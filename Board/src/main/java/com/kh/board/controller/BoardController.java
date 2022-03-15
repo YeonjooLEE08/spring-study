@@ -16,4 +16,4 @@ public class BoardController {
 	public String boardList() {
 		return "board_list"; // /WEB-INF/views/index.jsp
 	}
-}
+} 
