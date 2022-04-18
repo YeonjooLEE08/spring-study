@@ -2,18 +2,18 @@ package com.kh.library.book.vo;
 
 import java.util.List;
 
-public class ImgVO {
-	private String bkImgCode;
+public class BookImgVO {
+	private int bkImgCode;
 	private String bkOriginName;
-	private String bkAtImagName;
+	private String bkAtImgName;
 	private String isMain;
 	private String bookCode;
-	private List<ImgVO> imgList;
+	private List<BookImgVO> bookImgList;
 	
-	public String getBkImgCode() {
+	public int getBkImgCode() {
 		return bkImgCode;
 	}
-	public void setBkImgCode(String bkImgCode) {
+	public void setBkImgCode(int bkImgCode) {
 		this.bkImgCode = bkImgCode;
 	}
 	public String getBkOriginName() {
@@ -22,11 +22,11 @@ public class ImgVO {
 	public void setBkOriginName(String bkOriginName) {
 		this.bkOriginName = bkOriginName;
 	}
-	public String getBkAtImagName() {
-		return bkAtImagName;
+	public String getBkAtImgName() {
+		return bkAtImgName;
 	}
-	public void setBkAtImagName(String bkAtImagName) {
-		this.bkAtImagName = bkAtImagName;
+	public void setBkAtImgName(String bkAtImagName) {
+		this.bkAtImgName = bkAtImagName;
 	}
 	public String getIsMain() {
 		return isMain;
@@ -40,10 +40,10 @@ public class ImgVO {
 	public void setBookCode(String bookCode) {
 		this.bookCode = bookCode;
 	}
-	public List<ImgVO> getImgList() {
-		return imgList;
+	public List<BookImgVO> getImgList() {
+		return bookImgList;
 	}
-	public void setImgList(List<ImgVO> imgList) {
-		this.imgList = imgList;
+	public void setImgList(List<BookImgVO> imgList) {
+		this.bookImgList = imgList;
 	}
 }

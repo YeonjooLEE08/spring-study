@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 모든 SQL문을 mapper태그 안에 작성 -->
+<mapper namespace="adminMapper">
+	<resultMap type="com.kh.shop.vo.MenuVO" id="menu">
+		<id column="MENU_CODE" 		property="menuCode"/>
+		<result column="MENU_NAME" 	property="menuName"/>
+		<result column="MENU_URI" 	property="menuUri"/>
+	</resultMap>
+
+	<resultMap type="com.kh.shop.vo.SubMenuVO" id="subMenu">
+		<id column="SUB_MENU_CODE" 		property="subMenuCode"/>
+		<result column="SUB_MENU_NAME" 	property="subMenuName"/>
+		<result column="MENU_CODE" 		property="menuCode"/>
+		<result column="MENU_URI" 		property="menuUri"/>
+	</resultMap>
+	
+	<resultMap type="com.kh.shop.vo.BuyVO" id="buy">
+		<id column="BUY_NUM" 		property="buyNum"/>
+		<result column="MEM_ID" 	property="memId"/>
+		<result column="ITEM_CODE" 	property="itemCode"/>
+		<result column="ITEM_CNT" 	property="itemCnt"/>
+		<result column="BUY_PRICE" 	property="buyPrice"/>
+		<result column="BUY_DATE" 	property="buyDate"/>
+		<result column="ORDER_NUM" 	property="orderNum"/>
+		<result column="ROW_NUM" 	property="rowNum"/>
+		<association property="memberVO" resultMap="memberMapper.member"/>
+		<association property="itemVO" resultMap="itemMapper.item2"/>
+	</resultMap>
+	
+	<select id="selectMenuList" resultMap="menu">
+		SELECT MENU_CODE
+			, MENU_NAME
+			, MENU_URI
+		FROM ADMIN_MENU
+	</select>
+	
+	<insert id="insertItem">
+		INSERT INTO SHOP_ITEM (
+			ITEM_CODE           
+			, ITEM_NAME
+			, ITEM_PRICE
+			, ITEM_DETAIL
+			, CATE_CODE
+		) VALUES (
+			#{itemCode}
+			, #{itemName}
+			, #{itemPrice}
+			, #{itemDetail}
+			, #{cateCode}
+		)	
+	</insert>
+	
+	<select id="selectSubMenuList" resultMap="subMenu">
+		SELECT SUB_MENU_CODE       
+			, SUB_MENU_NAME
+			, MENU_URI
+			, MENU_CODE
+		FROM SUB_MENU
+		WHERE MENU_CODE = #{menuCode}
+		ORDER BY SUB_MENU_CODE
+	</select>
+	
+	<insert id="insertImages">
+		INSERT INTO ITEM_IMAGE (
+			IMG_CODE
+			, ORIGIN_IMG_NAME
+			, ATTACHED_IMG_NAME
+			, IS_MAIN
+			, ITEM_CODE
+		)           
+		<foreach collection="imgList" item="img" separator="UNION ALL">
+		SELECT #{img.imgCode}
+			, #{img.originImgName}
+			, #{img.attachedImgName}
+			, #{img.isMain}
+			, #{img.itemCode}
+		FROM DUAL
+		</foreach>
+	</insert>
+	
+	<select id="selectNextImgCode" resultType="int">
+		SELECT NVL(MAX(IMG_CODE), 0) + 1
+		FROM ITEM_IMAGE
+	</select>
+	
+	<select id="selectNextItemCode" resultType="String">
+		SELECT 'ITEM_'||LPAD(NVL(MAX(TO_NUMBER(SUBSTR(ITEM_CODE, 6))), 0) + 1, 3, '0')
+		FROM SHOP_ITEM
+	</select>
+	
+	<select id="selectBuyList" resultMap="buy">
+		SELECT ORDER_NUM
+		    , MEM_ID
+		    , MEM_NAME
+		    , BUY_DATE
+		    , ROW_NUM
+		FROM
+		(
+		    SELECT ORDER_NUM
+		        , MEM_ID
+		        , MEM_NAME
+		        , BUY_DATE
+		        , ROWNUM AS ROW_NUM
+		    FROM
+		    (
+		        SELECT DISTINCT ORDER_NUM
+		            , MEM_ID
+		            , (SELECT MEM_NAME
+		                FROM SHOP_MEMBER
+		                WHERE MEM_ID = SHOP_BUY.MEM_ID) AS MEM_NAME
+		            , TO_CHAR(BUY_DATE, 'YYYY-MM-DD HH24:MI') AS BUY_DATE
+		        FROM SHOP_BUY
+		        WHERE 1 = 1
+		        <if test="searchOrderNum != null and !searchOrderNum.equals('')">
+		        AND UPPER(ORDER_NUM) LIKE UPPER('%'||#{searchOrderNum}||'%')
+		        </if>   
+		        <if test="searchBuyer != null and !searchBuyer.equals('')">
+		        AND (UPPER(MEM_ID) LIKE UPPER('%'||#{searchBuyer}||'%') 
+		                OR 
+		            UPPER((SELECT MEM_NAME
+		                FROM SHOP_MEMBER               
+		                WHERE MEM_ID = SHOP_BUY.MEM_ID)) LIKE UPPER('%'||#{searchBuyer}||'%'))
+		        </if>     
+		        AND TO_CHAR(BUY_DATE, 'YYYY-MM-DD') &gt;= #{searchFromDate} AND TO_CHAR(BUY_DATE, 'YYYY-MM-DD') &lt;= #{searchToDate}
+		        ORDER BY BUY_DATE DESC
+		    )
+		)
+		WHERE ROW_NUM &gt;= #{startNum} AND ROW_NUM &lt;= #{endNum}
+	</select>
+	
+	<select id="selectBuyListDetail" resultMap="buy">
+		SELECT IMG.ATTACHED_IMG_NAME
+		    , ITEM.ITEM_NAME
+		    , BUY.ITEM_CNT
+		    , BUY.BUY_PRICE
+		    , BUY.MEM_ID
+		    , MEMBER.MEM_NAME
+		FROM SHOP_BUY BUY, SHOP_ITEM ITEM, ITEM_IMAGE IMG, SHOP_MEMBER MEMBER
+		WHERE BUY.ITEM_CODE = ITEM.ITEM_CODE
+		AND BUY.ITEM_CODE = IMG.ITEM_CODE
+		AND BUY.MEM_ID = MEMBER.MEM_ID
+		AND IS_MAIN = 'Y'
+		AND ORDER_NUM = #{orderNum}
+	</select>
+	
+	<select id="selectBuyListCnt" resultType="int">
+		SELECT COUNT(DISTINCT ORDER_NUM)
+		FROM SHOP_BUY
+		WHERE 1 = 1
+        <if test="searchOrderNum != null and !searchOrderNum.equals('')">
+        AND UPPER(ORDER_NUM) LIKE UPPER('%'||#{searchOrderNum}||'%')
+        </if>   
+        <if test="searchBuyer != null and !searchBuyer.equals('')">
+        AND (UPPER(MEM_ID) LIKE UPPER('%'||#{searchBuyer}||'%') 
+                OR 
+            UPPER((SELECT MEM_NAME
+                FROM SHOP_MEMBER               
+                WHERE MEM_ID = SHOP_BUY.MEM_ID)) LIKE UPPER('%'||#{searchBuyer}||'%'))
+        </if>     
+        AND TO_CHAR(BUY_DATE, 'YYYY-MM-DD') &gt;= #{searchFromDate} AND TO_CHAR(BUY_DATE, 'YYYY-MM-DD') &lt;= #{searchToDate}
+	</select>
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
