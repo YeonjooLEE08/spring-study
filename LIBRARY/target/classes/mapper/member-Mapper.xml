@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 모든 SQL문을 mapper태그 안에 작성 -->
+<mapper namespace="memberMapper">
+	<resultMap type="com.kh.library.member.vo.MemberVO" id="member">
+		<id column="MEM_ID" 		property="memId"/>
+		<result column="MEM_PWD" 	property="memPwd"/>
+		<result column="MEM_NAME" 	property="memName"/>
+		<result column="MEM_ADDR" 	property="memAddr"/>
+		<result column="MEM_TELL" 	property="memTell"/>
+		<result column="MEM_EMAIL" 	property="memEmail"/>
+		<result column="MEM_IMAGE" 	property="memImage"/>
+		<result column="MEM_GENDER"	property="memGender"/>
+		<result column="MEM_BIRTH" 	property="memBirth"/>
+		<result column="IS_DELETE" 	property="isDelete"/>
+		<result column="IS_ADMIN" 	property="isAdmin"/>
+		<result column="CLUB_ADMIN" property="clubAdmin"/>
+		<result column="CLUB_CODE" 	property="clubCode"/>
+	</resultMap>
+	
+	<!-- 회원가입 -->
+	<!-- ID 중복체크 -->
+	<select id="checkId" resultMap="member">
+		SELECT MEM_ID
+		FROM BOOK_MEMBER
+		WHERE MEM_ID = #{memId}
+	</select>
+	
+	
+	<select id="login" resultMap="member">
+		SELECT MEM_ID
+			, MEM_NAME 
+		FROM BOOK_MEMBER
+		WHERE MEM_ID = #{memId}
+		AND MEM_PWD = #{memPwd}	
+	</select>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
