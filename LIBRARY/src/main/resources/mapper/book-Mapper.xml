@@ -3,7 +3,7 @@
 <!-- 모든 SQL문을 mapper태그 안에 작성 -->
 <mapper namespace="bookMapper">
  
-	<resultMap type="com.kh.library.book.vo.CategoryVO" id="bookCategory">
+	<resultMap type="com.kh.library.book.vo.BookCategoryVO" id="bookCate">
 		<id column="CATE_CODE" 		property="cateCode"/>
 		<result column="CATE_NAME" 	property="cateName"/>
 	</resultMap>
@@ -21,9 +21,10 @@
 		<result column="RESERVE_CNT" 			property="reserveCnt"/>
 		<result column="IS_PLACE" 				property="isplace"/>
 		<result column="MADE_DATE" 				property="madeDate"/>
+		<result column="BK_AT_IMG_NAME"			property="btAtImgName"/>
 	</resultMap>
 	
-	<resultMap type="com.kh.library.book.vo.ImgVO " id="img">
+	<resultMap type="com.kh.library.book.vo.ImgVO" id="img">
 		<id column="BK_IMG_CODE" 				property="bkImgCode"/>
 		<result column="BK_ORIGIN_NAME" 		property="bkOriginName"/>
 		<result column="BK_AT_IMG_NAME" 		property="bkAtImgName"/>
@@ -42,14 +43,28 @@
 	
 	</resultMap>
 	
+	<select id="selectBookCategory" resultMap="bookCate">
+	SELECT CATE_CODE
+		, CATE_NAME
+	FROM BOOK_CATEGORY
+	</select>
 	
-	<!-- 책 목록 조회 -->
+	<insert id="insertBookCategory">
+	INSERT INTO BOOK_CATEGORY(
+		CATE_CODE
+		, CATE_NAME
+	)VALUES(
+		#{cateCode}
+		,#{cateName}
+	)
+	</insert>
+	
+	
 	<select id="selectBookList" resultMap="book">
 		SELECT BOOK.BOOK_CODE
 		    , BOOK_NAME
 		    , BOOK_WRITER
 		    , PUBLISHER
-		    , CATE_CODE
 		    , BOOK_STOCK
 		    , BK_AT_IMG_NAME
 		FROM BOOK, BOOK_IMAGE IMG
@@ -58,6 +73,57 @@
 		ORDER BY BOOK.BOOK_CODE DESC
 	</select>
 	
+	<insert id="insertBook">
+		INSERT INTO BOOK (
+			BOOK_CODE
+			, BOOK_NAME
+			, BOOK_WRITER
+			, BOOK_CONTENT
+			, PUBLISHER
+			, BOOK_STOCK
+			, MADE_DATE
+			, CATE_CODE
+		) VALUES (
+			#{bookCode}
+			, #{bookName}
+			, #{bookWriter}
+			, #{bookContent}
+			, #{publisher}
+			, #{bookStock}
+			, #{madeDate}
+			, #{cateCode}
+		)	
+	</insert>
+	
+	<insert id="insertBookImages">
+		INSERT INTO BOOK_IMAGE (
+			BK_IMG_CODE
+			, BK_ORIGIN_NAME
+			, BK_AT_IMG_NAME
+			, IS_MAIN
+			, BOOK_CODE
+		)VALUES 
+		<foreach collection="bookImgList" item="bookImg" separator ="UNION ALL">
+			SELECT #{bookImg.bkImgCode}
+				, #{bookImg.bkOriginName}
+				, #{bookImg.bkAtImgName}
+				, #{bookImg.isMain}
+				, #{bookImg.bookCode}
+			 FROM DUAL
+			</foreach>
+	</insert>
+	
+	<select id="selectNextImgCode" resultType="int">
+		SELECT NVL(MAX(BOOK_CODE), 0) + 1
+		FROM BOOK_IMAGE
+	</select>
+	
+	<select id="selectNextBookCode" resultType="String">
+		SELECT 'BOOK_'||LPAD(NVL(MAX(TO_NUMBER(SUBSTR(BOOK_CODE, 6))), 0) + 1, 3, '0')
+		FROM BOOK
+	</select>
+	
+		
 	<!-- 책 대여 -->
 	<insert id="insertReserve">
 		MERGE INTO RESERVE
@@ -72,56 +138,21 @@
 		        #{reserveCode}
 		        , #{bookCode}
 		        , #{memId}
-		)
-	</insert>
-	
-	<insert id="insertBook">
-		INSERT INTO BOOK (
-			BOOK_CODE
-			, BOOK_NAME
-			, BOOK_CONTENT
-			, PUBLISHER
-			, CATE_CODE
-			, BOOK_STOCK
-			, MADE_DATE
+		INSERT INTO RESERVE (
+		    RESERVE_CODE
+		    , APPLI_DATE
+		    , IS_RESERVE
+		    , BOOK_CODE
+		    , MEM_ID
+		    , RESERVE_DATE
+		    , RETURN_DATE
 		) VALUES (
-			#{bookCode}
-			, #{bookName}
-			, #{bookContent}
-			, #{publisher}
-			, #{cateCode}
-			, #{madeDate}
-		)	
-	</insert>
-	
-	<insert id="insertBookImages">
-		INSERT ITNO BOOK_IMAGE (
-			BK_IMG_CODE
-			, BK_ORIGIN_NAME
-			, BK_AT_IMG_NAME
-			, IS_MAIN
-			, BOOK_CODE
+		
 		)
-		<foreach collection="bookImgList" item="bookImg" separator ="UNION ALL">
-		SELECT #{bookImg.imgCode}
-			,#{bookImg.bkOriginName}
-			, #{bookImg.bkAtImgName}
-			, #{bookImg.isMain}
-			, #{bookImg.bookCode}
-		 FROM DUAL
-		</foreach>
 	</insert>
 	
-	<select id="selectNextBookCode" resultType="int">
-		SELECT NVL(MAX(BOOK_CODE), 0) + 1
-		FROM BOOK_IMAGE
-	</select>
-	
-	<select id="selectNextItemCode" resultType="String">
-		SELECT 'BOOK_'||LPAD(NVL(MAX(TO_NUMBER(SUBSTR(ITEM_CODE, 6))), 0) + 1, 3, '0')
-		FROM BOOK
-	</select>
 </mapper>
+
 
 
 

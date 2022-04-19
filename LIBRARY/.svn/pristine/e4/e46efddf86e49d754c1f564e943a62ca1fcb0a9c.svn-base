@@ -1,0 +1,92 @@
+package com.kh.library.club.controller;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.fasterxml.jackson.annotation.JsonCreator.Mode;
+import com.kh.library.club.service.ClubService;
+import com.kh.library.club.vo.ClubBoardVO;
+import com.kh.library.club.vo.ClubVO;
+
+@Controller
+@RequestMapping("/club")
+public class ClubController {
+	@Resource(name = "clubService")
+	private ClubService clubService;
+
+	@GetMapping("/clubList")
+	public String clubList(Model model) {
+		model.addAttribute("clubList", clubService.selectClubList());
+		return "club/club_list";
+	}
+	
+	@GetMapping("/clubAdmin")
+	public String clubAdmin() {
+		
+		return "club/club_manage";
+	}
+	
+	@GetMapping("/clubCreate")
+	public String clubCreate() {
+		return "club/club_create";
+	}
+	
+	@PostMapping("/clubCreate")
+	public String clubCreate(ClubVO clubVO) {
+		clubService.insertClubCreate(clubVO);
+		return "redirect:/club/clubList";
+	}
+	
+	@GetMapping("/clubDetail")
+	public String clubDetail(ClubVO clubVO, Model model, String clubCOde) {
+		model.addAttribute("club", clubService.selectClubDetail(clubVO));
+		model.addAttribute("boardList", clubService.selectClubBoardList(clubVO));
+		return "club/club_detail";
+	}
+	
+	@GetMapping("/clubBoardWrite")
+	public String clubBoardWrite(String clubCode, Model model) {
+		model.addAttribute("clubCode", clubCode);
+		return "club/club_board_write";
+	}
+	
+	@PostMapping("/regClubBoard")
+	public String regClubBoard(ClubBoardVO clubBoardVO, String clubCode, RedirectAttributes redirectAttributes) {
+		clubService.insertClubBoard(clubBoardVO);
+		redirectAttributes.addAttribute("clubCode", clubCode);
+		return "redirect:/club/clubDetail";
+	}
+	
+	@GetMapping("/clubBoardDetail")
+	public String clubBoardDetail(Model model, ClubBoardVO clubBoardVO, String cbBoardNum) {
+		model.addAttribute("clubBoard", clubService.selectClubBoardDetail(clubBoardVO));
+		return "club/club_board_detail";
+	}
+	
+	@GetMapping("/clubBoardUpdate")
+	public String clubBoardUpdate(Model model, ClubBoardVO clubBoardVO) {
+		model.addAttribute("clubBoard", clubService.selectClubBoardDetail(clubBoardVO));
+		return "club/club_board_detail_update";
+	}
+	
+	@PostMapping("/clubBoardUpdate")
+	public String clubBoardDetailUpdate(ClubBoardVO clubBoardVO, String cbBoardNum, RedirectAttributes redirectAttributes, String clubCode) {
+		clubService.updateClubBoardDetail(clubBoardVO);
+		redirectAttributes.addAttribute("clubCode", clubCode);
+		redirectAttributes.addAttribute("cbBoardNum", cbBoardNum);
+		return "redirect:/club/clubBoardDetail";
+	}
+	
+	@GetMapping("/clubBoardDelete")
+	public String clubBoardDelete(ClubBoardVO clubBoardVO, RedirectAttributes redirectAttributes, String clubCode) {
+		clubService.deleteClubBoard(clubBoardVO);
+		redirectAttributes.addAttribute("clubCode", clubCode);
+		return "redirect:/club/clubDetail";
+	}
+}

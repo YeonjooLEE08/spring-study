@@ -1,12 +1,19 @@
 package com.kh.library.admin.service;
 
+import java.util.List;
+
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.kh.library.book.vo.BookImgVO;
+import com.kh.library.book.vo.ImgVO;
+import com.kh.library.book.vo.ReserveVO;
 import com.kh.library.book.vo.BookVO;
+import com.kh.library.book.vo.HopeBookApplyVO;
+import com.kh.library.book.vo.HopeBookVO;
 
+@Service("bookAdminService")
 public class BookAdminServiceImpl implements BookAdminService {
 	
 	@Autowired
@@ -14,13 +21,13 @@ public class BookAdminServiceImpl implements BookAdminService {
 	
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public void insertBook(BookVO bookVO, BookImgVO bookImgVO) {
+	public void insertBook(BookVO bookVO, ImgVO bookImgVO) {
 		sqlSession.insert("bookMapper.insertBook",bookVO);
 		sqlSession.insert("bookMapper.insertBookImages", bookImgVO);
 	}
 	
 	@Override
-	public void insertBookImages(BookImgVO bookImgVO) {
+	public void insertBookImages(ImgVO bookImgVO) {
 		sqlSession.insert("bookMapper.insertBookImages", bookImgVO);
 	}
 	
@@ -32,6 +39,21 @@ public class BookAdminServiceImpl implements BookAdminService {
 	@Override
 	public String selectNextBookCode() {
 		return sqlSession.selectOne("bookMapper.selectNextBookCode");
+	}
+	
+	@Override
+	public void insertReserve(ReserveVO reserveVO) {
+		sqlSession.insert("bookMapper.insertReserve",reserveVO);
+	}
+	
+	@Override
+	public List<HopeBookVO> selectHopeBookList(){
+		return sqlSession.selectList("bookMapper.selectHopeBook");
+	}
+	
+	@Override
+	public void insertHopeBookApply(HopeBookApplyVO hopeBookApply) {
+		sqlSession.insert("bookMapper.insertHopeBookApply", hopeBookApply);
 	}
 	
 }
