@@ -24,6 +24,22 @@
 		<result column="BK_AT_IMG_NAME"			property="btAtImgName"/>
 	</resultMap>
 	
+	<resultMap type="com.kh.library.book.vo.BookVO" id="dBook">
+      <id column="BOOK_CODE"                property="bookCode"/>
+      <result column="BOOK_NAME"             property="bookName"/>
+      <result column="BOOK_WRITER"          property="bookWriter"/>
+      <result column="BOOK_CONTENT"          property="bookContent"/>
+      <result column="PUBLISHER"             property="publisher"/>
+      <result column="CATE_CODE"             property="cateCode"/>
+      <result column="RECEIVE_DATE"          property="receiveDate"/>
+      <result column="BOOK_STOCK"          property="bookStock"/>
+      <result column="IS_NOMI"             property="isNomi"/>
+      <result column="RESERVE_CNT"          property="reserveCnt"/>
+      <result column="IS_PLACE"             property="isplace"/>
+      <result column="MADE_DATE"             property="madeDate"/>
+      <collection property="bookImgList"       resultMap="bookImg"/>
+   </resultMap>
+   
 	<resultMap type="com.kh.library.book.vo.ImgVO" id="img">
 		<id column="BK_IMG_CODE" 				property="bkImgCode"/>
 		<result column="BK_ORIGIN_NAME" 		property="bkOriginName"/>
@@ -40,7 +56,28 @@
 		<result column="RETURN_DATE" 			property="returnDate"/>
 		<result column="BOOK_CODE" 				property="bookCode"/>
 		<result column="MEM_ID" 				property="memId"/>
+	</resultMap>
 	
+	<resultMap type="com.kh.library.book.vo.HopeBookVO" id="hopeBook">
+		<id column="HOPE_CODE"				property="hopeCode"/>
+		<result column="HOPE_NAME"  		property="hopeName"/>
+		<result column="HOPE_WRITER"  		property="hopeName"/>
+		<result column="HOPE_PUBLISHER"  	property="hopePublisher"/>
+		<result column="MEM_ID"  			property="memId"/>
+	</resultMap>
+	
+	<resultMap type="com.kh.library.book.vo.RecommendVO" id="recommend">
+		<id column="RC_CODE"				property="rcCode"/>
+		<result column="RC_NAME"			property="rcName"/>
+		<result column="RC_CONTENT"			property="rcName"/>
+	</resultMap>
+	
+	<resultMap type="com.kh.library.book.vo.RecommendImgVO" id="recommendImg">
+		<id column="RC_IMG_CODE"				property="rcImgCode"/>
+		<result column="RC_ORIGIN_NAME"			property="rcOriginName"/>
+		<result column="RC_AT_IMG_NAME"			property="rcAtImgName"/>
+		<result column="RC_CODE"			property="rcCode"/>
+		
 	</resultMap>
 	
 	<select id="selectBookCategory" resultMap="bookCate">
@@ -102,7 +139,7 @@
 			, BK_AT_IMG_NAME
 			, IS_MAIN
 			, BOOK_CODE
-		)VALUES 
+		)
 		<foreach collection="bookImgList" item="bookImg" separator ="UNION ALL">
 			SELECT #{bookImg.bkImgCode}
 				, #{bookImg.bkOriginName}
@@ -122,6 +159,7 @@
 		SELECT 'BOOK_'||LPAD(NVL(MAX(TO_NUMBER(SUBSTR(BOOK_CODE, 6))), 0) + 1, 3, '0')
 		FROM BOOK
 	</select>
+	
 	
 		
 	<!-- 책 대여 -->
@@ -151,6 +189,32 @@
 		)
 	</insert>
 	
+	<!-- 희망도서 신청 -->
+	<insert id="regHopeBook">
+		INSERT INTO BOOK_HOPE(
+			HOPE_CODE
+			, HOPE_NAME
+			, HOPE_WRITER
+			, HOPE_PUBLISHER
+			, MEM_ID)
+		VALUES(
+			SELECT 'HOPE_||LPAD(MAX(TO_NUMBER(SUBSTR(HOPE_CODE, 6))), 0) + 1, 3, '0') AS HOPE_CODE FROM BOOK_HOPE)
+			, #{hopeName}
+			, #{hopeWriter}
+			, #{hopePublisher}
+			, #{memId}
+		)
+	</insert>
+	
+	
+<!-- 	
+	<select id="selectNextHopeCode" resultType="String">
+		SELECT 'HOPE_'||LPAD(NVL(MAX(TO_NUMBER(SUBSTR(HOPE_CODE, 5))), 0) + 1, 3, '0')
+		FROM BOOK
+	</select> -->
+	
+	
+	<!-- 추천도서 등록 -->
 </mapper>
 
 
