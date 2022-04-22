@@ -10,31 +10,20 @@
 <div class="container">
 	<div class="row">
 		<div class="col-12">
-				<div class="row">
-					<input type="hidden" name="ntCode" value="${ntCode }">
+			<form action="/board/updateNtBoardDetail" method="post">
+					<input type="hidden" name="ntCode" value="${ntBoard.ntCode }">
 					<input type="hidden" name="memId" value="${sessionScope.loginInfo.memId }">
 					<input type="hidden" name="memName" value="${sessionScope.loginInfo.memName }">
-					<div class="col">
-						제목 <input type ="text" name="ntTitle" value="${ntBoardInfo.ntTitle }" class="form-control" autocomplete="none"> <!--기록저장X -->
-					</div>
-					<div class="col">
-						시간 ${ntCreateDate }
-					</div>
+					제목 <input type ="text" name="ntTitle" value="${ntBoard.ntTitle }"> <br>
+					시간 ${ntBoard.ntCreateDate } <br>
+					내용 <textarea rows="5" cols="50" name="ntContent" >${ntBoard.ntContent }</textarea> <br>
+					<input type="submit" value="수정" >
+				</form>
+				
 				</div>
-				<div class="row">
-					<div class="col-12">
-						내용 <textarea rows="5" cols="50" name="ntContent" >${ntBoardInfo.ntContent }</textarea>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col">
-					<input type="submit" value="수정" onclick="location.href='updateNtBoardDetail'">
-					</div>
-				</div>
+					
+			</div>
 		</div>
 	
-	</div>
-
-</div>
 </body>
 </html>

@@ -20,8 +20,8 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.kh.library.admin.service.BookAdminService;
 import com.kh.library.admin.service.ItemAdminService;
 import com.kh.library.book.service.BookService;
-import com.kh.library.book.vo.ImgVO;
 import com.kh.library.book.vo.ReserveVO;
+import com.kh.library.book.vo.BookImgVO;
 import com.kh.library.book.vo.BookVO;
 import com.kh.library.item.service.ItemService;
 
@@ -55,97 +55,83 @@ public class AdminController {
 		return "redirect:/admin/reserveList";
 	}
 	
-	@GetMapping("/regBook")
+	//책 등록페이지
+	@GetMapping("/regBookForm")
 	public String regBookForm(Model model) {
 		model.addAttribute("cateList",bookService.selectBookCategory());
 		return "admin/reg_book";
 	}
 	
+	//책 리스트 조회
+	@GetMapping("/bookList")
+	public String selectBookList(Model model) {
+		model.addAttribute("bookList", bookService.selectBookList());
+		return "book/book_list";
+	}
+	
+	//책 상세 조회
+	@GetMapping("/bookDetail")
+	public String selectBookDetail(Model model, BookVO bookVO) {
+		model.addAttribute("book", bookService.selectBookDetail(bookVO));
+		return "book/book_detail";	
+	}
+	
+	
 	// 책 등록 
 	@PostMapping("/regBook")
 	public String regBook(BookVO bookVO, MultipartHttpServletRequest multi) {
-		//여러 이미지 정보 셋팅 공간 생성
-		List<ImgVO> bookImgList = new ArrayList<ImgVO>();
 		
-		//이미지 삽입 쿼리 실행 시 빈값 채우는 객체
-		ImgVO bookImgVO = new ImgVO();
+		MultipartFile file = multi.getFile("file");
 		
-		//다음에 들어갈 img_code조회
-		int nextBookImgCode = bookAdminService.selectNextImgCode();
-		
-		//다음에 들어갈 book코드 조회
-		String nextBookCode = bookAdminService.selectNextBookCode();
-		
-		//이미지 첨부
-		Iterator<String> inputTagNames = multi.getFileNames();
-		
-		String uploadPath = "D:git\\spring-study\\LIBRARY\\src\\main\\webapp\\resources\\images\\book\\";
-		
-		while(inputTagNames.hasNext()) {
-			String inputTagName = inputTagNames.next();
+		if(!file.getOriginalFilename().equals("")) {
 			
-			if(inputTagName.equals("subImg")) {
-				List<MultipartFile> fileList = multi.getFiles(inputTagName);
-				
-				for(MultipartFile file : fileList) {
-					
-					String originFileName = file.getOriginalFilename();
-					
-					if(!originFileName.equals("")) {
-						String attachedFileName = System.currentTimeMillis()+"_"+ originFileName;
-						
-						try {
-							file.transferTo(new File(uploadPath+attachedFileName));
-							ImgVO vo = new ImgVO();
-							vo.setBkImgCode(nextBookImgCode++);
-							vo.setBkOriginName(originFileName);
-							vo.setBkAtImgName(attachedFileName);
-							vo.setIsMain("N");
-							vo.setBookCode(nextBookCode);
-							bookImgList.add(vo);
-						
-						} catch (IllegalStateException e) {
-							e.printStackTrace();
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
-					
-					}
-				}
-			}
+			//파일 첨부 경로
+			String uploadPath = "D:git\\spring-study\\LIBRARY\\src\\main\\webapp\\resources\\images\\book\\";
 			
-			//단일 첨부
-			else {
-				MultipartFile file = multi.getFile(inputTagName);
+			//다음에 들어갈 book코드 조회
+			String nextBookCode = bookAdminService.selectNextBookCode();
+			
+			//다음에 들어갈 img_code조회
+			int nextBookImgCode = bookAdminService.selectNextImgCode();
+			
+			try {
 				
-				String originFileName = file.getOriginalFilename();
+				//업로드할 파일명 설정
+				String attachedFileName = System.currentTimeMillis()+"_"+ file.getOriginalFilename();
+				//지정한 경로에 파일 첨부
+				file.transferTo(new File(uploadPath+attachedFileName));
 				
-				if(!originFileName.equals("")) {
-					String attachedFileName = System.currentTimeMillis()+"_"+originFileName;
-					
-					try {
-						file.transferTo(new File(uploadPath+attachedFileName));
-						ImgVO vo = new ImgVO();
-						vo.setBkImgCode(nextBookImgCode++);
-						vo.setBkOriginName(originFileName);
-						vo.setBkAtImgName(attachedFileName);
-						vo.setIsMain("Y");
-						vo.setBookCode(nextBookCode);
-						bookImgList.add(vo);
-					
-					} catch (IllegalStateException e) {
-						e.printStackTrace();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
+				String imgCode = "IMG_"+String.format("%03d", nextBookImgCode++);
+				
+				bookVO.setBookImgVO(new BookImgVO(imgCode,file.getOriginalFilename(),attachedFileName,nextBookCode));
+				bookVO.setBookCode(nextBookCode);
+			} catch(IllegalStateException e) {
+				
+				e.printStackTrace();
+			} catch(IOException e) {
+				e.printStackTrace();
 			}
 		}
 		
-		// 도서 정보 INSERT
-		bookVO.setBookCode(nextBookCode);
-		bookImgVO.setImgList(bookImgList);
-		bookAdminService.insertBook(bookVO,bookImgVO);
+		else {
+			
+			//다음에 들어갈 book코드 조회
+			String nextBookCode = bookAdminService.selectNextBookCode();
+			
+			
+			int nextBookImgCode = bookAdminService.selectNextImgCode();
+			String imgCode = "IMG_"+String.format("%03d", nextBookImgCode++);
+			
+			bookVO.setBookImgVO(new BookImgVO(imgCode,"noneImage.jpg","noneImage.jpg",nextBookCode));
+			bookVO.setBookCode(nextBookCode);
+		} 
+		
+		int result1 = bookAdminService.insertBook(bookVO);
+		int result2 = bookAdminService.insertBookImg(bookVO);
+		
+		if(result1==1 && result2==1) {
+			System.out.println("성공");
+		}
 		
 		return "redirect:/book/bookList";
 	

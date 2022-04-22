@@ -22,15 +22,12 @@ img:hover{
 			  <div class="card-body" style="padding: 0.2rem 1.2rem;">
 			    <h5 class="card-title">${book.bookName }</h5>
 			    <p class="card-text">
-			    	<fmt:formatNumber value="${book.bookStock }" pattern="\#,###"/>
 			    </p>
 			  </div>
 			</div>
 		</div>
 	</c:forEach>
-	<a href="/admin/regBook">등록</a>
-	<a href="/book/hopeBookForm">희망도서</a>
-	<a href="/board/ntBoardList">공지사항</a>
+	
 </div>
 </body>
 </html>

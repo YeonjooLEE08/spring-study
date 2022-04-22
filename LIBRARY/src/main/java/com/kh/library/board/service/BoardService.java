@@ -21,5 +21,5 @@ public interface BoardService {
 	void updateNtBoardDetail(NtBoardVO ntBoardVO);
 	
 	//공지사항 삭제
-	void deleteNtBoardDetail(NtBoardVO ntBoardVO);
+	void deleteNtBoardDetail(String ntcode);
 }

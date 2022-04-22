@@ -8,10 +8,24 @@ public class BookVO {
 	private String publisher;
 	private String cateCode;
 	private String receiveDate;
-	private String madeDate;
+	private String pubDate; //yyyy
 	private int reserveCnt;
 	private int bookStock;
 	
+	private BookImgVO bookImgVO;
+	
+	public String getPubDate() {
+		return pubDate;
+	}
+	public void setPubDate(String pubDate) {
+		this.pubDate = pubDate;
+	}
+	public BookImgVO getBookImgVO() {
+		return bookImgVO;
+	}
+	public void setBookImgVO(BookImgVO bookImgVO) {
+		this.bookImgVO = bookImgVO;
+	}
 	public String getBookCode() {
 		return bookCode;
 	}
@@ -53,12 +67,6 @@ public class BookVO {
 	}
 	public void setReceiveDate(String receiveDate) {
 		this.receiveDate = receiveDate;
-	}
-	public String getMadeDate() {
-		return madeDate;
-	}
-	public void setMadeDate(String madeDate) {
-		this.madeDate = madeDate;
 	}
 	public int getReserveCnt() {
 		return reserveCnt;

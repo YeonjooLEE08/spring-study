@@ -1,6 +1,5 @@
 package com.kh.library.admin.service;
 
-import com.kh.library.book.vo.ImgVO;
 import com.kh.library.book.vo.RecommendImgVO;
 import com.kh.library.book.vo.RecommendVO;
 import com.kh.library.book.vo.ReserveVO;
@@ -14,10 +13,10 @@ import com.kh.library.book.vo.HopeBookVO;
 public interface BookAdminService {
 
 	//책 등록
-	void insertBook(BookVO bookVO, ImgVO bookImgVO);
+	int insertBook(BookVO bookVO);
 	
 	//책 이미지 정보 등록
-	void insertBookImages(ImgVO bookImgVO);
+	int insertBookImg(BookVO bookVO);
 	
 	//다음 이미지 코드 조회
 	int selectNextImgCode();

@@ -37,7 +37,7 @@ public class BoardServiceImpl implements BoardService {
 	}
 	
 	@Override
-	public void deleteNtBoardDetail(NtBoardVO ntBoardVO) {
-		sqlSession.delete("boardMapper.deleteNtBoardDetail",ntBoardVO);
+	public void deleteNtBoardDetail(String ntCode) {
+		sqlSession.delete("boardMapper.deleteNtBoardDetail",ntCode);
 	}
 }

@@ -30,8 +30,8 @@ public class BookServiceImpl implements BookService {
 	}
 	
 	@Override
-	public BookVO selectBookDetail(String bookCode) {
-		return sqlSession.selectOne("bookMapper.selectBookDetail", bookCode);
+	public BookVO selectBookDetail(BookVO bookVO) {
+		return sqlSession.selectOne("bookMapper.selectBookDetail", bookVO);
 	}
 
 	@Override

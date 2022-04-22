@@ -17,7 +17,7 @@ public interface BookService {
 	List<BookVO> selectBookList();
 	
 	//도서 상세 조회
-	BookVO selectBookDetail(String bookCode);
+	BookVO selectBookDetail(BookVO bookVO);
 	
 	//도서 예약 기능
 	void insertReserveBook(ReserveVO reserveVO);

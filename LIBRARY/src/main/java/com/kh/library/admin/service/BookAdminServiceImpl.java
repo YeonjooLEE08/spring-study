@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.kh.library.book.vo.ImgVO;
 import com.kh.library.book.vo.RecommendImgVO;
 import com.kh.library.book.vo.RecommendVO;
 import com.kh.library.book.vo.ReserveVO;
@@ -21,23 +20,25 @@ public class BookAdminServiceImpl implements BookAdminService {
 	@Autowired
 	private SqlSessionTemplate sqlSession;
 	
+	
+	//도서 등록
 	@Override
-	@Transactional(rollbackFor = Exception.class)
-	public void insertBook(BookVO bookVO, ImgVO bookImgVO) {
-		sqlSession.insert("bookMapper.insertBook",bookVO);
-		sqlSession.insert("bookMapper.insertBookImages", bookImgVO);
+	public int insertBook(BookVO bookVO) {
+		return sqlSession.insert("bookMapper.insertBook",bookVO);
 	}
 	
 	@Override
-	public void insertBookImages(ImgVO bookImgVO) {
-		sqlSession.insert("bookMapper.insertBookImages", bookImgVO);
+	public int insertBookImg(BookVO bookVO) {
+		return sqlSession.insert("bookMapper.insertBookImg", bookVO);
 	}
 	
+	//이미지코드숫자
 	@Override
 	public int selectNextImgCode() {
 		return sqlSession.selectOne("bookMapper.selectNextImgCode");
 	}
 
+	//책 코드
 	@Override
 	public String selectNextBookCode() {
 		return sqlSession.selectOne("bookMapper.selectNextBookCode");

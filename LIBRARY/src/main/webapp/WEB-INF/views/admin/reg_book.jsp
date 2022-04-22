@@ -31,16 +31,16 @@
 					<input type="text" class="form-control" id="bookCode" name="bookCode">
 				</div>
 				<div class="col-12">
-					<label for="bookName" class="form-label">도서명</label>
-					<input type="text" class="form-control" id="bookName" name="bookName">
+					<label for="title" class="form-label">도서명</label>
+					<input type="text" class="form-control" id="title" name="title">
 				</div>
 				<div class="col-12">
-					<label for="bookWriter" class="form-label">저자</label>
-					<input type="text" class="form-control" id="bookWriter" name="bookWriter">
+					<label for="Writer" class="form-label">저자</label>
+					<input type="text" class="form-control" id="Writer" name="Writer">
 				</div>
 				<div class="col-12">
-					<label for="bookContent" class="form-label">도서 소개</label>
-					<textarea class="form-control" rows="3" id="bookContent" name="bookContent"></textarea>
+					<label for="keyword" class="form-label">키워드</label>
+					<textarea class="form-control" rows="3" id="keyword" name="keyword"></textarea>
 				</div>
 				<div class="col-12">
 					<label for="publisher" class="form-label">출판사</label>
@@ -51,19 +51,16 @@
 					<input type="text" class="form-control" id="bookStock" name="bookStock">
 				</div>
 				<div class="col-12">
-					<label for="madeDate" class="form-label">출판일</label>
-					<input type="text" class="form-control" id="madeDate" name="madeDate">
+					<label for="pubDate" class="form-label">출판일</label>
+					<input type="text" class="form-control" id="pubDate" name="pubDate">
 				</div>
-				<div class="col-12">
-					<label for="mainImg" class="form-label">대표이미지</label>
-					<input type="file" class="form-control" id="mainImg" name="mainImg">
-				</div>
-				<div class="col-12">
-					<label for="subImg" class="form-label">추가이미지</label>
-					<input type="file" class="form-control" id="subImg" name="subImg" multiple>
+				<div>
+					<label for="file" class="form-label">표지</label>
+					<input type="file" class="form-control" id="mainImg" >
+					이미지없으면기본이미지임
 				</div>
 				<div class="col-12 d-grid gap-2">
-					<button type="button" class="btn btn-primary" onclick="regBook();">도서등록</button>
+					<input type="submit" value="도서 등록">
 				</div>
 			</form>
 		</div>
