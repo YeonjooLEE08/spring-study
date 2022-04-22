@@ -18,13 +18,35 @@
 		<result column="CLUB_CODE" 	property="clubCode"/>
 	</resultMap>
 	
-	<!-- 회원가입 -->
+	<!--/////////////////////회원가입//////////////////// -->
 	<!-- ID 중복체크 -->
 	<select id="checkId" resultType="int">
 		SELECT COUNT(MEM_ID)
 		FROM BOOK_MEMBER
 		WHERE MEM_ID = #{memId}
 	</select>
+	
+	<!-- 프로필 사진 MEM_IMG_CODE 생성 -->
+	<select id="selectNextMemImgCode" resultType="int">
+		SELECT NVL(MAX(MEM_IMG_CODE), 0) + 1
+		FROM MEMBER_IMAGE
+	</select>
+	
+	<!-- 프로필 사진 이미지 등록 -->
+	<insert id="insertMemberImage">
+		INSERT INTO MEMBER_IMAGE (
+			MEM_IMG_CODE
+			, MEM_ORIGIN_NAME
+			, MEM_AT_IMG_NAME
+			, MEM_ID
+		) VALUES (
+			#{memImgCode}
+			, #{memOriginName}
+			, #{memAtImgName}
+			, #{memId}
+		)
+			 
+	</insert>
 	
 	<!-- 회원가입 -->
 	<insert id="join">
@@ -54,6 +76,7 @@
 	<!-- 로그인 -->
 	<select id="login" resultMap="member">
 		SELECT MEM_ID
+			, MEM_PWD
 			, MEM_NAME
 			, MEM_GENDER
 			, MEM_IMAGE
@@ -62,7 +85,6 @@
 			, IS_ADMIN
 		FROM BOOK_MEMBER
 		WHERE MEM_ID = #{memId}
-		AND MEM_PWD = #{memPwd}	
 	</select>
 	
 	<!-- 아이디찾기 -->
@@ -105,6 +127,22 @@
 		FROM BOOK_MEMBER
 		WHERE MEM_ID = #{memId}
 	</select>
+	
+	<!-- 내 정보 수정 -->
+	<update id="updateBasicInfo">
+		UPDATE BOOK_MEMBER
+		SET MEM_NAME = #{memName}
+			, MEM_TELL = #{memTell}
+			, MEM_EMAIL = #{memEmail}
+			, MEM_IMAGE = #{memImage}
+		WHERE MEM_ID = #{memId}
+	</update>
+	<update id="updateMemImage">
+		UPDATE MEMBER_IMAGE
+		SET MEM_ORIGIN_NAME = #{memOriginName}
+		    , MEM_AT_IMG_NAME = #{memAtImgName}
+		WHERE MEM_ID = #{memId}
+	</update>
 </mapper>
 
 

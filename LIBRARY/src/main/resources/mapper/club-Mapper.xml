@@ -11,6 +11,7 @@
 		<result column="MEM_NAME" 			property="memName"/>
 		<result column="CLUB_INTRO" 		property="clubIntro"/>
 		<result column="CLUB_DATE" 			property="clubDate"/>
+		<result column="CLUB_NUMBER_PEOPLE"	property="clubNumberPeople"/>
 	</resultMap>
 	
 	<resultMap type="com.kh.library.club.vo.ClubBoardVO" id="boardInfo">
@@ -44,6 +45,7 @@
 		<id column="MEM_ID" property="memId"/>
 		<result column="MEM_NAME" property="memName"/>
 		<result column="CLUB_CODE" property="clubCode"/>
+		<result column="CLUB_ADMIN" property="clubAdmin"/>
 	</resultMap>
 	
 	<insert id="insertClubCreate">
@@ -80,6 +82,9 @@
 		    , CLUB_DATE 
 		    , MEM_ID
 		    , MEM_NAME
+		    , (SELECT COUNT(MEM_ID)
+		    	FROM BOOK_MEMBER 
+		    	WHERE CLUB_CODE = BOOK_CLUB.CLUB_CODE) AS CLUB_NUMBER_PEOPLE
 		FROM BOOK_CLUB
 		ORDER BY CLUB_DATE
 	</select>
@@ -232,6 +237,7 @@
 		WHERE MEM_ID = #{memId}
 	</update>
 	
+	<!-- 거절 -->
 	<delete id="deleteApplyList">
 		DELETE BOOK_CLUB_APPLY
 		WHERE MEM_ID = #{memId}
@@ -241,6 +247,8 @@
 	<select id="selectClubMemberList" resultMap="member">
 		SELECT MEM_ID
 			, MEM_NAME
+			, CLUB_CODE
+			, CLUB_ADMIN
 		FROM BOOK_MEMBER
 		WHERE CLUB_CODE = #{clubCode}
 		ORDER BY MEM_NAME
@@ -248,11 +256,12 @@
 	
 	<!-- 모임강퇴 -->
 	<update id="clubMemberKick">
-	UPDATE BOOK_MEMBER
-	SET
-	CLLUB_CODE = NULL
-	WHERE MEM_ID = #{memId}
+		UPDATE BOOK_MEMBER
+		SET
+		CLUB_CODE = NULL
+		WHERE MEM_ID = #{memId}
 	</update>
+	
 </mapper>
 
 

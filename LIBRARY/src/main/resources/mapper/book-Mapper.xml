@@ -89,7 +89,6 @@
 			, WRITER
 			, KEYWORD
 			, PUBLISHER
-			, INPUT_DATE
 			, BOOK_STOCK
 			, PUB_DATE
 			, CATE_CODE
@@ -99,7 +98,6 @@
 			, #{writer}
 			, #{keyword}
 			, #{publisher}
-			, #{inputDate}
 			, #{bookStock}
 			, #{pubDate}
 			, #{cateCode}
@@ -135,15 +133,15 @@
 	
 	<!-- 책 조회 -->
 	<select id="selectBookList" resultMap="book">
-		SELECT BOOK_CODE
+		SELECT B.BOOK_CODE
 				, TITLE
 				, WRITER
 				, KEYWORD
-				, INPUT_DATE
+				, TO_CHAR(INPUT_DATE, 'YYYY-MM-DD')
 				, STATUS
-				, CATE_CODE
-				, BK_AT_IMG
-		FROM BOOK B, BOOK_CATE C, BOOK_IMAGE I
+				, C.CATE_CODE
+				, I.BK_AT_NAME
+		FROM BOOK B, BOOK_CATEGORY C, BOOK_IMAGE I
 		WHERE B.CATE_CODE = C.CATE_CODE
 		AND B.BOOK_CODE = I.BOOK_CODE
 		ORDER BY INPUT_DATE DESC

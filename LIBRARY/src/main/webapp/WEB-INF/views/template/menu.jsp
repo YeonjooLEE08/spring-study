@@ -37,11 +37,11 @@
 			<ul>
 				<li>도서관소개</li>
 				<li>
-				<a href="/book/bookList">자료검색</a></li>
+				<a href="/book/list">자료검색</a></li>
 				<li>도서관이용</li>
 				<li>참여마당
 					<ul>
-						<li><a>공지사항</a></li>
+						<li><a href="/board/ntBoardList">공지사항</a></li>
 						<li><a href="/board/freeBoard">자유게시판</a></li>
 						<li><a href="/board/qnaBoard">Q&A</a></li>
 					</ul>

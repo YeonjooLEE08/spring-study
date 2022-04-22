@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,8 +8,9 @@
 <title>Insert title here</title>
 </head>
 <body>
-<a href="/admin/regBookForm">등록</a>
+<c:if test="${sessionScope.loginInfo.isAdmin eq 'Y' }" >
+	<a href="/admin/regBookForm">등록</a>
+</c:if>
 <a href="/book/hopeBookForm">희망도서</a>
-<a href="/board/ntBoardList">공지사항</a>
 </body>
 </html>

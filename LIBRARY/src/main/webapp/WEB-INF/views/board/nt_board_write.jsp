@@ -34,31 +34,6 @@
 	
 	</div>
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<label for="file" class="form-label">표지이미지</label>
-				<input type="file" name="file" class="form-control" id="inputGroupFile01 file">
-				<div class="mt-2">* 이미지를 등록하지 않을 시, 기본 이미지로 보여집니다.</div>		
-			</div>
-			<div class="d-grid mt-3">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 
 </div>
 </body>

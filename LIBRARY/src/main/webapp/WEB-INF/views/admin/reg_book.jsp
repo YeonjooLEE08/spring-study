@@ -19,7 +19,7 @@
 			<form class="row g-3" action="/admin/regBook" method="post" id="regBookForm" enctype="multipart/form-data">
 				<div class="col-12">
 					<label for="categorySeletor" class="form-label">카테고리</label>
-					<select class="form-select" id="categorySeletor" name="cateCode">
+					<select class="form-select" id="categorySeletor" name="cateCode" form="regBookForm">
 						<option value="1">선택</option>
 						<c:forEach items="${cateList }" var="category">
 							<option value="${category.cateCode }">${category.cateName }</option>

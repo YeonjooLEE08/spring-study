@@ -2,17 +2,50 @@ package com.kh.library.book.vo;
 
 public class BookVO {
 	private String bookCode;
-	private String bookName;
-	private String bookWriter;
-	private String bookContent;
+	private String title;
+	private String writer;
+	private String keyword;
 	private String publisher;
 	private String cateCode;
-	private String receiveDate;
+	private String inputDate;
 	private String pubDate; //yyyy
 	private int reserveCnt;
 	private int bookStock;
+	private int status;
+	
 	
 	private BookImgVO bookImgVO;
+	
+	public String getWriter() {
+		return writer;
+	}
+	public void setWriter(String writer) {
+		this.writer = writer;
+	}
+	public String getKeyword() {
+		return keyword;
+	}
+	public void setKeyword(String keyword) {
+		this.keyword = keyword;
+	}
+	public String getInputDate() {
+		return inputDate;
+	}
+	public void setInputDate(String inputDate) {
+		this.inputDate = inputDate;
+	}
+	public int getStatus() {
+		return status;
+	}
+	public void setStatus(int status) {
+		this.status = status;
+	}
+	public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
+	}
 	
 	public String getPubDate() {
 		return pubDate;
@@ -32,24 +65,7 @@ public class BookVO {
 	public void setBookCode(String bookCode) {
 		this.bookCode = bookCode;
 	}
-	public String getBookName() {
-		return bookName;
-	}
-	public void setBookName(String bookName) {
-		this.bookName = bookName;
-	}
-	public String getBookWriter() {
-		return bookWriter;
-	}
-	public void setBookWriter(String bookWriter) {
-		this.bookWriter = bookWriter;
-	}
-	public String getBookContent() {
-		return bookContent;
-	}
-	public void setBookContent(String bookContent) {
-		this.bookContent = bookContent;
-	}
+
 	public String getPublisher() {
 		return publisher;
 	}
@@ -61,12 +77,6 @@ public class BookVO {
 	}
 	public void setCateCode(String cateCode) {
 		this.cateCode = cateCode;
-	}
-	public String getReceiveDate() {
-		return receiveDate;
-	}
-	public void setReceiveDate(String receiveDate) {
-		this.receiveDate = receiveDate;
 	}
 	public int getReserveCnt() {
 		return reserveCnt;
