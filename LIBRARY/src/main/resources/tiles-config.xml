@@ -18,6 +18,7 @@
 	
 	<!-- 혜수전용 : 마이페이지 관련 페이지 이동 정의 -->
 	<definition name="mypage/*" extends="baseLayout">
+		<put-attribute name="side" value="/WEB-INF/views/template/my_page.jsp" />
 		<put-attribute name="body" value="/WEB-INF/views/member/mypage/{1}.jsp"/>
 	</definition>
 

@@ -61,7 +61,7 @@
 	<resultMap type="com.kh.library.book.vo.HopeBookVO" id="hopeBook">
 		<id column="HOPE_CODE"				property="hopeCode"/>
 		<result column="HOPE_NAME"  		property="hopeName"/>
-		<result column="HOPE_WRITER"  		property="hopeName"/>
+		<result column="HOPE_WRITER"  		property="hopeWriter"/>
 		<result column="HOPE_PUBLISHER"  	property="hopePublisher"/>
 		<result column="MEM_ID"  			property="memId"/>
 	</resultMap>
@@ -190,15 +190,15 @@
 	</insert>
 	
 	<!-- 희망도서 신청 -->
-	<insert id="regHopeBook">
+	<insert id="insertHopeBook">
 		INSERT INTO BOOK_HOPE(
 			HOPE_CODE
 			, HOPE_NAME
 			, HOPE_WRITER
 			, HOPE_PUBLISHER
-			, MEM_ID)
-		VALUES(
-			SELECT 'HOPE_||LPAD(MAX(TO_NUMBER(SUBSTR(HOPE_CODE, 6))), 0) + 1, 3, '0') AS HOPE_CODE FROM BOOK_HOPE)
+			, MEM_ID
+		) VALUES (
+			(SELECT 'HP_'||LPAD(NVL(MAX(TO_NUMBER(SUBSTR(HOPE_CODE,4))),0)+1,3,0) AS NT_CODE FROM BOOK_HOPE)
 			, #{hopeName}
 			, #{hopeWriter}
 			, #{hopePublisher}

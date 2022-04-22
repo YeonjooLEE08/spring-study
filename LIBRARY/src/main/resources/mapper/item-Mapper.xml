@@ -52,6 +52,20 @@
 		,#{cateName}
 	)
 	</insert>
+	
+	<!-- 카테고리 수정 -->
+	<update id="updateCategory">
+	UPDATE ITEM_CATEGORY 
+	SET CATE_NAME = #{cateName}
+	WHERE CATE_CODE = #{cateCode}
+	</update>
+	
+	<!-- 카테고리 삭제 -->
+	<delete id="deleteCategory">
+	DELETE ITEM_CATEGORY
+	WHERE CATE_CODE=#{cateCode}
+	</delete>
+	
 	<!-- ITEM_CATE_CODE 다음 값 조회 -->
 	<select id="NextItemCateCode" resultType="String">
 	SELECT 'CATE_'||LPAD(NVL(MAX(TO_NUMBER(SUBSTR(CATE_CODE, 6))), 0) + 1, 3, '0')
@@ -136,6 +150,21 @@
 	SELECT NVL(MAX(ITEM_IMG_CODE), 0) + 1
 	FROM ITEM_IMAGE
 	</select>
+	
+	<!-- ITEM 삭제 -->
+	<delete id="deleteItem">
+	DELETE ITEM
+	WHERE ITEM_CODE = #{itemCode}
+	</delete>
+	
+	<!-- 선택된 ITEM 삭제 -->
+	<delete id="deleteItems">
+		DELETE ITEM
+		WHERE ITEM_CODE IN
+		<foreach collection="itemCodeArr" item="itemCode" open="(" close=")" separator=",">
+			#{itemCode}
+		</foreach>
+	</delete>
 </mapper>
 
 

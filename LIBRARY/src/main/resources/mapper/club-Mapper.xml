@@ -3,34 +3,47 @@
 <!-- 모든 SQL문을 mapper태그 안에 작성 -->
 <mapper namespace="clubMapper">
 	<resultMap type="com.kh.library.club.vo.ClubVO" id="club">
-		<id column="CLUB_CODE" property="clubCode"/>
-		<result column="CLUB_NAME" property="clubName"/>
-		<result column="CLUB_HEAD_CNT" property="clubHeadCnt"/>
-		<result column="CLUB_COMPLIT_CNT" property="clubComplitCnt"/>
-		<result column="MEM_ID" property="memId"/>
-		<result column="MEM_NAME" property="memName"/>
-		<result column="CLUB_INTRO" property="clubIntro"/>
-		<result column="CLUB_DATE" property="clubDate"/>
+		<id column="CLUB_CODE" 				property="clubCode"/>
+		<result column="CLUB_NAME" 			property="clubName"/>
+		<result column="CLUB_HEAD_CNT" 		property="clubHeadCnt"/>
+		<result column="CLUB_COMPLIT_CNT" 	property="clubComplitCnt"/>
+		<result column="MEM_ID" 			property="memId"/>
+		<result column="MEM_NAME" 			property="memName"/>
+		<result column="CLUB_INTRO" 		property="clubIntro"/>
+		<result column="CLUB_DATE" 			property="clubDate"/>
 	</resultMap>
 	
 	<resultMap type="com.kh.library.club.vo.ClubBoardVO" id="boardInfo">
-		<id column="CB_BOARD_NUM" property="cbBoardNum"/>
-		<result column="CB_BOARD_TITLE" property="cbBoardTitle"/>
-		<result column="CB_BOARD_CONTENT" property="cbBoardContent"/>
-		<result column="CB_BOARD_DATE" property="cbBoardDate"/>
-		<result column="MEM_ID" property="memId"/>
-		<result column="MEM_NAME" property="memName"/>
-		<result column="CLUB_CODE" property="clubCode"/>
+		<id column="CB_BOARD_NUM" 			property="cbBoardNum"/>
+		<result column="CB_BOARD_TITLE" 	property="cbBoardTitle"/>
+		<result column="CB_BOARD_CONTENT" 	property="cbBoardContent"/>
+		<result column="CB_BOARD_DATE" 		property="cbBoardDate"/>
+		<result column="MEM_ID" 			property="memId"/>
+		<result column="MEM_NAME" 			property="memName"/>
+		<result column="CLUB_CODE" 			property="clubCode"/>
 	</resultMap>
 	
 	<resultMap type="com.kh.library.club.vo.ClubBoardCmtVO" id="cmt">
-		<id column="CB_CMT_NUM" property="cbCmtNum"/>
-		<result column="CB_CMT_CONTENT" property="cbCmtContent"/>
-		<result column="CB_CMT_DATE" property="cbCmtDate"/>
-		<result column="MEM_ID" property="memId"/>
+		<id column="CB_CMT_NUM" 			property="cbCmtNum"/>
+		<result column="CB_CMT_CONTENT" 	property="cbCmtContent"/>
+		<result column="CB_CMT_DATE" 		property="cbCmtDate"/>
+		<result column="MEM_ID"				property="memId"/>
+		<result column="MEM_NAME" 			property="memName"/>
+		<result column="MEM_IMAGE" 			property="memImage"/>
+		<result column="CB_BOARD_NUM" 		property="cbBoardNum"/>
+	</resultMap>
+	
+	<resultMap type="com.kh.library.club.vo.ClubApplyVO" id="apply">
+		<id column="CLUB_APPLY_CODE" 		property="clubApplyCode"/>
+		<result column="CLUB_CODE" 			property="clubCode"/>
+		<result column="MEM_ID" 			property="memId"/>
+		<result column="MEM_NAME" 			property="memName"/>
+	</resultMap>
+	
+	<resultMap type="com.kh.library.member.vo.MemberVO" id="member">
+		<id column="MEM_ID" property="memId"/>
 		<result column="MEM_NAME" property="memName"/>
-		<result column="MEM_IMAGE" property="memImage"/>
-		<result column="CB_BOARD_NUM" property="cbBoardNum"/>
+		<result column="CLUB_CODE" property="clubCode"/>
 	</resultMap>
 	
 	<insert id="insertClubCreate">
@@ -171,7 +184,7 @@
 	<!-- 댓글조회 -->
 	<select id="selectCbCmtList" resultMap="cmt">
 		SELECT MEM_NAME
-			, TO_CHAR(CB_CMT_DATE, 'YYYY-MM-DD') AS CB_CMT_DATE
+			, TO_CHAR(CB_CMT_DATE, 'YYYY-MM-DD HH24:MI') AS CB_CMT_DATE
 			, CB_CMT_CONTENT
 			, CB_BOARD_NUM
 		FROM BOOK_CLUB_BOARD_COMMENT
@@ -201,6 +214,45 @@
 		)
 	</insert>
 	
+	<!-- 신청회원 리스트 -->
+	<select id="selectClubApplyList" resultMap="apply">
+		SELECT CLUB_APPLY_CODE
+			, CLUB_CODE
+			, MEM_ID
+			, MEM_NAME
+		FROM BOOK_CLUB_APPLY
+		WHERE CLUB_CODE = #{clubCode}
+		ORDER BY CLUB_APPLY_CODE
+	</select>
+	
+	<update id="updateClubAcceptance">
+		UPDATE BOOK_MEMBER
+		SET
+		CLUB_CODE = #{clubCode}
+		WHERE MEM_ID = #{memId}
+	</update>
+	
+	<delete id="deleteApplyList">
+		DELETE BOOK_CLUB_APPLY
+		WHERE MEM_ID = #{memId}
+	</delete>
+	
+	<!-- 회원리스트 조회 -->
+	<select id="selectClubMemberList" resultMap="member">
+		SELECT MEM_ID
+			, MEM_NAME
+		FROM BOOK_MEMBER
+		WHERE CLUB_CODE = #{clubCode}
+		ORDER BY MEM_NAME
+	</select>  
+	
+	<!-- 모임강퇴 -->
+	<update id="clubMemberKick">
+	UPDATE BOOK_MEMBER
+	SET
+	CLLUB_CODE = NULL
+	WHERE MEM_ID = #{memId}
+	</update>
 </mapper>
 
 

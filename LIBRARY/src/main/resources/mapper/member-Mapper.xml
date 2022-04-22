@@ -54,7 +54,12 @@
 	<!-- 로그인 -->
 	<select id="login" resultMap="member">
 		SELECT MEM_ID
-			, MEM_NAME 
+			, MEM_NAME
+			, MEM_GENDER
+			, MEM_IMAGE
+			, CLUB_CODE
+			, CLUB_ADMIN
+			, IS_ADMIN
 		FROM BOOK_MEMBER
 		WHERE MEM_ID = #{memId}
 		AND MEM_PWD = #{memPwd}	
@@ -66,6 +71,39 @@
     	FROM BOOK_MEMBER
 		WHERE MEM_NAME = #{memName}
 		AND MEM_EMAIL = #{memEmail}
+	</select>
+	
+	<!-- 비밀번호찾기 : 임시 비번 발송 위한 이메일 조회 -->
+	<select id="selectEmail" resultType="String">
+		SELECT MEM_EMAIL
+		FROM BOOK_MEMBER
+		WHERE MEM_ID = #{memId}
+		AND MEM_NAME = #{memName}
+	</select>
+	
+	<!-- 임시 비밀번호 -->
+	<update id="updateTempPwd">
+		UPDATE BOOK_MEMBER
+		SET MEM_PWD = #{memPwd}
+		WHERE MEM_ID = #{memId}
+	</update>
+	
+	<!-- 마이페이지 -->
+	<!-- 내 정보 상세조회 -->
+	<select id="selectMyPageDetail" resultMap="member">
+		SELECT MEM_ID
+		    , MEM_PWD
+		    , MEM_NAME
+		    , MEM_ADDR
+		    , MEM_TELL
+		    , MEM_EMAIL
+		    , MEM_IMAGE
+		    , MEM_GENDER
+		    , MEM_BIRTH
+		    , CLUB_ADMIN
+		    , CLUB_CODE
+		FROM BOOK_MEMBER
+		WHERE MEM_ID = #{memId}
 	</select>
 </mapper>
 
