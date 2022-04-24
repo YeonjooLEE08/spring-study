@@ -81,56 +81,50 @@ public class AdminController {
 	@PostMapping("/regBook")
 	public String regBook(BookVO bookVO, MultipartHttpServletRequest multi) {
 		
-		/*
-		 * MultipartFile file = multi.getFile("bkOriginFile");
-		 * 
-		 * if(!file.getOriginalFilename().equals("")) {
-		 * 
-		 * //파일 첨부 경로 String uploadPath =
-		 * "D:git\\spring-study\\LIBRARY\\src\\main\\webapp\\resources\\images\\book\\";
-		 * 
-		 * //다음에 들어갈 book코드 조회 String nextBookCode =
-		 * bookAdminService.selectNextBookCode();
-		 * 
-		 * //다음에 들어갈 img_code조회 int nextBookImgCode =
-		 * bookAdminService.selectNextImgCode();
-		 * 
-		 * try {
-		 * 
-		 * //업로드할 파일명 설정 String attachedFileName = System.currentTimeMillis()+"_"+
-		 * file.getOriginalFilename(); //지정한 경로에 파일 첨부 file.transferTo(new
-		 * File(uploadPath+attachedFileName));
-		 * 
-		 * String imgCode = "IMG_"+String.format("%03d", nextBookImgCode++);
-		 * 
-		 * bookVO.setBookImgVO(new
-		 * BookImgVO(imgCode,file.getOriginalFilename(),attachedFileName,nextBookCode));
-		 * bookVO.setBookCode(nextBookCode); } catch(IllegalStateException e) {
-		 * 
-		 * e.printStackTrace(); } catch(IOException e) { e.printStackTrace(); } }
-		 * 
-		 * else {
-		 * 
-		 * //다음에 들어갈 book코드 조회 String nextBookCode =
-		 * bookAdminService.selectNextBookCode();
-		 * 
-		 * 
-		 * int nextBookImgCode = bookAdminService.selectNextImgCode(); String imgCode =
-		 * "IMG_"+String.format("%03d", nextBookImgCode++);
-		 * 
-		 * bookVO.setBookImgVO(new
-		 * BookImgVO(imgCode,"noneImage.jpg","noneImage.jpg",nextBookCode));
-		 * bookVO.setBookCode(nextBookCode); }
-		 */
-		
-		int result1 = bookAdminService.insertBook(bookVO);
-//		int result2 = bookAdminService.insertBookImg(bookVO);
-		
-//		if(result1==1 && result2==1) {
-//			System.out.println("성공");
-//		}
-		
-		return "redirect:/book/bookList";
+		  //이미지 저장 공간
+	      List<BookImgVO> imgList = new ArrayList<BookImgVO>();
+	      BookImgVO bookImgVO = new BookImgVO();
+	      
+	      String nextBookCode = bookAdminService.selectNextBookCode();
+	      int nextBookImgCode = bookAdminService.selectNextBookImgCode();
+	      
+	      Iterator<String> inputTagsNames = multi.getFileNames();
+	      String uploadPath = "D:Git\\spring-study\\LIBRARY\\src\\main\\webapp\\resources\\images\\book\\";
+	      
+	      while(inputTagsNames.hasNext()) {
+	    	  String inputTagName = inputTagsNames.next();
+	    	  
+	    	  if(inputTagName.equals("")) {
+	    		  MultipartFile file = multi.getFile(inputTagName);
+	    		  String originFileName = file.getOriginalFilename();
+	    		  
+	    		  if(!originFileName.equals("")) {
+	    			  String attachedFileName = System.currentTimeMillis()+"_"+originFileName;
+	    			  
+	    			  try {
+	    				  file.transferTo(new java.io.File(uploadPath+attachedFileName));
+	    				  BookImgVO vo = new BookImgVO();
+	    				  vo.setBkImgCode(nextBookImgCode++);
+	    				  vo.setBkOriginName(originFileName);
+	    				  vo.setBkAtName(attachedFileName);
+	    				  vo.setBookCode(nextBookCode);
+	    				  imgList.add(vo);
+	    				  
+	    			  } catch(IllegalStateException e) {
+	    				  e.printStackTrace();
+	    			  } catch(IOException e) {
+	    				  e.printStackTrace();
+	    			  }
+	    		  }
+	    	  }
+	      }
+	      
+	      //책 insert
+	      bookVO.setBookCode(nextBookCode);
+	      bookImgVO.setBookImgList(imgList);
+	      bookAdminService.insertBook(bookVO, bookImgVO);
+	      
+		return "redirect:/admin/bookList";
 	
 	}
 	

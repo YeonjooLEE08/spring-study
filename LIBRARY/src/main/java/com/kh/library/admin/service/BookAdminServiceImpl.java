@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.kh.library.book.vo.RecommendImgVO;
 import com.kh.library.book.vo.RecommendVO;
 import com.kh.library.book.vo.ReserveVO;
+import com.kh.library.book.vo.BookImgVO;
 import com.kh.library.book.vo.BookVO;
 import com.kh.library.book.vo.HopeBookApplyVO;
 import com.kh.library.book.vo.HopeBookVO;
@@ -23,18 +24,19 @@ public class BookAdminServiceImpl implements BookAdminService {
 	
 	//도서 등록
 	@Override
-	public int insertBook(BookVO bookVO) {
-		return sqlSession.insert("bookMapper.insertBook",bookVO);
+	@Transactional(rollbackFor = Exception.class)
+	public void insertBook(BookVO bookVO, BookImgVO bookImgVO) {
+		sqlSession.insert("bookMapper.insertBook",bookVO);
+		sqlSession.insert("bookMapper.insertBookImg",bookImgVO);
 	}
-	
 	@Override
-	public int insertBookImg(BookVO bookVO) {
-		return sqlSession.insert("bookMapper.insertBookImg", bookVO);
+	public void insertBookImg(BookImgVO bookImgVO) {
+		sqlSession.insert("bookMapper.insertBookImg",bookImgVO);
 	}
 	
 	//이미지코드숫자
 	@Override
-	public int selectNextImgCode() {
+	public int selectNextBookImgCode() {
 		return sqlSession.selectOne("bookMapper.selectNextImgCode");
 	}
 

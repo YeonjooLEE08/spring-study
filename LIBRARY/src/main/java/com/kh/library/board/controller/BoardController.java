@@ -22,7 +22,7 @@ public class BoardController {
 	@GetMapping("/ntBoardWrite")
 	public String ntBoardWrite() {
 		
-		return "/board/nt_board_write";
+		return "board/nt_board_write";
 	}
 	
 	//공지사항 글 등록

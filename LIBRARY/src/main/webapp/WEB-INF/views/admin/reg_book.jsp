@@ -60,13 +60,13 @@
 					이미지없으면기본이미지임
 				</div>
 				<div class="col-12 d-grid gap-2">
-					<input type="submit" value="도서 등록">
+					<button type="button" onclick="regItem();">도서등록</button>
 				</div>
 			</form>
 		</div>
 	</div>
 </div>
-<script src="/resources/js/admin/reg_book.js" type="text/javascript"></script>
+<script src="/resources/js/admin/reg_book.js?ver.1" type="text/javascript"></script>
 </body>
 </html>
 

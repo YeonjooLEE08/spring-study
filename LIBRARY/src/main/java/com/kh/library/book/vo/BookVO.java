@@ -1,5 +1,7 @@
 package com.kh.library.book.vo;
 
+import java.util.List;
+
 public class BookVO {
 	private String bookCode;
 	private String title;
@@ -12,10 +14,15 @@ public class BookVO {
 	private int reserveCnt;
 	private int bookStock;
 	private int status;
+	private List<BookImgVO> bookImgList;
 	
 	
-	private BookImgVO bookImgVO;
-	
+	public List<BookImgVO> getBookImgList() {
+		return bookImgList;
+	}
+	public void setBookImgList(List<BookImgVO> bookImgList) {
+		this.bookImgList = bookImgList;
+	}
 	public String getWriter() {
 		return writer;
 	}
@@ -53,12 +60,7 @@ public class BookVO {
 	public void setPubDate(String pubDate) {
 		this.pubDate = pubDate;
 	}
-	public BookImgVO getBookImgVO() {
-		return bookImgVO;
-	}
-	public void setBookImgVO(BookImgVO bookImgVO) {
-		this.bookImgVO = bookImgVO;
-	}
+	
 	public String getBookCode() {
 		return bookCode;
 	}
