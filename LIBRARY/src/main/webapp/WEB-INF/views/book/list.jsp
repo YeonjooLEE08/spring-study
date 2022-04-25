@@ -8,10 +8,11 @@
 <title>Insert title here</title>
 </head>
 <body>
+<label for="select">소장자료검색</label>
 <form action="/book/searchBook" method="post" id="searchBook">
 <!-- 검색구분 선택 -->
-	<label for="select">소장자료검색</label>
-	<select name="searchSub" >
+<label for="select">소장자료검색</label>
+	<select name="searchSub">
 		<option value="all" >전체</option>
 		<option value="title">도서명</option>
 		<option value="writer">저자</option>

@@ -39,8 +39,8 @@
    </resultMap>
    
    <resultMap type="com.kh.library.book.vo.BookVO" id="searchBook">
-   		<id column="SEARCH_CODE" 			property="searchCode"/>
-   		<result column="SEARCH_SUB" 			property="searchSub"/>
+   		<id column="SEARCH_CODE" 				property="searchCode"/>
+   		<result column="SEARCH_SUB" 				property="searchSub"/>
    		<result column="SEARCH_TXT" 			property="searchTxt"/>
    </resultMap>
    

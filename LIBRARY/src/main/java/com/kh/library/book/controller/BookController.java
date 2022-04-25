@@ -98,24 +98,25 @@ public class BookController {
 		
 		return "book/book_list";
 	}
+	
 	//도서 검색 SUB 전달
 	@GetMapping("/goSearchBook")
 	public String goSearchBook(Model model) {
 			return "book/list";
 	}
+	
 	//도서 검색 키워드 전달
 	@PostMapping("/searchBook")
 	public String searchBook(BookVO bookVO) {
-		
+
 		bookService.insertSearch(bookVO);
-		
+
 		return "redirect:/book/searchBookList";
 	}
 	
 	//검색 키워드로 조회
 	@GetMapping("/searchBookList")
 	public String searchBookList(Model model, BookVO bookVO) {
-		
 		model.addAttribute("searchList", bookService.selectSearchList(bookVO));
 		return "book/search_book";
 	}
