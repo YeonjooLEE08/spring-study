@@ -11,7 +11,7 @@
 	<resultMap type="com.kh.library.book.vo.BookVO" id="book">
       <id column="BOOK_CODE"                	property="bookCode"/>
       <result column="TITLE"             		property="title"/>
-      <result column="WRITER"          		  	property="bookWriter"/>
+      <result column="WRITER"          		  	property="writer"/>
       <result column="KEYWORD"        		 	property="keyword"/>
       <result column="PUBLISHER"            	property="publisher"/>
       <result column="CATE_CODE"             	property="cateCode"/>
@@ -20,11 +20,10 @@
       <result column="RESERVE_CNT"         		property="reserveCnt"/>
       <result column="STATUS"             		property="status"/>
       <result column="PUB_DATE"             	property="pubDate"/>
-      <result column="BOOK_AT_IMG_CODE"         property="bookAtImgCode"/>
-      <collection property="bookImgVO"       resultMap="bookImg"/>
+      <result column="BK_IMG"         			property="bkImg"/>
    </resultMap>
    
-   <resultMap type="com.kh.library.book.vo.BookVO" id="dbook">
+   <resultMap type="com.kh.library.book.vo.BookVO" id="dBook">
       <id column="BOOK_CODE"                	property="bookCode"/>
       <result column="TITLE"             		property="title"/>
       <result column="WRITER"          		  	property="bookWriter"/>
@@ -37,7 +36,12 @@
       <result column="STATUS"             		property="status"/>
       <result column="PUB_DATE"             	property="pubDate"/>
       <result column="BOOK_AT_IMG_CODE"         property="bookAtImgCode"/>
-      <collection property="bookImgVO"       resultMap="bookImg"/>
+   </resultMap>
+   
+   <resultMap type="com.kh.library.book.vo.BookVO" id="searchBook">
+   		<id column="SEARCH_CODE" 			property="searchCode"/>
+   		<result column="SEARCH_SUB" 			property="searchSub"/>
+   		<result column="SEARCH_TXT" 			property="searchTxt"/>
    </resultMap>
    
 	<resultMap type="com.kh.library.book.vo.BookImgVO" id="bookImg">
@@ -107,6 +111,7 @@
 			, KEYWORD
 			, PUBLISHER
 			, BOOK_STOCK
+			, BK_IMG
 			, PUB_DATE
 			, CATE_CODE
 		) VALUES (
@@ -116,6 +121,7 @@
 			, #{keyword}
 			, #{publisher}
 			, #{bookStock}
+			, #{bkImg}
 			, #{pubDate}
 			, #{cateCode}
 		)	
@@ -128,28 +134,56 @@
 			, BK_ORIGIN_NAME
 			, BK_AT_NAME
 			, BOOK_CODE
-		) 
-		<foreach collection="bookImgList" item="img" separator="UNION ALL">
-		SELLECT #{img.bkImgCode}
-			,#{img.bkOriginName}
-			,#{img.bkAtName}
-			,#{img.bookCode}
-		FROM DUAL
-		</foreach>
+		) VALUES (
+			 #{bkImgCode}
+			,#{bkOriginName}
+			,#{bkAtName}
+			,#{bookCode}
+		)		
 	</insert>
 	
 	<!-- 이미지 코드 숫자 -->
 	<select id="selectNextImgCode" resultType="int">
-		SELECT NVL(MAX(BOOK_IMG_CODE),0)+1
+		SELECT NVL(MAX(BK_IMG_CODE),0)+1
 		FROM BOOK_IMAGE
 	</select>
 	
-	<!-- 이미지 책 코드 -->
+	<!-- 책 코드 -->
 	<select id="selectNextBookCode" resultType="String">
 		SELECT 'BOOK_'||LPAD(NVL(MAX(TO_NUMBER(SUBSTR(BOOK_CODE, 6))), 0) + 1,3,'0')
 		FROM BOOK
-	</select>
+	</select> 
 	
+	
+	<!-- 검색어 저장 -->
+	<insert id="insertSearch">
+		INSERT INTO SEARCH_BOOK(
+			SEARCH_CODE
+			, SEARCH_SUB 
+			, SEARCH_TXT
+		) VALUES(
+			(SELECT 'SEARCH'||LPAD(NVL(MAX(TO_NUMBER(SUBSTR(SEARCH_CODE,7,3))),0)+1,3,'0') AS SEARCH_CODE FROM SEARCH_BOOK)
+			, #{searchSub}
+			, #{searchTxt}
+		)
+	</insert>
+	
+	<!-- 검색 키워드 조회 -->
+	<select id="selectSearchList" resultMap="book">
+		SELECT B.BOOK_CODE
+			, TITLE
+			, WRITER
+			, KEYWORD
+			, STATUS
+			, C.CATE_CODE
+			, BK_IMG
+		FROM BOOK B, BOOK_CATEGORY C, BOOK_IMAGE I, SEARCH_BOOK S
+		WHERE (B.CATE_CODE = C.CATE_CODE
+		AND B.BOOK_CODE = I.BOOK_CODE)
+		AND SEARCH_SUB LIKE 'title'
+		AND SEARCH_TXT LIKE '%#{searchTxt}%'
+	</select>
+
 	<!-- 책 조회 -->
 	<select id="selectBookList" resultMap="book">
 		SELECT B.BOOK_CODE
@@ -159,7 +193,7 @@
 				, TO_CHAR(INPUT_DATE, 'YYYY-MM-DD')
 				, STATUS
 				, C.CATE_CODE
-				, I.BK_AT_NAME
+				, BK_IMG
 		FROM BOOK B, BOOK_CATEGORY C, BOOK_IMAGE I
 		WHERE B.CATE_CODE = C.CATE_CODE
 		AND B.BOOK_CODE = I.BOOK_CODE

@@ -16,7 +16,7 @@
 <div class="row">
 	<div class="col-8">
 		<div style="background-color: #eeeeee; padding: 16px; border-radius: 12px;">
-			<form class="row g-3" action="/admin/regBook" method="post" id="regBookForm" enctype="multipart/form-data">
+			<form class="row g-3" action="/book/regBook" method="post" id="regBookForm" enctype="multipart/form-data">
 				<div class="col-12">
 					<label for="categorySeletor" class="form-label">카테고리</label>
 					<select class="form-select" id="categorySeletor" name="cateCode" form="regBookForm">
@@ -27,16 +27,12 @@
 					</select>
 				</div>
 				<div class="col-12">
-					<label for="bookCode" class="form-label">도서코드</label>
-					<input type="text" class="form-control" id="bookCode" name="bookCode">
-				</div>
-				<div class="col-12">
 					<label for="title" class="form-label">도서명</label>
 					<input type="text" class="form-control" id="title" name="title">
 				</div>
 				<div class="col-12">
 					<label for="Writer" class="form-label">저자</label>
-					<input type="text" class="form-control" id="Writer" name="Writer">
+					<input type="text" class="form-control" id="writer" name="writer">
 				</div>
 				<div class="col-12">
 					<label for="keyword" class="form-label">키워드</label>
@@ -56,17 +52,17 @@
 				</div>
 				<div>
 					<label for="file" class="form-label">표지</label>
-					<input type="file" class="form-control" id="mainImg" >
+					<input type="file" class="form-control" id="bkImg" name="file" >
 					이미지없으면기본이미지임
 				</div>
 				<div class="col-12 d-grid gap-2">
-					<button type="button" onclick="regItem();">도서등록</button>
+					<input type="submit" value="도서등록">
 				</div>
 			</form>
 		</div>
 	</div>
 </div>
-<script src="/resources/js/admin/reg_book.js?ver.1" type="text/javascript"></script>
+<script src="/resources/js/book/reg_book.js?ver.3" type="text/javascript"></script>
 </body>
 </html>
 

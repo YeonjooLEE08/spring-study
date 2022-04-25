@@ -90,7 +90,34 @@
 		WHERE MEM_ID = #{memId}
 		AND ITEM_CODE = #{itemCode}
 	</update>
+	
+	<!-- 장바구니 선택삭제 -->
+	<delete id="deleteCarts">
+		DELETE CART
+		WHERE MEM_ID = #{memId}
+		AND ITEM_CODE IN
+		<foreach collection="itemCodes" item="itemCode" open="(" close=")" separator=",">
+			#{itemCode}
+		</foreach>
+	</delete>
+	
+	<!-- 장바구니비우기 -->
+	<delete id="deleteAllCart">
+		DELETE CART
+		WHERE MEM_ID = #{memId}
+	</delete>
+	
+	<!-- ///////// 주문관련 쿼리 //////////// -->
+	
+	<!-- 다음 구매번호 조회 -->
+	<select id="selectNextBuyNum" resultType="int">
+		SELECT NVL(MAX(BUY_NUM), 0) +1
+		FROM BUY
+	</select>
 </mapper>
+
+
+
 
 
 

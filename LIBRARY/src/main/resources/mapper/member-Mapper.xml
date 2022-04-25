@@ -17,6 +17,12 @@
 		<result column="CLUB_ADMIN" property="clubAdmin"/>
 		<result column="CLUB_CODE" 	property="clubCode"/>
 	</resultMap>
+	<resultMap type="com.kh.library.member.vo.MemberImageVO" id="memberImage">
+		<id column="MEM_IMG_CODE" 			property="memImgCode"/>
+		<result column="MEM_ORIGIN_NAME" 	property="memOriginName"/>
+		<result column="MEM_AT_IMG_NAME" 	property="memAtImgName"/>
+		<result column="MEM_ID" 			property="memId"/>
+	</resultMap>
 	
 	<!--/////////////////////회원가입//////////////////// -->
 	<!-- ID 중복체크 -->
@@ -128,6 +134,7 @@
 		WHERE MEM_ID = #{memId}
 	</select>
 	
+	
 	<!-- 내 정보 수정 -->
 	<update id="updateBasicInfo">
 		UPDATE BOOK_MEMBER
@@ -137,12 +144,19 @@
 			, MEM_IMAGE = #{memImage}
 		WHERE MEM_ID = #{memId}
 	</update>
+	<!-- 프로필 이미지 수정 -->
 	<update id="updateMemImage">
 		UPDATE MEMBER_IMAGE
 		SET MEM_ORIGIN_NAME = #{memOriginName}
 		    , MEM_AT_IMG_NAME = #{memAtImgName}
 		WHERE MEM_ID = #{memId}
 	</update>
+	<!-- 파일명 조회 : 프로필 이미지 수정 안 할 때 (기존 이미지로 채움) -->
+	<select id="selectMemAtImgName" resultType="String">
+		SELECT MEM_AT_IMG_NAME
+		FROM MEMBER_IMAGE
+		WHERE MEM_ID = #{memId}
+	</select>
 </mapper>
 
 

@@ -10,7 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.kh.validation.vo.MemberVO;
 
-@Controller
+//해당 클래스가 컨트로러임을 인지 + 해당 클래스의 객체 생성;
+@Controller 
 @RequestMapping("/test")
 public class TestController {
 	@Autowired
@@ -38,8 +39,16 @@ public class TestController {
 		String encodePw = pwEncoder.encode(memberVO.getPw());
 		System.out.println(encodePw);
 		
-		pwEncoder.matches("oracle","암호화된 비번(디비에저장된비번)"); //return타입 boolean 
+		Boolean aaa = pwEncoder.matches("oracle","암호화된 비번(디비에저장된비번)"); //return타입 boolean 
+		System.out.println(aaa);
 		
 		return "";
 	}
+	
+	@GetMapping("/main")
+	public String main() {
+		return "main";
+	}
+	
+	
 }
