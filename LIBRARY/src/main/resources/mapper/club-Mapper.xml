@@ -22,6 +22,7 @@
 		<result column="MEM_ID" 			property="memId"/>
 		<result column="MEM_NAME" 			property="memName"/>
 		<result column="CLUB_CODE" 			property="clubCode"/>
+		<result column="CB_CMT_COUNT" 			property="cbCmtCount"/>
 	</resultMap>
 	
 	<resultMap type="com.kh.library.club.vo.ClubBoardCmtVO" id="cmt">
@@ -32,6 +33,7 @@
 		<result column="MEM_NAME" 			property="memName"/>
 		<result column="MEM_IMAGE" 			property="memImage"/>
 		<result column="CB_BOARD_NUM" 		property="cbBoardNum"/>
+		<result column="CLUB_CODE" 			property="clubCode"/>
 	</resultMap>
 	
 	<resultMap type="com.kh.library.club.vo.ClubApplyVO" id="apply">
@@ -39,13 +41,6 @@
 		<result column="CLUB_CODE" 			property="clubCode"/>
 		<result column="MEM_ID" 			property="memId"/>
 		<result column="MEM_NAME" 			property="memName"/>
-	</resultMap>
-	
-	<resultMap type="com.kh.library.member.vo.MemberVO" id="member">
-		<id column="MEM_ID" property="memId"/>
-		<result column="MEM_NAME" property="memName"/>
-		<result column="CLUB_CODE" property="clubCode"/>
-		<result column="CLUB_ADMIN" property="clubAdmin"/>
 	</resultMap>
 	
 	<insert id="insertClubCreate">
@@ -135,6 +130,9 @@
 		    , MEM_ID
 		    , CLUB_CODE
 		    , MEM_NAME
+		    , (SELECT COUNT(CB_CMT_NUM)
+				FROM BOOK_CLUB_BOARD_COMMENT
+				WHERE CB_BOARD_NUM = BOOK_CLUB_BOARD.CB_BOARD_NUM) AS CB_CMT_COUNT
 		FROM BOOK_CLUB_BOARD
 		WHERE CLUB_CODE = #{clubCode} 
 		ORDER BY CB_BOARD_NUM DESC
@@ -174,26 +172,32 @@
 	INSERT INTO BOOK_CLUB_BOARD_COMMENT (
 		CB_CMT_NUM
 		, CB_CMT_CONTENT
-		, MEM_ID
 		, MEM_NAME
+		, MEM_ID
 		, CB_BOARD_NUM
+		, CLUB_CODE
 	) VALUES (
 		(SELECT 'CBCMT_'||LPAD(NVL(MAX(TO_NUMBER(SUBSTR(CB_CMT_NUM, 7))), 0) + 1, 3, 0) AS CB_CMT_NUM FROM BOOK_CLUB_BOARD_COMMENT)
 		, #{cbCmtContent}
-		, #{memId}
 		, #{memName}
+		, #{memId}
 		, #{cbBoardNum}
+		, #{clubCode}
 	)
 	</insert>
 	
 	<!-- 댓글조회 -->
 	<select id="selectCbCmtList" resultMap="cmt">
-		SELECT MEM_NAME
+		SELECT	MEM_ID 
+			, MEM_NAME
 			, TO_CHAR(CB_CMT_DATE, 'YYYY-MM-DD HH24:MI') AS CB_CMT_DATE
 			, CB_CMT_CONTENT
+			, CB_CMT_NUM
 			, CB_BOARD_NUM
+			, CLUB_CODE
 		FROM BOOK_CLUB_BOARD_COMMENT
 		WHERE CB_BOARD_NUM = #{cbBoardNum}
+		ORDER BY CB_CMT_DATE
 	</select>
 	
 	<!-- 댓글 수정 -->
@@ -201,8 +205,13 @@
 		UPDATE BOOK_CLUB_BOARD_COMMENT
 		SET
 		CB_CMT_CONTENT = #{cbCmtContent}
-		WHERE MEM_ID = ${memId}
+		WHERE CB_CMT_NUM = #{cbCmtNum}
 	</update>
+	
+	<delete id="deleteCbCmt">
+		DELETE BOOK_CLUB_BOARD_COMMENT
+		WHERE CB_CMT_NUM = #{cbCmtNum}
+	</delete>
 	
 	<!-- 모임 가입 -->
 	<insert id="insertClubJoin">
@@ -244,9 +253,10 @@
 	</delete>
 	
 	<!-- 회원리스트 조회 -->
-	<select id="selectClubMemberList" resultMap="member">
+	<select id="selectClubMemberList" resultMap="memberMapper.member">
 		SELECT MEM_ID
 			, MEM_NAME
+			, MEM_IMAGE
 			, CLUB_CODE
 			, CLUB_ADMIN
 		FROM BOOK_MEMBER
@@ -261,6 +271,13 @@
 		CLUB_CODE = NULL
 		WHERE MEM_ID = #{memId}
 	</update>
+	
+	<!-- 댓글수 -->
+	<select id="selectCbCmtCount" resultType="int">
+		select count(CB_CMT_NUM)
+		FROM BOOK_CLUB_BOARD_COMMENT
+		WHERE CB_BOARD_NUM = #{cbBoardNum}
+	</select>
 	
 </mapper>
 

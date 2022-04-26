@@ -157,6 +157,16 @@
 		FROM MEMBER_IMAGE
 		WHERE MEM_ID = #{memId}
 	</select>
+	
+	<!-- 북클럽 조회 -->
+	<select id="selectMyBookClub" resultMap="clubMapper.club">
+		SELECT CLUB_CODE, CLUB_NAME
+		FROM BOOK_CLUB
+		WHERE CLUB_CODE = 
+			(SELECT CLUB_CODE 
+			FROM BOOK_MEMBER 
+			WHERE MEM_ID = #{memId})
+	</select>
 </mapper>
 
 

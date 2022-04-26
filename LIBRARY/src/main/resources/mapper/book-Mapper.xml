@@ -12,15 +12,24 @@
       <id column="BOOK_CODE"                	property="bookCode"/>
       <result column="TITLE"             		property="title"/>
       <result column="WRITER"          		  	property="writer"/>
+      <result column="ISBN"          		  	property="isbn"/>
       <result column="KEYWORD"        		 	property="keyword"/>
+      <result column="BK_CONTENT"        		property="bkContent"/>
+      <result column="BK_PAGE"        			property="bkPage"/>
+      <result column="BK_SIZE"        			property="bkSize"/>
       <result column="PUBLISHER"            	property="publisher"/>
-      <result column="CATE_CODE"             	property="cateCode"/>
       <result column="INPUT_DATE"          		property="inputDate"/>
-      <result column="BOOK_STOCK"          		property="bookStock"/>
-      <result column="RESERVE_CNT"         		property="reserveCnt"/>
+      <result column="BK_STOCK"          		property="bkStock"/>
+      <result column="AREA"          			property="area"/>
+      <result column="BK_IMG"         			property="bkImg"/>
+      <result column="RSV_CNT"             		property="rsvCnt"/>
+      <result column="RCD_CNT"             		property="rcdCnt"/>
       <result column="STATUS"             		property="status"/>
       <result column="PUB_DATE"             	property="pubDate"/>
-      <result column="BK_IMG"         			property="bkImg"/>
+      <result column="CATE_CODE"             	property="cateCode"/>
+      <result column="CATE_NAME"             	property="cateName"/>
+      <result column="SEARCH_SUB"         		property="searchSub"/>
+      <result column="SEARCH_TXT"         		property="searchTxt"/>
    </resultMap>
    
    <resultMap type="com.kh.library.book.vo.BookVO" id="dBook">
@@ -108,9 +117,14 @@
 			BOOK_CODE
 			, TITLE
 			, WRITER
+			, ISBN
 			, KEYWORD
+			, BK_CONTENT
+			, BK_PAGE
+			, BK_SIZE
 			, PUBLISHER
-			, BOOK_STOCK
+			, BK_STOCK
+			, AREA
 			, BK_IMG
 			, PUB_DATE
 			, CATE_CODE
@@ -118,9 +132,14 @@
 			#{bookCode}
 			, #{title}
 			, #{writer}
+			, #{isbn}
 			, #{keyword}
+			, #{bkContent}
+			, #{bkPage}
+			, #{bkSize}
 			, #{publisher}
-			, #{bookStock}
+			, #{bkStock}
+			, #{area}
 			, #{bkImg}
 			, #{pubDate}
 			, #{cateCode}
@@ -169,37 +188,94 @@
 	</insert>
 	
 	<!-- 검색 키워드 조회 -->
-	<select id="selectSearchList" resultMap="book">
+	<select id="selectSearchList" resultMap="book" >
 		SELECT B.BOOK_CODE
 			, TITLE
 			, WRITER
+			, ISBN
 			, KEYWORD
+			, BK_CONTENT
+			, AREA
 			, STATUS
 			, C.CATE_CODE
+			, CATE_NAME
 			, BK_IMG
-		FROM BOOK B, BOOK_CATEGORY C, BOOK_IMAGE I, SEARCH_BOOK S
+		FROM BOOK B, BOOK_CATEGORY C, BOOK_IMAGE I
 		WHERE (B.CATE_CODE = C.CATE_CODE
 		AND B.BOOK_CODE = I.BOOK_CODE)
-		AND SEARCH_SUB LIKE 'title'
-		AND SEARCH_TXT LIKE '%#{searchTxt}%'
+        AND ${searchSub} LIKE '%'||#{searchTxt}||'%' 
 	</select>
 
-	<!-- 책 조회 -->
+	<!-- 전체 책 조회 -->
 	<select id="selectBookList" resultMap="book">
 		SELECT B.BOOK_CODE
 				, TITLE
 				, WRITER
-				, KEYWORD
-				, TO_CHAR(INPUT_DATE, 'YYYY-MM-DD')
-				, STATUS
-				, C.CATE_CODE
+				, ISBN
+				, BK_CONTENT
+				, PUBLISHER
+				, AREA
 				, BK_IMG
+				, STATUS
+				, PUB_DATE
+				, C.CATE_CODE
 		FROM BOOK B, BOOK_CATEGORY C, BOOK_IMAGE I
 		WHERE B.CATE_CODE = C.CATE_CODE
 		AND B.BOOK_CODE = I.BOOK_CODE
-		ORDER BY INPUT_DATE DESC
+		ORDER BY TITLE DESC
 	</select>
+	
+	<!-- 도서 상세 보기 -->
+	<select id="selectBookDetail" resultMap="book">
+		SELECT B.BOOK_CODE
+			, TITLE
+			, WRITER
+			, ISBN
+			, KEYWORD
+			, BK_CONTENT
+			, BK_PAGE
+			, BK_SIZE
+			, PUBLISHER
+			, TO_CHAR(INPUT_DATE, 'YYYY-MM-DD')			
+			, BK_STOCK
+			, AREA
+			, BK_IMG
+			, RCD_CNT
+			, STATUS
+			, PUB_DATE
+			, C.CATE_CODE
+			, CATE_NAME
+		FROM BOOK B, BOOK_CATEGORY C , BOOK_IMAGE I 
+		WHERE B.CATE_CODE = C.CATE_CODE
+		AND B.BOOK_CODE = I.BOOK_CODE
+		AND B.BOOK_CODE = #{bookCode}
+	</select>
+	
+	<!-- 책 추천  -->
+	<update id="updateRcdCnt" >
+		UPDATE BOOK
+		SET RCD_CNT = RCD_CNT+1
+		WHERE BOOK_CODE = #{bookCode}
+	</update>
+	
+	<!-- 추천도서 랭킹 -->
+	<select id="selectRcdBook" resultMap="book">
+		SELECT BOOK_CODE
+		    , TITLE
+		    , BK_IMG
+		    , RCD_CNT
+		FROM (
+		        SELECT BOOK_CODE
+		            , TITLE
+		            , BK_IMG
+		            , RCD_CNT
+		            , DENSE_RANK() OVER(ORDER BY RCD_CNT DESC) AS MRCD
+		        FROM BOOK
+		    )
+		WHERE MRCD &lt; 3
 		
+		
+	</select>
 	<!-- 책 대여 -->
 	<insert id="insertReserve">
 		MERGE INTO RESERVE
@@ -243,7 +319,7 @@
 			, #{memId}
 		)
 	</insert>
-	
+
 	
 <!-- 	
 	<select id="selectNextHopeCode" resultType="String">
