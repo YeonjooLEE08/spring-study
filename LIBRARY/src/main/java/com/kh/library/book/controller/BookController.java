@@ -125,6 +125,18 @@ public class BookController {
 		
 		return "manage/home";
 	}
+	
+	//신간도서 select 
+	@GetMapping("/selectNewBook")
+	public String selectNewBook(Model model) {
+		model.addAttribute("bookList", bookService.selectNewBook());
+		return "manage/home";
+	}
+	//도서예약
+	
+	
+	
+	
 	//희망도서 신청 폼 
 	@GetMapping("/hopeBookForm")
 	public String hopeBookForm() {
@@ -139,4 +151,10 @@ public class BookController {
 		return "book/fin_hope_book";
 	}
 
+	
+	//카카오검색 기능
+	@RequestMapping("/searchHpBook")
+	public String searchHpBook() {
+		return "book/reg_hope_book";
+	}
 }

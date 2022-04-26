@@ -34,6 +34,9 @@ public interface BookService {
 	//추천도서 랭킹 
 	List<BookVO> selectRcdBook();
 	
+	//신간도서 select
+	List<BookVO> selectNewBook();
+	
 	//도서 예약 기능
 	void insertReserveBook(ReserveVO reserveVO);
 	

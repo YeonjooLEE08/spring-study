@@ -12,7 +12,7 @@
  <c:if test="${sessionScope.loginInfo.isAdmin eq 'Y' }" > 
 	<a href="/book/regBookForm">등록</a>
  </c:if> 
-<a href="/book/hopeBookForm">희망도서</a>
+<a href="/book/searchHpBook">희망도서</a>
 <a href="/book/bookList">등록도서확인</a>
 
 

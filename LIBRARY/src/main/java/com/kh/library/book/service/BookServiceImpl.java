@@ -61,6 +61,14 @@ public class BookServiceImpl implements BookService {
 	public List<BookVO> selectRcdBook(){
 		return sqlSession.selectList("bookMapper.selectRcdBook");
 	}
+	
+	//신간도서 조회
+	@Override
+	public List<BookVO> selectNewBook(){
+		return sqlSession.selectList("bookMapper.selectNewBook");
+	}
+	
+	
 	@Override
 	public void insertReserveBook(ReserveVO reserveVO) {
 		sqlSession.insert("bookMapper.insertReserveBook", reserveVO);
