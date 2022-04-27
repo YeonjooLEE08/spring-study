@@ -43,6 +43,14 @@
 		<result column="MEM_NAME" 			property="memName"/>
 	</resultMap>
 	
+	<resultMap type="com.kh.library.admin.vo.MessageVO" id="msg">
+		<id column="MSG_CODE" 		property="msgCode"/>
+		<result column="SEND_ID" 	property="sendId"/>
+		<result column="GET_ID" 	property="getId"/>
+		<result column="SEND_DATE" 	property="sendDate"/>
+		<result column="IS_READ" 	property="isRead"/>
+	</resultMap>
+	
 	<insert id="insertClubCreate">
 		INSERT INTO BOOK_CLUB (  
 		    CLUB_CODE
@@ -146,6 +154,9 @@
 		    , CLUB_CODE
 		    , MEM_ID
 		    , MEM_NAME
+		    , (SELECT COUNT(CB_CMT_NUM)
+				FROM BOOK_CLUB_BOARD_COMMENT
+				WHERE CB_BOARD_NUM = BOOK_CLUB_BOARD.CB_BOARD_NUM) AS CB_CMT_COUNT
 		FROM BOOK_CLUB_BOARD
 		WHERE CB_BOARD_NUM = #{cbBoardNum}
 		AND CLUB_CODE = #{clubCode}
@@ -279,6 +290,21 @@
 		WHERE CB_BOARD_NUM = #{cbBoardNum}
 	</select>
 	
+	<!-- 알림함 조회 -->
+	<select id="selectGetMsgList" resultMap="msg">
+		SELECT MSG_CODE
+			, MSG_CONTENT
+			, SEND_DATE
+		FROM MESSAGE
+		WHERE GET_ID = #{getId}
+	</select>
+	
+	<!-- 게시글 전체 개수 -->
+	<select id="selectClubBoardListCnt" resultType="int">
+	SELECT COUNT(CB_BOARD_NUM)
+	FROM BOOK_CLUB_BOARD
+	WHERE CLUB_CODE = #{clubCode}
+	</select>
 </mapper>
 
 

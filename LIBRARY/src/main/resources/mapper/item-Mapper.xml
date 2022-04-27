@@ -88,6 +88,24 @@
 	ORDER BY ITEM.ITEM_CODE DESC
 	</select>
 	
+	
+	<!-- 굿즈검색 -->
+	<select id="searchItem" resultMap="item">
+	SELECT ITEM.ITEM_CODE
+		, ITEM_NAME
+		, ITEM_PRICE
+		, CATE_CODE
+		, ITEM_AT_IMG_NAME
+	FROM ITEM ITEM, ITEM_IMAGE IMG
+	WHERE ITEM.ITEM_CODE = IMG.ITEM_CODE
+	AND IS_MAIN ='Y'
+	<if test="keyword != null and !keyword.equals('')">
+		AND ITEM_NAME LIKE #{keyword}
+	</if>
+	<if test=""></if>
+	ORDER BY ITEM.ITEM_CODE DESC
+	</select>
+	
 	<!-- 굿즈상세조회 -->
 	<select id="selectItemDetail" resultMap="dItem">
 	SELECT ITEM.ITEM_CODE

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 모든 SQL문을 mapper태그 안에 작성 -->
+<mapper namespace="memberMapper">
+	<resultMap type="com.kh.spring.vo.MemberVO" id="member">
+		<id column="MEM_ID" property="memId"/>
+		<result column="MEM_PW" property="memPw"/>
+		<result column="MEM_EMAIL" property="memEmail"/>
+		
+	
+	</resultMap>
+	
+	<insert id="join">
+		INSERT INTO SECURE_MEMBER (
+			MEM_ID
+			, MEM_PW
+			, MEM_EMAIL
+		) VALUES (
+			#{memId}		
+			, #{memPw}		
+			, #{memEmail}		
+		)
+	</insert>
+	
+	<select id="login" resultMap="member">
+		SELECT MEM_ID
+			, MEM_PW
+			, MEM_EMAIL
+		FROM SECURE_MEMBER
+		WHERE MEM_ID = #{memId}
+		AND MEM_PW = #{memPw}
+	</select>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+

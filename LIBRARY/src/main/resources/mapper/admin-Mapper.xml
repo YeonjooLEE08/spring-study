@@ -10,20 +10,24 @@
 		SELECT MEM_ID
 			, MEM_NAME
 		FROM BOOK_MEMBER
-		ORDER BY MEM_NAME
+		ORDER BY MEM_Id
 	</select>
 	
 	<insert id="insertSendMessage">
 		INSERT INTO MESSAGE (
-			GET_ID
-			, SEND_ID
+			MSG_CODE
+			, GET_ID
 			, MSG_CONTENT
 		) VALUES (
-			#{getId}
-			, #{sendId}
+			(SELECT 'MSG_'||LPAD(NVL(MAX(TO_NUMBER(SUBSTR(MSG_CODE, 5))), 0) + 1, 3, 0) AS MSG_CODE FROM MESSAGE)
+			, #{getId}
 			, #{msgContent}
 		)		
 	</insert>
+	
+	<select id="">
+		
+	</select>
 </mapper>
 
 
