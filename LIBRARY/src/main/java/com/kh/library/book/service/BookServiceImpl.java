@@ -35,21 +35,25 @@ public class BookServiceImpl implements BookService {
 	public List<BookVO> selectSearchSub(){
 		return sqlSession.selectList("bookMapper.selectSearchList()");
 	}
+	
 	//검색어 저장
 	@Override
 	public void insertSearch(BookVO bookVO) {
 		sqlSession.insert("bookMapper.insertSearch", bookVO);
 	}
+	
 	//도서 검색결과 조회
 	@Override
 	public List<BookVO> selectSearchList(BookVO bookVO){
 		return sqlSession.selectList("bookMapper.selectSearchList",bookVO);
 	}
+	
 	//도서 상세보기
 	@Override
 	public BookVO selectBookDetail(BookVO bookVO) {
 		return sqlSession.selectOne("bookMapper.selectBookDetail", bookVO);
 	}
+	
 	//도서 추천
 	@Override
 	public void updateRcdCnt(BookVO bookVO) {
@@ -63,15 +67,18 @@ public class BookServiceImpl implements BookService {
 		sqlSession.update("bookMapper.updateStatus",bookVO);
 	}
 	
-	@Override
-	public void insertHopeBook(HopeBookVO hbVO) {
-		sqlSession.insert("bookMapper.insertHopeBook", hbVO);
-	}
-	
 	// 유저 예약 도서 조회
 	@Override
 	public List<ReserveVO> selectRsvUser(ReserveVO reserveVO) {
 		return sqlSession.selectList("bookMapper.selectRsvUser",reserveVO);
+	}
+	
+	
+	
+	//희망도서 신청
+	@Override
+	public void insertHopeBook(HopeBookVO hbVO) {
+		sqlSession.insert("bookMapper.insertHopeBook", hbVO);
 	}
 
 	

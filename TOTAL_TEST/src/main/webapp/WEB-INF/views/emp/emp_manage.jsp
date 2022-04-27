@@ -6,6 +6,15 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<style type="text/css">
+table{
+
+	 width: 80%;
+
+	margin: 0 auto;
+}
+
+</style>
 </head>
 <body>
 <form action="/emp/regEmp" method="post">
@@ -51,8 +60,14 @@
 			<td>
 				<input type="text" name="tell"> <input type="text" name="tell"> <input type="text" name="tell"></td>
 		</tr>
+		<tr>
+		<td>
+			<input type="submit" value="전송">
+		</td>
+		
+		</tr>
 	</table>
-	<input type="submit" value="전송">
+	
 </form>
 </body>
 </html>

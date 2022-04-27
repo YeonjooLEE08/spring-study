@@ -6,6 +6,22 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<style type="text/css">
+table{
+	text-align: center;
+	 width: 80%;
+	 border: 1px solid black;
+	 border-collapse: collapse;
+	margin: 0 auto;
+	
+	 
+}
+tr,td{
+	border: 1px solid black;
+	 border-collapse: collapse;
+}
+
+</style>
 </head>
 <body>
 <table>
@@ -30,6 +46,7 @@
 				<td>${emp.eNum }</td>
 				<td>${emp.eName }</td>
 				<td>${emp.tell }</td>
+				<td>${emp.gender }</td>
 				<td>${emp.eAge }</td>
 				<td>${emp.dName }</td>
 				<td>${emp.dLoc }</td>

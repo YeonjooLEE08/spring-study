@@ -8,6 +8,7 @@ import java.util.List;
 
 import com.kh.library.book.vo.BookImgVO;
 import com.kh.library.book.vo.BookVO;
+import com.kh.library.book.vo.BorrowVO;
 import com.kh.library.book.vo.HopeBookApplyVO;
 import com.kh.library.book.vo.HopeBookVO;
 
@@ -34,8 +35,14 @@ public interface BookAdminService {
 	//예약목록 조회
 	List<ReserveVO> selectRsvList(ReserveVO reserveVO);
 	
-	//책 대여
+	//도서 예약
 	void insertReserve(ReserveVO reserveVO);
+	
+	//도서 대여
+	void insertBorrow(ReserveVO reserveVO);
+	
+	//대여 정보 업데이트
+	void updateBorrow(BorrowVO borrowVO);
 	
 	//희망도서신청리스트조회
 	List<HopeBookVO> selectHopeBookList();

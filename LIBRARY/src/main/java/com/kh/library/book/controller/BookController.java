@@ -17,6 +17,7 @@ import com.kh.library.book.service.BookAdminService;
 import com.kh.library.book.service.BookService;
 import com.kh.library.book.vo.BookImgVO;
 import com.kh.library.book.vo.BookVO;
+import com.kh.library.book.vo.BorrowVO;
 import com.kh.library.book.vo.HopeBookVO;
 import com.kh.library.book.vo.ReserveVO;
 
@@ -149,6 +150,22 @@ public class BookController {
 		model.addAttribute("adminReserve", bookAdminService.selectRsvList(reserveVO));
 		
 		return "admin/reserve_list";
+	}
+	
+	//도서 대여
+	@RequestMapping("/insertBorrow")
+	public String insertBorrow(ReserveVO reserveVO) {
+		bookAdminService.insertBorrow(reserveVO);
+		
+		return "";
+	}
+	
+	//대여 정보 업데이트
+	@RequestMapping("/updateBorrow")
+	public String updateBorrow(BorrowVO borrowVO) {
+		bookAdminService.updateBorrow(borrowVO);
+		
+		return "redirect:/reserveListAdmin";
 	}
 	
 	//희망도서 신청 폼 

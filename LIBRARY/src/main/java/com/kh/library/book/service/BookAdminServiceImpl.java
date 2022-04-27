@@ -12,6 +12,7 @@ import com.kh.library.book.vo.RecommendVO;
 import com.kh.library.book.vo.ReserveVO;
 import com.kh.library.book.vo.BookImgVO;
 import com.kh.library.book.vo.BookVO;
+import com.kh.library.book.vo.BorrowVO;
 import com.kh.library.book.vo.HopeBookApplyVO;
 import com.kh.library.book.vo.HopeBookVO;
 
@@ -59,10 +60,36 @@ public class BookAdminServiceImpl implements BookAdminService {
 	public List<BookVO> selectNewBook(){
 		return sqlSession.selectList("bookMapper.selectNewBook");
 	}
-
+	
+	//예약 추가 
 	@Override
 	public void insertReserve(ReserveVO reserveVO) {
 		sqlSession.insert("bookMapper.insertReserve",reserveVO);
+	}
+	
+	//예약 목록 조회
+	@Override
+	public List<ReserveVO> selectRsvList(ReserveVO reserveVO) {
+		return sqlSession.selectList("bookMapper.selectRsvAdmin",reserveVO);
+	}
+	
+	//도서 대여 insert
+	@Override
+	public void insertBorrow(ReserveVO reserveVO) {
+		sqlSession.insert("bookMapeer.insertBorrow", reserveVO);
+		//여기서 예약 어쩌고 걍 삭제해버리기 .. 
+		sqlSession.delete("bookMapper.deleteRsvList", reserveVO);
+	}
+	
+	//도서 및 멤버 대여정보 update
+	@Override
+	public void updateBorrow(BorrowVO borrowVO) {
+		sqlSession.update("bookMapper.updateBrCnt", borrowVO);
+		sqlSession.insert("bookMapper.updateBrCode", borrowVO);
+		
+		//reserveVO랑 borrowVO 사용해서 merge into 하기..불가능할듯
+		//걍 조건 맞는 거 삭제하기 .. ...
+		sqlSession.delete("bookMapper.deleteRsvList", borrowVO);
 	}
 	
 	@Override
@@ -81,11 +108,10 @@ public class BookAdminServiceImpl implements BookAdminService {
 		sqlSession.insert("bookMapper.insertRecommend",rcVO);
 		sqlSession.insert("bookMapper.insertRecommendImg",rcImgVO);
 	}
+
 	
-	//예약 목록 조회
-	@Override
-	public List<ReserveVO> selectRsvList(ReserveVO reserveVO) {
-		return sqlSession.selectList("bookMapper.selectRsvAdmin",reserveVO);
-	}
+
+	
+	
 	
 }
