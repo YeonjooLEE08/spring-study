@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.kh.library.book.vo.BookCategoryVO;
 import com.kh.library.book.vo.BookVO;
+import com.kh.library.book.vo.BorrowVO;
 import com.kh.library.book.vo.HopeBookVO;
 import com.kh.library.book.vo.RecommendImgVO;
 import com.kh.library.book.vo.RecommendVO;
@@ -31,6 +32,9 @@ public interface BookService {
 	
 	//유저 예약 도서 조회
 	List<ReserveVO> selectRsvUser(ReserveVO reserveVO);
+	
+	//유저 대여 목록 조회
+	List<BorrowVO> selectBrUser(BorrowVO borrowVO);
 	
 	//희망도서 신청 기능
 	void insertHopeBook(HopeBookVO hbVO);

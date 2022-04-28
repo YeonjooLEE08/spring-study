@@ -57,8 +57,10 @@
 	</button>
 <!-- Modal -->
 <div class="modal fade" id="selectBorrow" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<form action="/book/selectBrMember" method="post" id="brMemberForm">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
+     
       <div class="modal-header">
         <h5 class="modal-title" id="myModalLabel">대여 입력 정보 </h5>
       </div>
@@ -66,21 +68,24 @@
       	<table>
       		<tr>
       			<!-- 폼 입력해주기  -->
-      			<td>아이디 </td>
-      			<td><input type="text" id="memId" ></td>
-      		</tr>
-      	</table>
-          
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" id="closeModalBtn" data-dismiss="modal">닫기</button>
-        <button type="button" class="btn btn-primary" onclick="selectBorrow();">조회</button>
-      </div>
+      				<td>아이디 </td>
+      				<td><input type="text" id="memId" ></td>
+			      			
+			      		</tr>
+			      	</table>
+			          
+			      </div>
+			      <div class="modal-footer">
+			        <button type="button" class="btn btn-default" id="closeModalBtn" data-dismiss="modal">닫기</button>
+			        <button type="button" class="btn btn-primary" onclick="selectBrMember();">조회</button>
+			      </div>
+     		
     </div>
   </div>
+  </form>
  </div>
 	
 
-<script type="text/javascript" src="/resources/js/book/admin_brList.js?ver=1"></script>
+<script type="text/javascript" src="/resources/js/book/admin_brList.js?ver=2"></script>
 </body>
 </html>

@@ -7,7 +7,36 @@ public class NtBoardVO {
 	private String memId;
 	private String memName;
 	private String ntCreateDate;
+	private String ntRdCnt;
+	private String searchSub;
+	private int rowNum;
+	public int getRowNum() {
+		return rowNum;
+	}
+	public void setRowNum(int rowNum) {
+		this.rowNum = rowNum;
+	}
+	public String getSearchSub() {
+		return searchSub;
+	}
+	public void setSearchSub(String searchSub) {
+		this.searchSub = searchSub;
+	}
+	private String searchTxt;
 	
+	
+	public String getNtRdCnt() {
+		return ntRdCnt;
+	}
+	public void setNtRdCnt(String ntRdCnt) {
+		this.ntRdCnt = ntRdCnt;
+	}
+	public String getSearchTxt() {
+		return searchTxt;
+	}
+	public void setSearchTxt(String searchTxt) {
+		this.searchTxt = searchTxt;
+	}
 	public String getNtCode() {
 		return ntCode;
 	}

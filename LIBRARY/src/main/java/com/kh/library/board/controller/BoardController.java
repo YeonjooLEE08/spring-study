@@ -28,6 +28,8 @@ public class BoardController {
 	//공지사항 글 등록
 	@PostMapping("/regNtBoard")
 	public String insertNtBoard(Model model, NtBoardVO ntBoardVO) {
+		String nextNtCode = boardService.selectNextNtCode();
+		ntBoardVO.setNtCode(nextNtCode);
 		boardService.insertNtBoard(ntBoardVO);
 		return "redirect:/board/ntBoardList";
 	}
@@ -39,11 +41,17 @@ public class BoardController {
 		return "board/nt_board_list";
 	}
 	
-	
+	//공지사항 검색
+	@PostMapping("/searchNt")
+	public String selectSearchNt(Model model, NtBoardVO ntBoardVO) {
+		model.addAttribute("ntBoardList", boardService.selectSearchNt(ntBoardVO));
+		return "board/nt_board_list";
+	}
 	
 	//공지사항 상세 조회
 	@GetMapping("/ntBoardDetail")
-	public String selectNtBoardDetail(Model model , NtBoardVO ntBoardVO) {
+	public String selectNtBoardDetail(Model model , NtBoardVO ntBoardVO, String ntCode) {
+		boardService.updateNtBoardRdCnt(ntCode);
 		model.addAttribute("ntBoard", boardService.selectNtBoardDetail(ntBoardVO));
 		return "board/nt_board_detail";
 	}

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.kh.library.book.vo.BookCategoryVO;
 import com.kh.library.book.vo.BookVO;
+import com.kh.library.book.vo.BorrowVO;
 import com.kh.library.book.vo.HopeBookVO;
 import com.kh.library.book.vo.RecommendImgVO;
 import com.kh.library.book.vo.RecommendVO;
@@ -61,6 +62,11 @@ public class BookServiceImpl implements BookService {
 		return sqlSession.selectList("bookMapper.selectRsvUser",reserveVO);
 	}
 	
+	//유저 대여 목록 조회
+	@Override
+	public List<BorrowVO> selectBrUser(BorrowVO borrowVO){
+		return sqlSession.selectList("bookMapper.selectBrUser",borrowVO);
+	}
 	
 	
 	//희망도서 신청

@@ -14,6 +14,11 @@ public class BoardServiceImpl implements BoardService {
 	
 	@Autowired
 	private SqlSessionTemplate sqlSession;
+	
+	@Override
+	public String selectNextNtCode() {
+		return sqlSession.selectOne("boardMapper.selectNextNtCode");
+	}
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
@@ -40,4 +45,16 @@ public class BoardServiceImpl implements BoardService {
 	public void deleteNtBoardDetail(String ntCode) {
 		sqlSession.delete("boardMapper.deleteNtBoardDetail",ntCode);
 	}
+
+	@Override
+	public void updateNtBoardRdCnt(String ntCode) {
+		sqlSession.update("boardMapper.updateNtBoardRdCnt",ntCode);
+		
+	}
+
+	@Override
+	public List<NtBoardVO> selectSearchNt(NtBoardVO ntBoardVO) {
+		return sqlSession.selectList("boardMapper.selectSearchNt",ntBoardVO);
+	}
+
 }

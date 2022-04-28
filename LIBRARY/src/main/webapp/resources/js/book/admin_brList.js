@@ -1,7 +1,7 @@
-function selectBorrow(){
+function selectBrMember(){
 	
 	//submit
-	var formTag = document.getElementById('borrowForm');
+	var formTag = document.getElementById('brMemberForm');
 	formTag.submit();
 }
 
