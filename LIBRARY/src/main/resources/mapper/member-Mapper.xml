@@ -16,7 +16,7 @@
 		<result column="IS_ADMIN" 			property="isAdmin"/>
 		<result column="CLUB_ADMIN" 		property="clubAdmin"/>
 		<result column="CLUB_CODE" 			property="clubCode"/>
-		<result column="CLUB_APPLY_CODE" 	property="clubApplyCode"/>
+		<result column="KEYWORD" 			property="keyword"/>
 	</resultMap>
 	<resultMap type="com.kh.library.member.vo.MemberImageVO" id="memberImage">
 		<id column="MEM_IMG_CODE" 			property="memImgCode"/>

@@ -43,21 +43,26 @@ public class MemberController {
 		return "login";
 	}
 	
-	//로그인
-	@PostMapping("/login")
-	public String login(MemberVO memberVO, HttpSession session) {
-		
-		MemberVO loginInfo = memberService.login(memberVO);
-		
-		if(loginInfo != null) {
-			session.setAttribute("loginInfo", loginInfo);
-			
-		}
-		return "redirect:/member/main";
-	}
+//	//로그인
+//	@PostMapping("/login")
+//	public String login(MemberVO memberVO, HttpSession session) {
+//		
+//		MemberVO loginInfo = memberService.login(memberVO);
+//		
+//		if(loginInfo != null) {
+//			session.setAttribute("loginInfo", loginInfo);
+//			
+//		}
+//		return "redirect:/member/main";
+//	}
 	
 	@GetMapping("/board")
 	public String board() {
 		return "board";
+	}
+	
+	@RequestMapping("/loginError")
+	public String loginError() {
+		return "login_errer";
 	}
 }

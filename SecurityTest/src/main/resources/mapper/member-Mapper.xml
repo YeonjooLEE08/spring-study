@@ -30,6 +30,14 @@
 		WHERE MEM_ID = #{memId}
 		AND MEM_PW = #{memPw}
 	</select>
+	
+	<!-- 로그인을 시도하는 계정의 권한 목록 조회  -->
+	<select id="selectUserRoleList" resultType="String">
+		SELECT ROLE_NAME
+		FROM MEMBER_ROLE
+		WHERE MEM_ID  = #{memId}
+	</select>
+	
 </mapper>
 
 

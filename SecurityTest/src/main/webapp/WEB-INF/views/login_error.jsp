@@ -7,10 +7,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-<form action="/member/login" method="post">
-<input type="text" name="username"><br>
-<input type="password" name="memPw"><br>
-<input type="submit" value="로그인">
-</form>
+로그인 오류
 </body>
 </html>

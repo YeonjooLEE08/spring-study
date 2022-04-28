@@ -10,9 +10,19 @@
 		SELECT MEM_ID
 			, MEM_NAME
 		FROM BOOK_MEMBER
-		ORDER BY MEM_Id
+		ORDER BY MEM_ID
 	</select>
 	
+	<!-- 회원 검색 -->
+	<select id="selectSearchMember" resultMap="memberMapper.member">
+		SELECT MEM_ID
+			, MEM_NAME
+		FROM BOOK_MEMBER
+		WHERE UPPER(MEM_ID) LIKE UPPER('%'||#{keyword}||'%')
+		ORDER BY MEM_ID
+	</select>
+	
+	<!-- 알림전송 -->
 	<insert id="insertSendMessage">
 		INSERT INTO MESSAGE (
 			MSG_CODE
@@ -24,10 +34,6 @@
 			, #{msgContent}
 		)		
 	</insert>
-	
-	<select id="">
-		
-	</select>
 </mapper>
 
 

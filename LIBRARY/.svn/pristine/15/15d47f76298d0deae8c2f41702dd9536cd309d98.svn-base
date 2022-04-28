@@ -1,7 +1,6 @@
-package com.kh.library.club.vo;
+package com.kh.library.util.vo;
 
-public class ClubBoardPageVO {
-	
+public class PageVO {
 	private int nowPage;//현재 선택된 페이지 번호
 	private int totalCnt;//전체 데이터 수
 	private int beginPage;//화면에 보이는 첫 페이지
@@ -13,7 +12,7 @@ public class ClubBoardPageVO {
 	private int startNum;//시작 row_num
 	private int endNum;//마지막 row_num
 	
-	public ClubBoardPageVO() {
+	public PageVO() {
 		nowPage = 1;
 		displayCnt = 5;
 		displayPageCnt = 5;
@@ -86,8 +85,6 @@ public class ClubBoardPageVO {
 	//페이징 처리를 위한 모든 데이터를 세팅
 	public void setPageInfo() {
 		//화면에 보이는 마지막 페이지 번호 세팅
-		//1 2 3 4 5
-		//6 7 8 9 10
 		endPage = (int)(Math.ceil(nowPage / (double)displayPageCnt)) * displayPageCnt ;
 		
 		//화면에 보이는 첫 페이지 번호 세팅
