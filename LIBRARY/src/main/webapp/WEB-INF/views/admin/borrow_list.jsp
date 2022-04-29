@@ -52,12 +52,11 @@
 			</c:forEach>
 		</tbody>
 	</table>
-	<button type="button" data-toggle="modal" id="openModalBtn" data-target="#selectBorrow" class="btn btn-primary" >
+	<button type="button" data-toggle="modal"  data-target="#selectBorrow" id="openModalBtn" class=btn btn-primary" >
 		회원 대여 정보
 	</button>
 <!-- Modal -->
 <div class="modal fade" id="selectBorrow" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-<form action="/book/selectBrMember" method="post" id="brMemberForm">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
      
@@ -82,10 +81,9 @@
      		
     </div>
   </div>
-  </form>
  </div>
 	
 
-<script type="text/javascript" src="/resources/js/book/admin_brList.js?ver=2"></script>
+<script type="text/javascript" src="/resources/js/book/admin_brList.js?ver=10"></script>
 </body>
 </html>

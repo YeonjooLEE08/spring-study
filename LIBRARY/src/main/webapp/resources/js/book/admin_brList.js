@@ -1,31 +1,32 @@
+
+
+//조회버튼 클릭
 function selectBrMember(){
 	
-	//submit
-	var formTag = document.getElementById('brMemberForm');
-	formTag.submit();
+	var inputMemId = $('#selectBorrow #memId').val();
+	
+	
+		location.href='/book/selectBrMember?memId='+inputMemId;
+	
 }
-
 
 $('#openModalBtn').on('click',function(){
 	$('#selectBorrow').modal('show');
-		conseol.log("click open");
 });
 
 $('#closeModalBtn').on('click', function(){
 $('#selectBorrow').modal('hide');
-console.log("click close");
 });
 $('#selectBorrow').on('show.bs.modal', function (e) {
-console.log("show.bs.modal");
 });
 $('#selectBorrow').on('shown.bs.modal', function (e) {
-console.log("shown.bs.modal");
 });
 $('#selectBorrow').on('hide.bs.modal', function (e) {
-console.log("hide.bs.modal");
 });
+
+//모달창 닫힐 때 아이디 값 비워주기
 $('#selectBorrow').on('hidden.bs.modal', function (e) {
-console.log("hidden.bs.modal");
+	$('#selectBorrow input').val('');
 });
 
 

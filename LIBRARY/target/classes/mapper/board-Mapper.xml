@@ -77,13 +77,20 @@
 		SELECT NT_CODE
 			, NT_TITLE
 			, NT_CONTENT
-			, TO_CHAR(NT_CREATE_DATE, 'YYYY-MM-DD HH24:MI') AS NT_CREATE_DATE
+			, TO_CHAR(NT_CREATE_DATE, 'YYYY-MM-DD') AS NT_CREATE_DATE
 			, MEM_ID
 			, MEM_NAME
 			, ROWNUM
 			, NT_RD_CNT
 		FROM NT_BOARD
-		WHERE ${searchSub} LIKE '%'||#{searchTxt}||'%'
+		<choose>
+			<when test="searchSub != 'all'">WHERE ${searchSub} LIKE '%'||#{searchTxt}||'%'</when>
+			<when test="searchSub == 'all'">
+				WHERE NT_TITLE LIKE '%'||#{searchTxt}||'%'
+				OR NT_CONTENT LIKE '%'||#{searchTxt}||'%'
+			</when>
+		</choose>
+		
 		ORDER BY ROWNUM DESC
 	</select>
 	

@@ -91,7 +91,7 @@ public class BookAdminServiceImpl implements BookAdminService {
 	//대여 상태별 조회
 	@Override
 	public List<BorrowVO> selectBrStatus(BorrowVO borrowVO) {
-		return sqlSession.selectList("bookMapper.selectBrList",borrowVO);
+		return sqlSession.selectList("bookMapper.selectBrStatus",borrowVO);
 	}
 
 	@Override

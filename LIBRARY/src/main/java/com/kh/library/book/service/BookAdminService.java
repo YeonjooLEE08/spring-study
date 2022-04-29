@@ -1,7 +1,5 @@
 package com.kh.library.book.service;
 
-import com.kh.library.book.vo.RecommendImgVO;
-import com.kh.library.book.vo.RecommendVO;
 import com.kh.library.book.vo.ReserveVO;
 
 import java.util.List;

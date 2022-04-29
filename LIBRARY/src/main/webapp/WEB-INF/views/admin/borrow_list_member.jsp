@@ -9,7 +9,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<h2>${adminBorrow.memId }도서대여목록</h2>
+	<h2>도서대여목록</h2>
 	<table>
 		<thead>
 			<tr>
@@ -17,8 +17,9 @@
 				<td>회원아이디</td>
 				<td>제목</td>
 				<td>ISBN</td>
-				<td>예약일</td>
-				<td>대여</td>
+				<td>대여일</td>
+				<td>반납예정일</td>
+				<td>대여상태</td>
 			</tr>
 		</thead>
 		<tbody>
@@ -32,12 +33,12 @@
 					<td>${borrow.rtDate }</td>
 					<td><c:choose>
 						<c:when test="${borrow.status eq 0}">
-							<button type="button" data-toggle="modal" id="openModalBtn" data-target="#returnBook" class="btn btn-primary" >
+							<button type="button" data-toggle="modal" onclick="showModal(this);"data-target="#returnBook" class="btn btn-primary" >
 								대여중
 							</button>
 						</c:when>
-						<c:when test="${borrow.status eq 1 }">
-							<button type="button" data-toggle="modal" id="openModalBtn" data-target="#returnBook" class="btn btn-primary" >
+						<c:when test="${borrow.status eq 1 }" >
+							<button type="button" data-toggle="modal" onclick="showModalOD(this);" data-target="#returnBook" class="btn btn-primary" >
 								연체
 							</button>
 						</c:when>
@@ -53,20 +54,24 @@
 
 <!-- Modal -->
 <div class="modal fade" id="returnBook" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <!-- !!!!!!!!!!!!!!!! 모달로 위의 값 꼭 받아오기 !!!!!!!!!! -->
+  <input type="hidden"  id="originIsbn" value="">
+  <input type="hidden"  id="originBrCode" value="">
+  <input type="hidden"  id="originMemId" value="">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-body">
+      
+      <input type="hidden"  id="originIsbn" value="">
 				반납하시겠습니까?
       </div>
-      <div class="modal-footer">
         <button type="button" class="btn btn-default" id="closeModalBtn" data-dismiss="modal">닫기</button>
         <button type="button" class="btn btn-primary" onclick="returnBook();">반납</button>
-      </div>
     </div>
   </div>
  </div>
 	
 
-<script type="text/javascript" src="/resources/js/book/admin_retrun.js?ver=1"></script>
+<script type="text/javascript" src="/resources/js/book/admin_returnBook.js?ver=14"></script>
 </body>
 </html>

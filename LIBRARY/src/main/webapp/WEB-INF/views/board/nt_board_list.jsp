@@ -9,11 +9,11 @@ g<%@ page language="java" contentType="text/html; charset=UTF-8"
 </head>
 <body>
 <div class="container">
-	<form action="/board/SearchNt" method="post" id="earchNt">
+	<form action="/board/searchNt" method="post" id="SearchNt">
 		<!-- 검색구분 선택 -->
 			<select name="searchSub">
-				<option value="ntTitle">제목</option>
-				<option value="ntContent">내용</option>
+				<option value="NT_TITLE">제목</option>
+				<option value="NT_CONTENT">내용</option>
 				<option value="all">제목+내용</option>
 			</select>
 			<input type="text" name="searchTxt">
@@ -32,7 +32,7 @@ g<%@ page language="java" contentType="text/html; charset=UTF-8"
 			</tr>
 		</thead>
 		<tbody>
-			<c:forEach items="${ntBoardList }" var="ntBoardInfo" varStatus="status">
+			<c:forEach items="${ntBoardList }" var="ntBoardInfo" >
 			<tr>
 					<td>${ntBoardInfo.rowNum}</td>
 					<td><a href="/board/ntBoardDetail?ntCode=${ntBoardInfo.ntCode }">${ntBoardInfo.ntTitle }</a></td>

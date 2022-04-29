@@ -15,13 +15,14 @@
 				<td>제목</td>
 				<td>ISBN</td>
 				<td>예약일</td>
+				<td>반납예정일</td>
+				<td>상태</td>
 			</tr>
 		</thead>
 		<tbody>
 			<c:forEach items="${userBorrow }" var="borrow">
 				<tr>
 					<td>${borrow.brCode }</td>
-					<td>${borrow.memId }</td>
 					<td>${borrow.title }</td>
 					<td>${borrow.isbn }</td>
 					<td>${borrow.brDate }</td>

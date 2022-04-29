@@ -42,7 +42,7 @@ public class BoardController {
 	}
 	
 	//공지사항 검색
-	@PostMapping("/searchNt")
+	@RequestMapping("/searchNt")
 	public String selectSearchNt(Model model, NtBoardVO ntBoardVO) {
 		model.addAttribute("ntBoardList", boardService.selectSearchNt(ntBoardVO));
 		return "board/nt_board_list";

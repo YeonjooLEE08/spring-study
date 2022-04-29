@@ -25,6 +25,7 @@
 		<result column="CB_CMT_COUNT" 		property="cbCmtCount"/>
 		<result column="SORT" 				property="sort"/>
 		<result column="KEYWORD" 			property="keyword"/>
+		<result column="ROW_NUM" 			property="rowNum"/>
 	</resultMap>
 	
 	<resultMap type="com.kh.library.club.vo.ClubBoardCmtVO" id="cmt">
@@ -50,6 +51,7 @@
 		<result column="SEND_ID" 	property="sendId"/>
 		<result column="GET_ID" 	property="getId"/>
 		<result column="SEND_DATE" 	property="sendDate"/>
+		<result column="MSG_CONTENT" 	property="msgContent"/>
 		<result column="IS_READ" 	property="isRead"/>
 	</resultMap>
 	
@@ -142,17 +144,43 @@
 	<!-- 북클럽 게시판 목록 조회  -->
 	<select id="selectClubBoardList" resultMap="boardInfo">
 		SELECT CB_BOARD_NUM
-		    , CB_BOARD_TITLE
-		    , TO_CHAR(CB_BOARD_DATE, 'YYYY-MM-DD') AS CB_BOARD_DATE
-		    , MEM_ID
-		    , CLUB_CODE
-		    , MEM_NAME
-		    , (SELECT COUNT(CB_CMT_NUM)
-				FROM BOOK_CLUB_BOARD_COMMENT
-				WHERE CB_BOARD_NUM = BOOK_CLUB_BOARD.CB_BOARD_NUM) AS CB_CMT_COUNT
-		FROM BOOK_CLUB_BOARD
-		WHERE CLUB_CODE = #{clubCode} 
-		ORDER BY CB_BOARD_NUM DESC
+	        , CB_BOARD_TITLE
+	        , CB_BOARD_DATE
+	        , MEM_ID
+	        , CLUB_CODE
+	        , MEM_NAME
+	        , CB_CMT_COUNT
+	        , ROW_NUM
+		FROM
+		(
+		    SELECT CB_BOARD_NUM
+		        , CB_BOARD_TITLE
+		        , CB_BOARD_DATE
+		        , MEM_ID
+		        , CLUB_CODE
+		        , MEM_NAME
+		        , CB_CMT_COUNT
+		        , ROWNUM AS ROW_NUM
+		    FROM
+		    (
+		        SELECT CB_BOARD_NUM
+		            , CB_BOARD_TITLE
+		            , TO_CHAR(CB_BOARD_DATE, 'YYYY-MM-DD') AS CB_BOARD_DATE
+		            , MEM_ID
+		            , CLUB_CODE
+		            , MEM_NAME
+		            , (SELECT COUNT(CB_CMT_NUM)
+		                FROM BOOK_CLUB_BOARD_COMMENT
+		                WHERE CB_BOARD_NUM = BOOK_CLUB_BOARD.CB_BOARD_NUM) AS CB_CMT_COUNT
+		        FROM BOOK_CLUB_BOARD
+		        WHERE CLUB_CODE = #{clubCode} 
+		        <if test="keyword != null and !keyword.equals('')">
+		        AND ${sort} LIKE '%'||#{keyword}||'%'
+		        </if>
+		        ORDER BY CB_BOARD_NUM DESC
+		    )
+		)
+		WHERE ROW_NUM &gt; = #{startNum} AND ROW_NUM &lt; =  #{endNum}
 	</select>
 	
 	<!-- 북클럽 게시글 검색 -->
@@ -232,6 +260,7 @@
 			, CB_CMT_NUM
 			, CB_BOARD_NUM
 			, CLUB_CODE
+			, MEM_IMAGE
 		FROM BOOK_CLUB_BOARD_COMMENT
 		WHERE CB_BOARD_NUM = #{cbBoardNum}
 		ORDER BY CB_CMT_DATE
@@ -324,14 +353,31 @@
 			, SEND_DATE
 		FROM MESSAGE
 		WHERE GET_ID = #{getId}
+		ORDER BY SEND_DATE DESC
 	</select>
 	
 	<!-- 게시글 전체 개수 -->
 	<select id="selectClubBoardListCnt" resultType="int">
 	SELECT COUNT(CB_BOARD_NUM)
 	FROM BOOK_CLUB_BOARD
-	WHERE CLUB_CODE = #{clubCode}
+	WHERE CLUB_CODE = #{clubCode} 
+		<if test="keyword != null and !keyword.equals('')">
+		AND ${sort} LIKE '%'||#{keyword}||'%'
+		</if>
 	</select>
+	
+	<!-- 클럽 수락시 알림보내기 -->
+	<insert id="insertClubJoinMessage">
+		INSERT INTO MESSAGE (
+			MSG_CODE
+			, GET_ID
+			, MSG_CONTENT
+		) VALUES (
+			(SELECT 'MSG_'||LPAD(NVL(MAX(TO_NUMBER(SUBSTR(MSG_CODE, 5))), 0) + 1, 3, 0) AS MSG_CODE FROM MESSAGE)
+			, #{getId}
+			, '북클럽에 가입되셨습니다. 북클럽 게시판에 환영인사를 써보아요~'
+		)		
+	</insert>
 </mapper>
 
 

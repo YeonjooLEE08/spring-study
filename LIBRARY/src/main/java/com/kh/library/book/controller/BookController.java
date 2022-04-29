@@ -10,7 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
@@ -168,7 +167,7 @@ public class BookController {
 	public String selectBrList(BorrowVO borrowVO, Model model) {
 		model.addAttribute("adminBorrow", bookAdminService.selectBrList(borrowVO));
 		
-		return "admin/admin_br_list";
+		return "admin/borrow_list";
 	}
 	
 	//분류별 조회
@@ -177,14 +176,14 @@ public class BookController {
 		
 		model.addAttribute("adminBorrow", bookAdminService.selectBrStatus(borrowVO));
 		
-		return "admin/admin_br_list";
+		return "admin/borrow_list";
 	}
 	
 	//회원별 대여 목록 조회
 	@RequestMapping("/selectBrMember")
 	public String selectBrMember(BorrowVO borrowVO, Model model) {
 		model.addAttribute("adminBorrow", bookAdminService.selectBrMember(borrowVO));
-		return "admin/pre_return_page";
+		return "admin/borrow_list_member";
 	}
 	
 	//도서 반납
@@ -192,7 +191,7 @@ public class BookController {
 	public String returnBook(BorrowVO borrowVO) {
 		bookAdminService.updateReturn(borrowVO);
 		
-		return "redirect:/book/selectBrMember";
+		return "redirect:/book/selectBrList";
 	}
 	
 	

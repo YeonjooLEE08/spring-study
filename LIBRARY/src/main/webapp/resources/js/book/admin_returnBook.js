@@ -1,7 +1,27 @@
-$('#openModalBtn').on('click',function(){
+function showModal(selectedTag){
+	
+	var isbn = $(selectedTag).closest('tr').children().eq(3).text();
+	var memId = $(selectedTag).closest('tr').children().eq(1).text();
+	var brCode = $(selectedTag).closest('tr').children().eq(0).text();
+	
+	$('#returnBook #originIsbn' ).val(isbn);
+	$('#returnBook #originBrCode' ).val(brCode);
+	$('#returnBook #originMemId' ).val(brCode);
+	
 	$('#returnBook').modal('show');
-		conseol.log("click open");
-});
+	
+}
+
+function returnBook(){
+	var originIsbn = $('#returnBook #originIsbn').val();
+	var originBrCode = $('#returnBook #originBrCode').val();
+	var originMemId = $('#returnBook #originMemId').val();
+	
+	location.href = '/book/returnBook?isbn='+originIsbn+'&brCode='+originBrCode+'&memId='+originMemId;
+	alert('반납되었습니다.');
+	
+}
+	
 
 $('#closeModalBtn').on('click', function(){
 $('#returnBook').modal('hide');

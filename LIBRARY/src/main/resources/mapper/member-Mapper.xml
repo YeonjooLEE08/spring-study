@@ -17,6 +17,7 @@
 		<result column="CLUB_ADMIN" 		property="clubAdmin"/>
 		<result column="CLUB_CODE" 			property="clubCode"/>
 		<result column="KEYWORD" 			property="keyword"/>
+		<result column="ROW_NUM" 			property="rowNum"/>
 	</resultMap>
 	<resultMap type="com.kh.library.member.vo.MemberImageVO" id="memberImage">
 		<id column="MEM_IMG_CODE" 			property="memImgCode"/>
@@ -167,6 +168,20 @@
 		FROM MEMBER_IMAGE
 		WHERE MEM_ID = #{memId}
 	</select>
+	<!-- 보안 정보 수정 -->
+	<update id="updateSecretInfo">
+		UPDATE BOOK_MEMBER
+		SET MEM_PWD = #{memPwd}
+		WHERE MEM_ID = #{memId}
+	</update>
+	<!-- 추가 정보 수정 -->
+	<update id="updatePlusInfo">
+		UPDATE BOOK_MEMBER
+		SET MEM_ADDR = #{memAddr}
+			, MEM_BIRTH = #{memBirth}
+		WHERE MEM_ID = #{memId}
+		
+	</update>
 	
 	<!--  독서플래너 조회  -->
 	<select id="selectBookPlaner" resultMap="complit"> 
