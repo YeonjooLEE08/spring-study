@@ -18,11 +18,25 @@ public class MemberVO extends PageVO{
 	private String clubCode;
 	private String keyword;
 	private String rowNum;
+	private String isOd;
+	private int brCnt;
 	
 	
 	
 	
 	
+	public String getIsOd() {
+		return isOd;
+	}
+	public void setIsOd(String isOd) {
+		this.isOd = isOd;
+	}
+	public int getBrCnt() {
+		return brCnt;
+	}
+	public void setBrCnt(int brCnt) {
+		this.brCnt = brCnt;
+	}
 	public String getRowNum() {
 		return rowNum;
 	}

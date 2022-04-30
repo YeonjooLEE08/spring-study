@@ -116,4 +116,11 @@ public class BookAdminServiceImpl implements BookAdminService {
 		sqlSession.update("bookMapper.updateBookInfo", borrowVO);
 		sqlSession.update("bookMapper.updateBrStatus", borrowVO);
 	}
+	
+	//연체 도서 업데이트
+	@Override
+	public void updateOverdue() {
+		sqlSession.update("bookMapper.updateOverdue");
+		sqlSession.update("memberMapper.updateIsOdMem");
+	}
 }

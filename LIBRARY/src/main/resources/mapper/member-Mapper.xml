@@ -18,6 +18,8 @@
 		<result column="CLUB_CODE" 			property="clubCode"/>
 		<result column="KEYWORD" 			property="keyword"/>
 		<result column="ROW_NUM" 			property="rowNum"/>
+		<result column="IS_OD" 				property="isOd"/>
+		<result column="BR_CNT" 			property="brCnt"/>
 	</resultMap>
 	<resultMap type="com.kh.library.member.vo.MemberImageVO" id="memberImage">
 		<id column="MEM_IMG_CODE" 			property="memImgCode"/>
@@ -251,6 +253,17 @@
 			FROM BOOK_MEMBER 
 			WHERE MEM_ID = #{memId})
 	</select>
+	
+	
+	<!-- ///////////////////// 도서 대여 관리 ////////////////////////////// -->
+	<!-- isOd 업데이트 -->
+	<update id="updateIsOdMem">
+		UPDATE BOOK_MEMBER
+		SET IS_OD = 'Y'
+		WHERE MEM_ID IN (SELECT MEM_ID
+						FROM BORROW
+						WHERE STATUS=1)
+	</update>
 </mapper>
 
 

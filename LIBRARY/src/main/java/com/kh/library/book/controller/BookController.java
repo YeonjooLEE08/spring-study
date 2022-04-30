@@ -194,6 +194,13 @@ public class BookController {
 		return "redirect:/book/selectBrList";
 	}
 	
+	// ----------------------------- 속 내용만 어드민컨트롤러로 이동 -------------------------
+	@GetMapping("/updateOverdue")
+	public String updateOverdue() {
+		bookAdminService.updateOverdue();
+		
+		return "manage/home";
+	}
 	
 	//희망도서 신청 폼 
 	@GetMapping("/hopeBookForm")

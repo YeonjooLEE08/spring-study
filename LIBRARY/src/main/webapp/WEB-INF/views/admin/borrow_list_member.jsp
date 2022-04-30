@@ -38,7 +38,7 @@
 							</button>
 						</c:when>
 						<c:when test="${borrow.status eq 1 }" >
-							<button type="button" data-toggle="modal" onclick="showModalOD(this);" data-target="#returnBook" class="btn btn-primary" >
+							<button type="button" data-toggle="modal" onclick="showModalOD(this);" data-target="#returnOverdue" class="btn btn-primary" >
 								연체
 							</button>
 						</c:when>
@@ -52,17 +52,17 @@
 
 
 
-<!-- Modal -->
+<!-- 정상 반납 Modal -->
 <div class="modal fade" id="returnBook" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <!-- !!!!!!!!!!!!!!!! 모달로 위의 값 꼭 받아오기 !!!!!!!!!! -->
   <input type="hidden"  id="originIsbn" value="">
   <input type="hidden"  id="originBrCode" value="">
   <input type="hidden"  id="originMemId" value="">
+  <input type="hidden"  id="originIsbn" value="">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-body">
       
-      <input type="hidden"  id="originIsbn" value="">
 				반납하시겠습니까?
       </div>
         <button type="button" class="btn btn-default" id="closeModalBtn" data-dismiss="modal">닫기</button>
@@ -70,8 +70,28 @@
     </div>
   </div>
  </div>
-	
 
-<script type="text/javascript" src="/resources/js/book/admin_returnBook.js?ver=14"></script>
+<!-- 연체 반납 Modal -->
+<div class="modal fade" id="returnOverdue" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <!-- !!!!!!!!!!!!!!!! 모달로 위의 값 꼭 받아오기 !!!!!!!!!! -->
+  <input type="hidden"  id="originIsbn" 	value="">
+  <input type="hidden"  id="originBrCode" 	value="">
+  <input type="hidden"  id="originMemId" 	value="">
+  <input type="hidden"	id="originBrDate"	value="">
+  <input type="hidden"	id="originRtDate" 	value="">
+   <input type="hidden"  id="originIsbn" value="">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+      
+				반납하시겠습니까?
+      </div>
+        <button type="button" class="btn btn-default" id="closeModalBtn" data-dismiss="modal">닫기</button>
+        <button type="button" class="btn btn-primary" onclick="returnOverdue();">반납</button>
+    </div>
+  </div>
+ </div>	
+
+<script type="text/javascript" src="/resources/js/book/admin_returnBook.js?ver=30"></script>
 </body>
 </html>

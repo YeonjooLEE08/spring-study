@@ -45,6 +45,9 @@ public interface BookAdminService {
 	//대여 상태별 조회
 	List<BorrowVO> selectBrStatus(BorrowVO borrowVO);
 	
+	//연체 도서 업데이트
+	void updateOverdue();
+	
 	//희망도서신청리스트조회
 	List<HopeBookVO> selectHopeBookList();
 	

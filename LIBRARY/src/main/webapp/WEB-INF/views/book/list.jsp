@@ -18,7 +18,10 @@
   <c:if test="${sessionScope.loginInfo.isAdmin eq 'Y' }" > 
 	<a href="/book/selectBrList">대여목록확인</a>
  </c:if> 
+ 
+ 
 <a href="/book/searchHpBook">희망도서</a>
+<a href="/book/updateOverdue">연체관리확인용</a> <!-- 수정하고 삭제하세료 -->
 <a href="/book/bookList">등록도서확인</a>
 
 

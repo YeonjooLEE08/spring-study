@@ -322,7 +322,7 @@
 		)
 	</insert>
 	
-	<!-- status 변경  -->
+	<!-- 책 재고 상태 status 변경  -->
 	<update id="updateStatus">
 		UPDATE BOOK
 		SET STATUS = STATUS+1
@@ -455,6 +455,16 @@
 		SET STATUS = 2
 		WHERE BR_CODE = #{brCode}
 	</update>
+	
+	<!-- 연체 상태 변경 -->
+	<update id="updateOverdue">
+		UPDATE BORROW
+		SET STATUS = 1
+		WHERE STATUS = 0
+		AND TO_CHAR(RT_DATE,'YYYY/MM/DD') &lt; TO_CHAR(SYSDATE, 'YYYY/MM/DD')
+	</update>
+	
+	<!--  -->
 	
 	<!-- 희망도서 신청 -->
 	<insert id="insertHopeBook">
