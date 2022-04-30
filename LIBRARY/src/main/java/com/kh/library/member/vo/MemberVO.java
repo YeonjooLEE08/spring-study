@@ -18,13 +18,22 @@ public class MemberVO extends PageVO{
 	private String clubCode;
 	private String keyword;
 	private String rowNum;
-	private String isOd;
-	private int brCnt;
+	
+	
+	private String isOd; //연체여부
+	private int brCnt;  // 1인당 대출 권 수 제한
+	private String limitDate; // 대출 제한 일 limitDate까지
 	
 	
 	
 	
 	
+	public String getLimitDate() {
+		return limitDate;
+	}
+	public void setLimitDate(String limitDate) {
+		this.limitDate = limitDate;
+	}
 	public String getIsOd() {
 		return isOd;
 	}

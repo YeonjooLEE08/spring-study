@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.kh.library.book.vo.RecommendImgVO;
 import com.kh.library.book.vo.RecommendVO;
 import com.kh.library.book.vo.ReserveVO;
+import com.kh.library.member.vo.MemberVO;
 import com.kh.library.book.vo.BookImgVO;
 import com.kh.library.book.vo.BookVO;
 import com.kh.library.book.vo.BorrowVO;
@@ -22,7 +23,19 @@ public class BookAdminServiceImpl implements BookAdminService {
 	@Autowired
 	private SqlSessionTemplate sqlSession;
 	
+	//연체 도서 업데이트
+	@Override
+	public void updateOverdue() {
+		sqlSession.update("bookMapper.updateOverdue");
+		sqlSession.update("memberMapper.updateIsOdMem");
+	}
 	
+	//대여 제한 해제
+	@Override
+	public void clearLimitDate() {
+		sqlSession.update("memberMapper.updateClearLimit");
+	}
+
 	//도서 등록
 	@Override
 	@Transactional(rollbackFor = Exception.class)
@@ -117,10 +130,11 @@ public class BookAdminServiceImpl implements BookAdminService {
 		sqlSession.update("bookMapper.updateBrStatus", borrowVO);
 	}
 	
-	//연체 도서 업데이트
+	//대여 제한(연체일만큼)
 	@Override
-	public void updateOverdue() {
-		sqlSession.update("bookMapper.updateOverdue");
-		sqlSession.update("memberMapper.updateIsOdMem");
+	public void updateLimit(MemberVO memberVO) {
+		sqlSession.update("memberMapper.updateLimitDate", memberVO);
 	}
+
+	
 }

@@ -77,21 +77,22 @@
   <input type="hidden"  id="originIsbn" 	value="">
   <input type="hidden"  id="originBrCode" 	value="">
   <input type="hidden"  id="originMemId" 	value="">
-  <input type="hidden"	id="originBrDate"	value="">
   <input type="hidden"	id="originRtDate" 	value="">
-   <input type="hidden"  id="originIsbn" value="">
+  <input type="hidden"  id="originIsbn" 	value="">
+  <input type="hidden"  id="originLimitDate" value="">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-body">
       
 				반납하시겠습니까?
       </div>
-        <button type="button" class="btn btn-default" id="closeModalBtn" data-dismiss="modal">닫기</button>
+        <button type="button" class="btn btn-default" id="closeModalBtnOD" data-dismiss="modal">닫기</button>
         <button type="button" class="btn btn-primary" onclick="returnOverdue();">반납</button>
     </div>
   </div>
  </div>	
 
-<script type="text/javascript" src="/resources/js/book/admin_returnBook.js?ver=30"></script>
+<script type="text/javascript" src="/resources/js/book/admin_returnBook.js?ver=31"></script>
+<script type="text/javascript" src="/resources/js/book/admin_returnOverdue.js?ver=19"></script>
 </body>
 </html>

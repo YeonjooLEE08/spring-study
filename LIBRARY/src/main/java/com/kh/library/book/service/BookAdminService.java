@@ -1,6 +1,7 @@
 package com.kh.library.book.service;
 
 import com.kh.library.book.vo.ReserveVO;
+import com.kh.library.member.vo.MemberVO;
 
 import java.util.List;
 
@@ -11,6 +12,13 @@ import com.kh.library.book.vo.HopeBookApplyVO;
 import com.kh.library.book.vo.HopeBookVO;
 
 public interface BookAdminService {
+	
+	//연체 도서 업데이트
+	void updateOverdue();
+	
+	//대여 제한 해제 
+	void clearLimitDate();
+
 
 	//책 등록
 	void insertBook(BookVO bookVO,BookImgVO bookImgVO );
@@ -45,21 +53,20 @@ public interface BookAdminService {
 	//대여 상태별 조회
 	List<BorrowVO> selectBrStatus(BorrowVO borrowVO);
 	
-	//연체 도서 업데이트
-	void updateOverdue();
+	//멤버별 대여목록 조회
+	List<BorrowVO> selectBrMember(BorrowVO borrowVO);
+	
+	//도서 반납
+	void updateReturn(BorrowVO borrowVO);
+
+	//대여 제한(연체일만큼)
+	void updateLimit(MemberVO memberVO);
 	
 	//희망도서신청리스트조회
 	List<HopeBookVO> selectHopeBookList();
 	
 	//희망도서신청수락
 	void insertHopeBookApply(HopeBookApplyVO hopeBookApply);
-	
-
-	//멤버별 대여목록 조회
-	List<BorrowVO> selectBrMember(BorrowVO borrowVO);
-	
-	//도서 반납
-	void updateReturn(BorrowVO borrowVO);
 
 	
 

@@ -20,6 +20,7 @@ import com.kh.library.book.vo.BookVO;
 import com.kh.library.book.vo.BorrowVO;
 import com.kh.library.book.vo.HopeBookVO;
 import com.kh.library.book.vo.ReserveVO;
+import com.kh.library.member.vo.MemberVO;
 
 @Controller
 @RequestMapping("/book")
@@ -194,10 +195,22 @@ public class BookController {
 		return "redirect:/book/selectBrList";
 	}
 	
+	//연체도서 반납
+	@RequestMapping("/returnOverdue")
+	public String returnOverdue(BorrowVO borrowVO, MemberVO memberVO) {
+		System.out.println(borrowVO.getLimitDate());
+		System.out.println(memberVO.getLimitDate());
+		bookAdminService.updateReturn(borrowVO);
+		bookAdminService.updateLimit(memberVO);
+		
+		return "redirect:/book/selectBrList";
+	}
+	
 	// ----------------------------- 속 내용만 어드민컨트롤러로 이동 -------------------------
 	@GetMapping("/updateOverdue")
 	public String updateOverdue() {
 		bookAdminService.updateOverdue();
+		bookAdminService.clearLimitDate();
 		
 		return "manage/home";
 	}

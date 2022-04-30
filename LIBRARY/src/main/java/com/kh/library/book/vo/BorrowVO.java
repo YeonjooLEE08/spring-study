@@ -11,7 +11,14 @@ public class BorrowVO {
 	private String title;
 	private String bookCode;
 	private String searchSub;
+	private String limitDate;
 	
+	public String getLimitDate() {
+		return limitDate;
+	}
+	public void setLimitDate(String limitDate) {
+		this.limitDate = limitDate;
+	}
 	public String getSearchSub() {
 		return searchSub;
 	}
