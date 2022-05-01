@@ -1,28 +1,38 @@
 package com.kh.library.book.vo;
 
 public class RecommendVO {
-	private String rcCode;
-	private String rcName;
-	private String rcContent;
+	private String rcdCode;
+	private String bookCode;
+	private String memId;
+	private int rcdStatus;
 	
-	public String getRcCode() {
-		return rcCode;
+	public int getRcdStatus() {
+		return rcdStatus;
 	}
-	public void setRcCode(String rcCode) {
-		this.rcCode = rcCode;
+	public void setRcdStatus(int rcdStatus) {
+		this.rcdStatus = rcdStatus;
 	}
-	public String getRcName() {
-		return rcName;
+	public String getRcdCode() {
+		return rcdCode;
 	}
-	public void setRcName(String rcName) {
-		this.rcName = rcName;
+	public void setRcdCode(String rcdCode) {
+		this.rcdCode = rcdCode;
 	}
-	public String getRcContent() {
-		return rcContent;
+	public String getBookCode() {
+		return bookCode;
 	}
-	public void setRcContent(String rcContent) {
-		this.rcContent = rcContent;
+	public void setBookCode(String bookCode) {
+		this.bookCode = bookCode;
 	}
+	public String getMemId() {
+		return memId;
+	}
+	public void setMemId(String memId) {
+		this.memId = memId;
+	}
+
+	
+	
 	
 	
 }

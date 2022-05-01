@@ -42,8 +42,14 @@ img{
 				<td>${bookDetail.keyword }</td>
 			</tr>
 		</table>
+		<div id="rcdBook">
+			<input type="hidden" id="memId" value="${sessionScope.loginInfo.memId }">
+			<input type="hidden" id="bookCode" value="${bookDetail.bookCode }">
+			<button type="button" id="recommendBook" onclick="recommendBook();">추천 ${bookDetail.rcdCnt }</button>
+		</div>
+	
 	</div>
-	<button type="button" id="rcdBookComplete" onclick="location.href='rcdBook?bookCode=${bookDetail.bookCode }';">추천 ${bookDetail.rcdCnt }</button>
+	
 	
 <%-- 	<button type="button" onclick="location.href='/book/reserve?bookCode=${bookDetail.bookCode}';">
 		<c:set var ="status" scope ="session" value="${bookDetail.status }"/>
@@ -63,7 +69,20 @@ img{
 		<c:set var ="bkStock" scope ="session" value="${bookDetail.bkStock }"/>
 		<c:choose>
 			<c:when test="${ bkStock-status > 0}">
-				<input type="submit"  value="대출가능 ${bkStock-status }">
+				<c:set var ="brCnt" scope ="session" value="${member.brCnt}"/>
+				<c:set var ="isOd" scope ="session" value="${member.isOd}"/>
+				<c:choose>
+					<c:when test="${ brCnt == 5 }">
+						<button type = "button" onclick="limitBrCnt()">대출가능 ${bkStock-status }</button>
+					</c:when>
+					<c:when test="${ isOd eq 'Y' }">
+						<button type = "button" class="btn btn-primary"  onclick="limitOverdue()">대출가능</button>
+					</c:when>
+					<c:otherwise>
+						<input type="submit"  value="대출가능 ${bkStock-status }">
+					</c:otherwise>
+				</c:choose>
+				
 			</c:when>
 			<c:otherwise>
 				<button type="button">대출불가</button>
@@ -89,5 +108,7 @@ img{
 	  </div>
 	</div>
 </div>
+
+<script type="text/javascript" src="/resources/js/book/recommend_book.js?ver=4"></script>
 </body>
 </html>

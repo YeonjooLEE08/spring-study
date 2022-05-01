@@ -279,8 +279,14 @@
 		UPDATE BOOK_MEMBER
 		SET LIMIT_DATE = #{limitDate}
 		WHERE MEM_ID = #{memId}
-	
 	</update>
+	
+	<!-- 예약 제한 정보 조회 -->
+	<select id="selectRsvInfo" resultMap="member">
+		SELECT BR_CNT, IS_OD
+		FROM BOOK_MEMBER
+		WHERE MEM_ID = #{memId}
+	</select>
 </mapper>
 
 

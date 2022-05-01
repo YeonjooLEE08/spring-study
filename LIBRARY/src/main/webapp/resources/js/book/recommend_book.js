@@ -1,21 +1,16 @@
-$('#openModalBtn').on('click',function(){
-	$('#rcdBook').modal('show');
-		conseol.log("click open");
-});
+function recommendBook(){
+	
+	var memId = $('#rcdBook #memId').val();
+	
+	alert(memId);
+}
 
-$('#closeModalBtn').on('click', function(){
-$('#rcdBook').modal('hide');
-console.log("click close");
-});
-$('#rcdBook').on('show.bs.modal', function (e) {
-console.log("show.bs.modal");
-});
-$('#rcdBook').on('shown.bs.modal', function (e) {
-console.log("shown.bs.modal");
-});
-$('#rcdBook').on('hide.bs.modal', function (e) {
-console.log("hide.bs.modal");
-});
-$('#rcdBook').on('hidden.bs.modal', function (e) {
-console.log("hidden.bs.modal");
-});
+function limitBrCnt(){
+	
+	alert('대여권수가 5권을 초과할 수 없습니다.');
+}
+
+function limitOverdue(){
+	
+	alert('연체이력으로 대여할 수 없습니다.');
+}

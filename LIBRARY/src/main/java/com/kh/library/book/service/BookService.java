@@ -9,6 +9,7 @@ import com.kh.library.book.vo.HopeBookVO;
 import com.kh.library.book.vo.RecommendImgVO;
 import com.kh.library.book.vo.RecommendVO;
 import com.kh.library.book.vo.ReserveVO;
+import com.kh.library.member.vo.MemberVO;
 
 public interface BookService {
 	//카테고리목록조회
@@ -23,9 +24,14 @@ public interface BookService {
 	//도서 상세 조회
 	BookVO selectBookDetail(BookVO bookVO);
 	
+	//멤버별 추천리스트 조회
+	RecommendVO selectRcdInfo(RecommendVO rcdVO);
+	
 	//도서 추천 
 	void updateRcdCnt(BookVO bookVO);
 	
+	//예약 권한 조회
+	MemberVO selectRsvInfo(MemberVO memberVO);
 	
 	//도서 예약 기능
 	void reserve(BookVO bookVO);
@@ -38,6 +44,8 @@ public interface BookService {
 	
 	//희망도서 신청 기능
 	void insertHopeBook(HopeBookVO hbVO);
+
+	
 	
 
 	

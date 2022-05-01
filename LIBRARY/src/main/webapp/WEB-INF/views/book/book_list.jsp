@@ -50,7 +50,7 @@ img:hover{
 		<h4><a href="/book/bookDetail?bookCode=${book.bookCode }">${book.title }</a></h4>
 	</tr>
 	<tr>
-		<td colspan="4"><a href="/book/bookDetail?bookCode=${book.bookCode }"><img src="/resources/images/book/${book.bkImg }"  alt="..." height="120px;" width="80px;" ></a></td>
+		<td colspan="4"><a href="/book/bookDetail?bookCode=${book.bookCode }&memId=${sessionScope.loginInfo.memId}"><img src="/resources/images/book/${book.bkImg }"  alt="..." height="120px;" width="80px;" ></a></td>
 		<td>저자</td>
 		<td>${book.writer }</td>
 	</tr>

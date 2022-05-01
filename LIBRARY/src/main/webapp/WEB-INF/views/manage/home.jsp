@@ -37,7 +37,7 @@
 			<c:forEach items="${bookList }" var="book">
 				<div class="col-3 text-center" style="margin-bottom: 16px;">
 					<div class="card" style="width: 13rem; margin: 0 auto;">
-						 <a href="/book/bookDetail?bookCode=${book.bookCode }">
+						 <a href="/book/bookDetail?bookCode=${book.bookCode }&memId=${sessionScope.loginInfo.memId}">
 						 	<img src="/resources/images/book/${book.bkImg }"  alt="..." height="170px;"  >
 						 </a>
 						 <div class="card-body" style="padding:0.2rem 1.2rem;">

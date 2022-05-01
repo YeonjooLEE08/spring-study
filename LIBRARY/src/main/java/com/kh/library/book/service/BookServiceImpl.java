@@ -13,6 +13,7 @@ import com.kh.library.book.vo.HopeBookVO;
 import com.kh.library.book.vo.RecommendImgVO;
 import com.kh.library.book.vo.RecommendVO;
 import com.kh.library.book.vo.ReserveVO;
+import com.kh.library.member.vo.MemberVO;
 
 @Service("bookService")
 public class BookServiceImpl implements BookService {
@@ -43,12 +44,25 @@ public class BookServiceImpl implements BookService {
 		return sqlSession.selectOne("bookMapper.selectBookDetail", bookVO);
 	}
 	
+	//멤버별 추천 정보 조회
+	@Override
+	public RecommendVO selectRcdInfo(RecommendVO rcdVO) {
+		return sqlSession.selectOne("bookMapper.selectRcdInfo",rcdVO);
+	}
+	
 	//도서 추천
 	@Override
 	public void updateRcdCnt(BookVO bookVO) {
 		sqlSession.update("bookMapper.updateRcdCnt",bookVO);
 	}
 	
+	// 예약 제한 정보 조회
+	@Override
+	public MemberVO selectRsvInfo(MemberVO memberVO) {
+		return sqlSession.selectOne("memberMapper.selectRsvInfo",memberVO);
+	}
+		
+		
 	//도서 예약
 	@Override
 	public void reserve(BookVO bookVO) {
@@ -74,6 +88,10 @@ public class BookServiceImpl implements BookService {
 	public void insertHopeBook(HopeBookVO hbVO) {
 		sqlSession.insert("bookMapper.insertHopeBook", hbVO);
 	}
+
+
+
+	
 
 	
 

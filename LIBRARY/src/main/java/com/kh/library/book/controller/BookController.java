@@ -19,6 +19,7 @@ import com.kh.library.book.vo.BookImgVO;
 import com.kh.library.book.vo.BookVO;
 import com.kh.library.book.vo.BorrowVO;
 import com.kh.library.book.vo.HopeBookVO;
+import com.kh.library.book.vo.RecommendVO;
 import com.kh.library.book.vo.ReserveVO;
 import com.kh.library.member.vo.MemberVO;
 
@@ -106,9 +107,10 @@ public class BookController {
 	}
 	//도서 상세보기
 	@GetMapping("/bookDetail")
-	public String bookDetail(Model model, BookVO bookVO) {
+	public String bookDetail(Model model, BookVO bookVO, RecommendVO rcdVO, MemberVO memberVO) {
 		model.addAttribute("bookDetail", bookService.selectBookDetail(bookVO));
-		
+	//	model.addAttribute("bookDetail", bookService.selectRcdInfo(rcdVO));
+		model.addAttribute("member", bookService.selectRsvInfo(memberVO));
 		return "book/book_detail";
 	}
 	

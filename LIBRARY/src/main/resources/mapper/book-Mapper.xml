@@ -92,9 +92,10 @@
 	</resultMap>
 	
 	<resultMap type="com.kh.library.book.vo.RecommendVO" id="recommend">
-		<id column="RC_CODE"				property="rcCode"/>
-		<result column="RC_NAME"			property="rcName"/>
-		<result column="RC_CONTENT"			property="rcName"/>
+		<id column="RCD_CODE"				property="rcdCode"/>
+		<result column="MEM_ID"  			property="memId"/>
+		<result column="BOOK_CODE"  		property="bookCOde"/>
+		<result column="RCD_STATUS"  		property="rcdStatus"/>
 	</resultMap>
 	
 	<resultMap type="com.kh.library.book.vo.RecommendImgVO" id="recommendImg">
@@ -262,12 +263,25 @@
 		AND B.BOOK_CODE = #{bookCode}
 	</select>
 	
-	<!-- 책 추천  -->
+	<!-- ////////////////// 책 추천 //////////////////////////////  -->
 	<update id="updateRcdCnt" >
 		UPDATE BOOK
 		SET RCD_CNT = RCD_CNT+1
 		WHERE BOOK_CODE = #{bookCode}
 	</update>
+	
+	<insert id="insertRcd">
+		INSERT INTO RECOMMEND (
+			RCD_CODE
+			, BOOK_CODE
+			, MEM_ID
+		)VALUES(
+			(SELECT 'RCD'||LPAD(NVL(MAX(TO_NUMBER(SUBSTR(RCD_CODE,4,3))),0)+1,3,'0') AS RCD_CODE FROM RECOMMEND)
+			, #{bookCode}	
+			, #{memId}	
+		)
+		
+	</insert>
 	
 	<!-- 추천도서 랭킹 -->
 	<select id="selectRcdBook" resultMap="book">
