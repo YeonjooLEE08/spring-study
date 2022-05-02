@@ -24,10 +24,17 @@ public class MemberVO extends PageVO{
 	private int brCnt;  // 1인당 대출 권 수 제한
 	private String limitDate; // 대출 제한 일 limitDate까지
 	
+	private int rsvCnt;
 	
 	
 	
 	
+	public int getRsvCnt() {
+		return rsvCnt;
+	}
+	public void setRsvCnt(int rsvCnt) {
+		this.rsvCnt = rsvCnt;
+	}
 	public String getLimitDate() {
 		return limitDate;
 	}

@@ -27,7 +27,6 @@ function showModalOD(selectedTag){
 	$('#returnOverdue #originBrCode' ).val(brCode);
 	$('#returnOverdue #originMemId' ).val(memId);
 	$('#returnOverdue #originIsbn' ).val(isbn);
-//	$('#returnOverdue #originRtDate' ).val(rtDate);
 	$('#returnOverdue #originLimitDate').val(limitDate);
 	
 	$('#returnOverdue').modal('show');
@@ -35,34 +34,19 @@ function showModalOD(selectedTag){
 }	
 
 function returnOverdue(){
-	var originIsbn = $('#returnOverdue #originIsbn').val();
-	var originBrCode = $('#returnOverdue #originBrCode').val();
-	var originMemId = $('#returnOverdue #originMemId').val();
-//	var originRtDate = $('#returnOverdue #originRtDate').val();
+	var isbn = $('#returnOverdue #originIsbn').val();
+	var brCode = $('#returnOverdue #originBrCode').val();
+	var memId = $('#returnOverdue #originMemId').val();
 	
-	var originLimitDate = $('#returnOverdue #originLimitDate').val();
-	alert(originLimitDate);
-	
-/*	var nowDate = new Date();
-	var originRtDateT =new Date(originRtDate);
+	var limitDate = $('#returnOverdue #originLimitDate').val();
 
-	var limitDay = Math.floor((nowDate.getTime() - originRtDateT.getTime())/(1000*60*60*24));
-	
-	var limit = new Date(nowDate);
-	limit.setDate(nowDate.getDate()+limitDay);
-	
-	var limitYear = limit.getFullYear();
-	var limitMonth = limit.getMonth()+1;
-	var limitDate = limit.getDate();
-	
-	var limitDate = limitYear +'-'+ limitMonth +'-'+ limitDate;*/
-	
-	var originLimitDate = $('#returnOverdue #originLimitDate').val();
-	
-//	alert('연체일은 총 '+limitDay+'일입니다.\n 대출가능일은 '+limitDate+'입니다.');
+
+	var formTag = document.getElementById('rtOverdue');
+	formTag.submit();
+
 	
 	
-	location.href = '/book/returnOverdue?isbn='+originIsbn+'&brCode='+originBrCode+'&memId='+originMemId+'&limitDate='+originLimitDate;
+	//location.href = '/book/returnOverdue?isbn='+isbn+'&brCode='+brCode+'&memId='+memId+'&limitDate='+limitDate;
 	
 }
 $('#closeModalBtnOD').on('click', function(){

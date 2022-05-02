@@ -68,6 +68,7 @@
 		<result column="ISBN" 				property="isbn"/>
 		<result column="MEM_ID" 				property="memId"/>
 		<result column="RSV_DATE" 				property="rsvDate"/>
+		<result column="ROWNUM" 					property="rowNum"/>
 	</resultMap>
 	
 								<!-- 도서 대여 -->
@@ -81,6 +82,7 @@
 		<result column="BOOK_CODE" 			property="bookCode"/>
 		<result column="TITLE" 				property="title"/>
 		<result column="SEARCH_SUB" 		property="searchSub"/>
+		<result column="ROWNUM" 					property="rowNum"/>
 	</resultMap>
 	
 	<resultMap type="com.kh.library.book.vo.HopeBookVO" id="hopeBook">
@@ -96,6 +98,7 @@
 		<result column="MEM_ID"  			property="memId"/>
 		<result column="BOOK_CODE"  		property="bookCOde"/>
 		<result column="RCD_STATUS"  		property="rcdStatus"/>
+		<result column="ROWNUM" 					property="rowNum"/>
 	</resultMap>
 	
 	<resultMap type="com.kh.library.book.vo.RecommendImgVO" id="recommendImg">
@@ -264,12 +267,14 @@
 	</select>
 	
 	<!-- ////////////////// 책 추천 //////////////////////////////  -->
+	<!-- 책 추천수 업데이트 -->	
 	<update id="updateRcdCnt" >
 		UPDATE BOOK
 		SET RCD_CNT = RCD_CNT+1
 		WHERE BOOK_CODE = #{bookCode}
 	</update>
 	
+	<!-- 멤버별 추천 정보 입력 -->
 	<insert id="insertRcd">
 		INSERT INTO RECOMMEND (
 			RCD_CODE
@@ -280,8 +285,15 @@
 			, #{bookCode}	
 			, #{memId}	
 		)
-		
 	</insert>
+	
+	<!-- 추천 기록 조회 -->
+	<select id="selectRcdInfo" resultMap="recommend">
+		SELECT RCD_STATUS
+		FROM RECOMMEND
+		WHERE BOOK_CODE=#{bookCode}
+		AND MEM_ID = #{memId}
+	</select>
 	
 	<!-- 추천도서 랭킹 -->
 	<select id="selectRcdBook" resultMap="book">
@@ -350,8 +362,10 @@
 			, TO_CHAR(RSV_DATE, 'YYYY-MM-DD') AS RSV_DATE
 			, MEM_ID
 			, BOOK_CODE
+			, ROWNUM
 		FROM RESERVE
 		WHERE MEM_ID=#{memId }
+		ORDER BY ROWNUM
 	</select>
 	
 	<!-- 관리자 예약도서 확인 -->
@@ -412,6 +426,7 @@
 			, TO_CHAR(RT_DATE, 'YYYY-MM-DD ') AS RT_DATE
 			, STATUS
 		FROM BORROW
+		ORDER BY STATUS
 	</select>
 	
 	<!-- 멤버별 대여목록 조회 -->
@@ -425,6 +440,7 @@
 			, STATUS
 		FROM BORROW
 		WHERE MEM_ID = #{memId}
+		ORDER BY STATUS
 	</select>
 	
 	<!-- 마이페이지 대여도서 확인 -->
@@ -433,11 +449,13 @@
 			, MEM_ID
 			, TITLE
 			, ISBN
+			, ROWNUM
 			, TO_CHAR(BR_DATE, 'YYYY-MM-DD ') AS BR_DATE
 			, TO_CHAR(RT_DATE, 'YYYY-MM-DD ') AS RT_DATE
 			, STATUS
 		FROM BORROW
 		WHERE MEM_ID=#{memId }
+		ORDER BY ROWNUM DESC
 	</select>
 	
 	<!-- 대여 상태별 조회 -->
@@ -450,7 +468,16 @@
 			, TO_CHAR(RT_DATE, 'YYYY-MM-DD ') AS RT_DATE
 			, STATUS
 		FROM BORROW
-		WHERE STATUS = #{searchSub}
+		<choose>
+			<when test="searchSub != 'all'">
+				WHERE STATUS = #{searchSub}
+				ORDER BY RT_DATE DESC
+			</when>
+			<otherwise>
+				ORDER BY STATUS
+			</otherwise>
+		</choose>
+		
 	</select>
 	
 

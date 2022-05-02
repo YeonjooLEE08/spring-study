@@ -3,8 +3,9 @@
 <!-- 모든 SQL문을 mapper태그 안에 작성 -->
 <mapper namespace="itemMapper">
 	<resultMap type="com.kh.library.item.vo.ItemCategoryVO" id="itemCate">
-	<id column="CATE_CODE"		 property="cateCode"/>
-	<result column="CATE_NAME"	 property="cateName"/>
+	<id column="CATE_CODE"		 		property="cateCode"/>
+	<result column="CATE_NAME"	 		property="cateName"/>
+	<result column="IS_DELETE" 			property="isDelete"/>
 	</resultMap>
 
 	<resultMap type="com.kh.library.item.vo.ItemVO" id="item">
@@ -15,6 +16,7 @@
 	<result column="ITEM_STOCK" 		property="itemStock"/>
 	<result column="CATE_CODE" 			property="cateCode"/>
 	<result column="ITEM_AT_IMG_NAME" 	property="itemAtImgName"/>
+	<result column="IS_DELETE" 			property="isDelete"/>
 	<result column="keyword" 			property="keyword"/>
 	</resultMap>
 	
@@ -41,6 +43,8 @@
 	SELECT CATE_CODE
 		, CATE_NAME
 	FROM ITEM_CATEGORY
+	WHERE IS_DELETE = 'N'
+	ORDER BY CATE_NAME ASC
 	</select>
 	
 	<!-- 카테고리등록 -->
@@ -61,7 +65,14 @@
 	WHERE CATE_CODE = #{cateCode}
 	</update>
 	
-	<!-- 카테고리 삭제 -->
+	<!-- 카테고리 삭제 상태변경 -->
+	<update id="updateIsDelete">
+	UPDATE ITEM_CATEGORY
+	SET IS_DELETE = #{isDelete}
+	WHERE CATE_CODE = #{cateCode}
+	</update>
+	
+	<!-- 카테고리 완전삭제 -->
 	<delete id="deleteCategory">
 	DELETE ITEM_CATEGORY
 	WHERE CATE_CODE=#{cateCode}
@@ -83,6 +94,7 @@
 	FROM ITEM ITEM, ITEM_IMAGE IMG
 	WHERE ITEM.ITEM_CODE = IMG.ITEM_CODE
 	AND IS_MAIN ='Y'
+	AND IS_DELETE = 'N'
 	<if test="cateCode != null and !cateCode.equals('')">
 		AND CATE_CODE = #{cateCode}
 	</if>
@@ -100,6 +112,7 @@
 	FROM ITEM ITEM, ITEM_IMAGE IMG
 	WHERE ITEM.ITEM_CODE = IMG.ITEM_CODE
 	AND IS_MAIN ='Y'
+	AND IS_DELETE = 'N'
 	AND ITEM_NAME LIKE '%'||#{keyword}||'%'
 	ORDER BY ITEM.ITEM_CODE DESC
 	</select>
@@ -109,6 +122,7 @@
 	SELECT COUNT(*) AS ITEM_CNT
     FROM ITEM
     WHERE ITEM_NAME LIKE '%'||#{keyword}||'%'
+    AND IS_DELETE = 'N'
 	</select>
 	
 	<!-- 굿즈상세조회 -->
@@ -174,7 +188,14 @@
 	FROM ITEM_IMAGE
 	</select>
 	
-	<!-- ITEM 삭제 -->
+	<!-- ITEM 삭제유무 업데이트 -->
+	<update id="updateIsDeleteItem">
+		UPDATE ITEM
+		SET IS_DELETE = #{isDelete}
+		WHERE ITEM_CODE = #{itemCode}
+	</update>
+	
+	<!-- ITEM 완전삭제 -->
 	<delete id="deleteItem">
 	DELETE ITEM
 	WHERE ITEM_CODE = #{itemCode}
@@ -186,7 +207,17 @@
 		WHERE ITEM_CODE = #{itemCode}	
 	</delete>
 	
-	<!-- 선택된 ITEM 삭제 -->
+	<!-- 선택된 ITEM 삭제유무 업데이트 -->
+	<update id="updateIsDeleteItems">
+		UPDATE ITEM
+		SET IS_DELETE = #{isDelete}
+		WHERE ITEM_CODE IN
+		<foreach collection="itemCodeArr" item="itemCode" open="(" close=")" separator=",">
+			#{itemCode}
+		</foreach>
+	</update>
+	
+	<!-- 선택된 ITEM 완전삭제 -->
 	<delete id="deleteItems">
 		DELETE ITEM
 		WHERE ITEM_CODE IN

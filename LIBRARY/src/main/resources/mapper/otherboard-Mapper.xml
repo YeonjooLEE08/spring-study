@@ -30,9 +30,13 @@
 		<result column="QNA_TITLE" 			property="qnaTitle"/> 
 		<result column="QNA_CONTENT" 		property="qnaContent"/>
 		<result column="QNA_CREATE_DATE" 	property="qnaCreateDate"/>
+		<result column="QNA_READ_CNT" 		property="qnaReadCnt"/>
 		<result column="QNA_IS_PRIVATE" 	property="qnaIsPrivate"/>
 		<result column="QNA_PW" 			property="qnaPw"/>
 		<result column="MEM_ID" 			property="memId"/>
+		<result column="MEM_NAME" 			property="memName"/>
+		<result column="ROWNUM" 			property="rownum"/>
+		<result column="IS_ANSWERED" 		property="isAnswered"/>
 	</resultMap>
 	
 	<resultMap type="com.kh.library.board.vo.QnaAnswerVO" id="qnaAnswer">
@@ -180,8 +184,50 @@
 		WHERE COMMENT_NUM = #{commentNum}
 	</delete>
 	
+	
+	
 	<!-- ///////////////////        QNA게시판           /////////////////////////////  -->
 	
+	<!-- Qna게시판 다음번호 조회 -->
+	<select id="selectNextQnaNum" resultType="String">
+		SELECT 'QNA_'||LPAD(NVL(MAX(TO_NUMBER(SUBSTR(QNA_NUM, 5))),0) +1, 3, '0')
+		FROM QNA
+	</select>
+	
+	<!-- Qna게시판 등록 -->
+	<insert id="insertQna">
+		INSERT INTO QNA(
+			QNA_NUM
+			, QNA_TITLE
+			, QNA_CONTENT
+			, MEM_ID
+			, MEM_NAME
+			, QNA_IS_PRIVATE
+		)VALUES(
+			#{qnaNum}
+			, #{qnaTitle}
+			, #{qnaContent}
+			, #{memId}
+			, #{memName}
+			, #{qnaIsPrivate}
+		)
+	</insert>
+	
+	<!-- Qna게시판리스트 조회 -->
+	<select id="selectQnaList" resultMap="qna">
+		SELECT QNA_NUM
+			, QNA_TITLE
+			, QNA_CREATE_DATE
+			, QNA_IS_PRIVATE
+			, MEM_ID
+			, MEM_NAME
+			, QNA_READ_CNT
+			, ROWNUM
+			, IS_ANSWERED
+		FROM QNA
+		ORDER BY QNA_CREATE_DATE DESC
+			, ROWNUM DESC
+	</select>
 </mapper>
 
 

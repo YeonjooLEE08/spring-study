@@ -13,13 +13,45 @@ function showModal(selectedTag){
 }
 
 function returnBook(){
-	var originIsbn = $('#returnBook #originIsbn').val();
-	var originBrCode = $('#returnBook #originBrCode').val();
-	var originMemId = $('#returnBook #originMemId').val();
+	var isbn = $('#returnBook #originIsbn').val();
+	var brCode = $('#returnBook #originBrCode').val();
+	var memId = $('#returnBook #originMemId').val();
 	
-	location.href = '/book/returnBook?isbn='+originIsbn+'&brCode='+originBrCode+'&memId='+originMemId;
+	
+	
+	
+	/*let f = document.createElement('form');
+	
+	let obj;
+	obj = document.createElement('input');
+	obj.setAttribute('type','hidden');
+	obj.setAttribute('name','isbn');
+	obj.setAttribute('value',isbn);
+	
+	obj = document.createElement('input');
+	obj.setAttribute('type','hidden');
+	obj.setAttribute('name','memId');
+	obj.setAttribute('value',memId);
+	
+	obj = document.createElement('input');
+	obj.setAttribute('type','hidden');
+	obj.setAttribute('name','brCode');
+	obj.setAttribute('value',brCode);
+	
+	f.appendChild(obj);
+	f.setAttribute('method','post');
+	f.setAttribute('action','/book/returnBook');
+	document.body.appendChild(f);
+	f.submit();*/
+	
+	
+	location.href = '/book/returnBook?isbn='+isbn+'&brCode='+brCode+'&memId='+memId;
 	alert('반납되었습니다.');
 	
+/*	var formTag = document.getElementById('rtBook');
+	formTag.submit();
+	
+	*/
 }
 
 
