@@ -45,51 +45,49 @@ img{
 		<div id="rcdBook">
 			<input type="hidden" id="memId" value="${sessionScope.loginInfo.memId }">
 			<input type="hidden" id="bookCode" value="${bookDetail.bookCode }">
-			<button type="button" id="recommendBook" onclick="recommendBook();">추천 ${bookDetail.rcdCnt }</button>
+			<input type="hidden" id="rcdStatus" value="${rcdInfo.rcdStatus }">
+			
+			<button type="button" id="recommendBook" onclick="insertRecommend();">추천 ${bookDetail.rcdCnt }</button>
 		</div>
 	
 	</div>
-	
-	
-<%-- 	<button type="button" onclick="location.href='/book/reserve?bookCode=${bookDetail.bookCode}';">
-		<c:set var ="status" scope ="session" value="${bookDetail.status }"/>
-		<c:set var ="bkStock" scope ="session" value="${bookDetail.bkStock }"/>
-		<c:choose>
-			<c:when test="${ bkStock-status > 0}">대출가능 ${bookDetail.bkStock }</c:when>
-			<c:otherwise>대출불가</c:otherwise>
-		</c:choose>
-	</button> --%>
-	<form action="/book/reserve" method="post">
-		<input type="hidden" name="bookCode" value="${bookDetail.bookCode }">
-		<input type="hidden" name="title" value="${bookDetail.title }">
-		<input type="hidden" name="isbn" value="${bookDetail.isbn }">
-		<input type="hidden" name="memId" value="${sessionScope.loginInfo.memId }">
+	<div id = "reserveBook">	
+		<form action="/book/reserve" method="post" id="insertRsv">
+			<input type="hidden" name="bookCode" value="${bookDetail.bookCode }">
+			<input type="hidden" name="title" value="${bookDetail.title }">
+			<input type="hidden" name="isbn" value="${bookDetail.isbn }">
+			<input type="hidden" name="memId" value="${sessionScope.loginInfo.memId }">
+			<input type="hidden" name="brCnt" id="brCnt" value="${member.brCnt}">
+			<input type="hidden" name="rsvCnt" id="rsvCnt" value="${member.rsvCnt}">
+			<input type="hidden" name="isOd" id="isOd" value="${member.isOd}">
+			
+			<c:set var ="status" scope ="session" value="${bookDetail.status }"/>
+			<c:set var ="bkStock" scope ="session" value="${bookDetail.bkStock }"/>
+			<c:choose>
+				<c:when test="${ bkStock-status > 0}">
+					<c:set var ="brCnt" scope ="session" value="${member.brCnt}"/>
+					<c:set var ="isOd" scope ="session" value="${member.isOd}"/>
+				<%-- 	<c:choose>
+						<c:when test="${ brCnt == 5 }">
+							<button type = "button" onclick="limitBrCnt()">대출가능 ${bkStock-status }</button>
+						</c:when>
+						<c:when test="${ isOd eq 'Y' }">
+							<button type = "button" class="btn btn-primary"  onclick="limitOverdue()">대출가능 ${bkStock-status }</button>
+						</c:when>
+						<c:otherwise> <!-- 로그인제한은 spring security 이용 하기  -->
+							<button type="button" onclick="reserveBook();">대출가능 ${bkStock-status }</button>
+						</c:otherwise>
+					</c:choose> --%>
+					<button type="button" onclick="reserveBook();">대출가능 ${bkStock-status }</button>
+					
+				</c:when>
+				<c:otherwise>
+					<button type="button">대출불가</button>
+				</c:otherwise>
+			</c:choose>
+		</form>
+	</div>
 		
-		<c:set var ="status" scope ="session" value="${bookDetail.status }"/>
-		<c:set var ="bkStock" scope ="session" value="${bookDetail.bkStock }"/>
-		<c:choose>
-			<c:when test="${ bkStock-status > 0}">
-				<c:set var ="brCnt" scope ="session" value="${member.brCnt}"/>
-				<c:set var ="isOd" scope ="session" value="${member.isOd}"/>
-				<c:choose>
-					<c:when test="${ brCnt == 5 }">
-						<button type = "button" onclick="limitBrCnt()">대출가능 ${bkStock-status }</button>
-					</c:when>
-					<c:when test="${ isOd eq 'Y' }">
-						<button type = "button" class="btn btn-primary"  onclick="limitOverdue()">대출가능</button>
-					</c:when>
-					<c:otherwise>
-						<input type="submit"  value="대출가능 ${bkStock-status }">
-					</c:otherwise>
-				</c:choose>
-				
-			</c:when>
-			<c:otherwise>
-				<button type="button">대출불가</button>
-			</c:otherwise>
-		</c:choose>
-	</form>
-	
 
 	<div class="modal fade" id="rcdBookComplete" tabindex="-1" aria-labelledby="rcdBookCompleteLabel" aria-hidden="true">
 	  <div class="modal-dialog">
@@ -109,6 +107,7 @@ img{
 	</div>
 </div>
 
-<script type="text/javascript" src="/resources/js/book/recommend_book.js?ver=4"></script>
+<script type="text/javascript" src="/resources/js/book/recommend_book.js?ver=5"></script>
+<script type="text/javascript" src="/resources/js/book/reserve_book.js?ver=12"></script>
 </body>
 </html>

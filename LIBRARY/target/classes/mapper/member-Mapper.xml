@@ -20,6 +20,7 @@
 		<result column="ROW_NUM" 			property="rowNum"/>
 		<result column="IS_OD" 				property="isOd"/>
 		<result column="BR_CNT" 			property="brCnt"/>
+		<result column="RSV_CNT" 			property="rsvCnt"/>
 		<result column="LIMIT_DATE" 		property="limitDate"/>
 	</resultMap>
 	<resultMap type="com.kh.library.member.vo.MemberImageVO" id="memberImage">
@@ -33,6 +34,7 @@
 		<result column="COMPLIT_DATE" 	property="complitDate"/>
 		<result column="BOOK_CODE" 		property="bookCode"/>
 		<result column="MEM_ID" 		property="memId"/>
+		<association property="bookInfo"    resultMap="bookMapper.book"></association>
 	<!-- 	<association property="title" resultMap="bookMapper.book" />
 		<association property="writer"  resultMap="bookMapper.book"/> -->
 	</resultMap>
@@ -257,6 +259,35 @@
 	
 	
 	<!-- ///////////////////// 도서 대여 관리 ////////////////////////////// -->
+	<!-- 예약시 rsvCnt 업데이트 -->
+	<update id="updateRsvCnt">
+		UPDATE BOOK_MEMBER
+		SET RSV_CNT=RSV_CNT+1
+		WHERE MEM_ID =#{memId}
+	</update>
+	
+	<!-- 예약 취소 시  rsvCnt 업데이트 -->
+	<update id="updateCancelRsvCnt">
+		UPDATE BOOK_MEMBER
+		SET RSV_CNT=RSV_CNT-1
+		WHERE MEM_ID =#{memId}
+	</update>
+	
+	<!-- 대여시 brCnt,rsvCnt 업데이트 -->
+	<update id="updateBrCntPlus">
+		UPDATE BOOK_MEMBER
+		SET BR_CNT=BR_CNT+1
+		AND RSV_CNT=RSV_CNT-1
+		WHERE MEM_ID = #{memId}
+	</update>
+	
+	<!-- 반납 시 brCnt 업데이트 -->
+	<update id="updateBrCntMinus">
+		UPDATE BOOK_MEMBER
+		SET BR_CNT=BR_CNT-1
+		WHERE MEM_ID = #{memId}
+	</update>
+	
 	<!-- isOd 업데이트 -->
 	<update id="updateIsOdMem">
 		UPDATE BOOK_MEMBER
@@ -283,10 +314,12 @@
 	
 	<!-- 예약 제한 정보 조회 -->
 	<select id="selectRsvInfo" resultMap="member">
-		SELECT BR_CNT, IS_OD
+		SELECT BR_CNT, IS_OD, RSV_CNT
 		FROM BOOK_MEMBER
 		WHERE MEM_ID = #{memId}
 	</select>
+	
+	
 </mapper>
 
 

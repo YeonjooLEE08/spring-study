@@ -109,7 +109,7 @@ public class BookController {
 	@GetMapping("/bookDetail")
 	public String bookDetail(Model model, BookVO bookVO, RecommendVO rcdVO, MemberVO memberVO) {
 		model.addAttribute("bookDetail", bookService.selectBookDetail(bookVO));
-	//	model.addAttribute("bookDetail", bookService.selectRcdInfo(rcdVO));
+		model.addAttribute("rcdInfo", bookService.selectRcdInfo(rcdVO));
 		model.addAttribute("member", bookService.selectRsvInfo(memberVO));
 		return "book/book_detail";
 	}
@@ -117,10 +117,13 @@ public class BookController {
 	//도서 추천
 	@GetMapping("/rcdBook")
 	public String rcdBook(Model model, BookVO bookVO) {
-		bookService.updateRcdCnt(bookVO);
-		model.addAttribute("bookDetail", bookService.selectBookDetail(bookVO));
 		
-		return "book/book_detail";
+		System.out.println("!!!"+bookVO.getBookCode());
+		System.out.println("!!!"+bookVO.getMemId());
+		bookService.updateRcdCnt(bookVO);
+	
+		
+		return "redirect:/book/bookDetail?bookCode="+bookVO.getBookCode()+"&memId="+bookVO.getMemId();
 	}
 	
 	//추천도서 랭킹
@@ -157,10 +160,11 @@ public class BookController {
 	
 	//도서 대여
 	@RequestMapping("/borrowBook")
-	public String borrowBook(ReserveVO reserveVO) {
+	public String borrowBook(ReserveVO reserveVO, MemberVO memberVO) {
 		System.out.println("!!!" + reserveVO.getMemId());
 		System.out.println("!!!" + reserveVO.getIsbn());
-		bookAdminService.borrowBook(reserveVO);
+		System.out.println("!!!"+memberVO.getMemId());
+		bookAdminService.borrowBook(reserveVO, memberVO);
 		
 		return "redirect:/book/reserveListAdmin";
 	}
@@ -191,10 +195,11 @@ public class BookController {
 	
 	//도서 반납
 	@RequestMapping("/returnBook")
-	public String returnBook(BorrowVO borrowVO) {
-		bookAdminService.updateReturn(borrowVO);
+	public String returnBook(BorrowVO borrowVO , MemberVO memberVO, Model model) {
+		bookAdminService.updateReturn(borrowVO, memberVO);
+		model.addAttribute("adminBorrow", bookAdminService.selectBrMember(borrowVO));
 		
-		return "redirect:/book/selectBrList";
+		return "admin/borrow_list_member";
 	}
 	
 	//연체도서 반납
@@ -202,10 +207,10 @@ public class BookController {
 	public String returnOverdue(BorrowVO borrowVO, MemberVO memberVO) {
 		System.out.println(borrowVO.getLimitDate());
 		System.out.println(memberVO.getLimitDate());
-		bookAdminService.updateReturn(borrowVO);
+		bookAdminService.updateReturn(borrowVO, memberVO);
 		bookAdminService.updateLimit(memberVO);
 		
-		return "redirect:/book/selectBrList";
+		return "redirect:/book/selectBrMember";
 	}
 	
 	// ----------------------------- 속 내용만 어드민컨트롤러로 이동 -------------------------

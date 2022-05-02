@@ -55,33 +55,35 @@
 
 
 <div class="modal fade" id="insertBorrow" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <input type="hidden" id="originMemId" value="">
-  <input type="hidden" id="originIsbn" value="">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="myModalLabel">대여 입력 정보 </h5>
-      </div>
-      <div class="modal-body">
-      	<table>
-      		<tr>
-      			<td>아이디 </td>
-      			<td><input type="text" id="memId" ></td>
-      			<td>ISBN</td>
-      			<td><input type="text" id="isbn" ></td>
-      		</tr>
-      	</table>
-          
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" id="closeModalBtn" data-dismiss="modal">닫기</button>
-        <button type="button" class="btn btn-primary" onclick="insertBorrow();">대여</button>
-      </div>
-    </div>
-  </div>
+	<form action="book/borrowBook" id="borrow">
+	  <input type="hidden" id="originMemId" value="">
+	  <input type="hidden" id="originIsbn" value="">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="myModalLabel">대여 입력 정보 </h5>
+	      </div>
+	      <div class="modal-body">
+	      	<table>
+	      		<tr>
+	      			<td>아이디 </td>
+	      			<td><input type="text" id="memId" name="memId"></td>
+	      			<td>ISBN</td>
+	      			<td><input type="text" id="isbn" name="isbn"></td>
+	      		</tr>
+	      	</table>
+	          
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" id="closeModalBtn" data-dismiss="modal">닫기</button>
+	        <button type="button" class="btn btn-primary" onclick="insertBorrow();">대여</button>
+	      </div>
+	    </div>
+	  </div>
+  </form>
  </div>
 	
 
-<script type="text/javascript" src="/resources/js/book/admin_rsvList.js?ver=30"></script>
+<script type="text/javascript" src="/resources/js/book/admin_rsvList.js?ver=34"></script>
 </body>
 </html>

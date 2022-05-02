@@ -216,6 +216,7 @@
 		WHERE CB_BOARD_NUM = #{cbBoardNum}
 		AND CLUB_CODE = #{clubCode}
 	</select>
+	
 	<!-- 게시글 수정 -->
 	<update id="updateClubBoardDetail">
 		UPDATE BOOK_CLUB_BOARD 
@@ -225,6 +226,7 @@
 		WHERE CB_BOARD_NUM = #{cbBoardNum}
 		AND CLUB_CODE = #{clubCode}
 	</update>
+	
 	<!-- 게시글 삭제 -->
 	<delete id="deleteClubBoard">
 		DELETE BOOK_CLUB_BOARD
@@ -255,7 +257,7 @@
 	<select id="selectCbCmtList" resultMap="cmt">
 		SELECT	MEM_ID 
 			, MEM_NAME
-			, TO_CHAR(CB_CMT_DATE, 'YYYY-MM-DD HH24:MI') AS CB_CMT_DATE
+			, TO_CHAR(CB_CMT_DATE, 'YYYY-MM-DD HH24:MI:SS') AS CB_CMT_DATE
 			, CB_CMT_CONTENT
 			, CB_CMT_NUM
 			, CB_BOARD_NUM
@@ -293,7 +295,8 @@
 			, #{memName}
 		)
 	</insert>
-	
+
+	<!-- ///////////////////// 북클럽 관리 ///////////////////////////// -->
 	<!-- 신청회원 리스트 -->
 	<select id="selectClubApplyList" resultMap="apply">
 		SELECT CLUB_APPLY_CODE
@@ -327,7 +330,7 @@
 			, CLUB_ADMIN
 		FROM BOOK_MEMBER
 		WHERE CLUB_CODE = #{clubCode}
-		ORDER BY MEM_NAME
+		ORDER BY MEM_ID
 	</select>  
 	
 	<!-- 모임강퇴 -->

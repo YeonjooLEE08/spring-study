@@ -54,45 +54,55 @@
 
 <!-- 정상 반납 Modal -->
 <div class="modal fade" id="returnBook" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <!-- !!!!!!!!!!!!!!!! 모달로 위의 값 꼭 받아오기 !!!!!!!!!! -->
-  <input type="hidden"  id="originIsbn" value="">
-  <input type="hidden"  id="originBrCode" value="">
-  <input type="hidden"  id="originMemId" value="">
-  <input type="hidden"  id="originIsbn" value="">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-body">
-      
-				반납하시겠습니까?
-      </div>
-        <button type="button" class="btn btn-default" id="closeModalBtn" data-dismiss="modal">닫기</button>
-        <button type="button" class="btn btn-primary" onclick="returnBook();">반납</button>
-    </div>
-  </div>
+	<form action="/book/returnBook" id="rtBook">
+		  <!-- !!!!!!!!!!!!!!!! 모달로 위의 값 꼭 받아오기 !!!!!!!!!! -->
+		  <input type="hidden"  id="originIsbn" value="">
+		  <input type="hidden"  id="originBrCode" value="">
+		  <input type="hidden"  id="originMemId" value="">
+		  <input type="hidden"  id="originIsbn" value="">
+
+		  <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class="modal-body">
+		      
+						반납하시겠습니까?
+		      </div>
+		        <button type="button" class="btn btn-default" id="closeModalBtn" data-dismiss="modal">닫기</button>
+		        <button type="button" class="btn btn-primary" onclick="returnBook();">반납</button>
+		    </div>
+		  </div>
+  </form>
  </div>
 
 <!-- 연체 반납 Modal -->
 <div class="modal fade" id="returnOverdue" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <!-- !!!!!!!!!!!!!!!! 모달로 위의 값 꼭 받아오기 !!!!!!!!!! -->
-  <input type="hidden"  id="originIsbn" 	value="">
-  <input type="hidden"  id="originBrCode" 	value="">
-  <input type="hidden"  id="originMemId" 	value="">
-  <input type="hidden"	id="originRtDate" 	value="">
-  <input type="hidden"  id="originIsbn" 	value="">
-  <input type="hidden"  id="originLimitDate" value="">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-body">
-      
-				반납하시겠습니까?
-      </div>
-        <button type="button" class="btn btn-default" id="closeModalBtnOD" data-dismiss="modal">닫기</button>
-        <button type="button" class="btn btn-primary" onclick="returnOverdue();">반납</button>
-    </div>
-  </div>
+  <form action="/book/returnOverdue" id="rtOverdue">
+	  <input type="hidden"  id="originIsbn" 	value="">
+	  <input type="hidden"  id="originBrCode" 	value="">
+	  <input type="hidden"  id="originMemId" 	value="">
+	  <input type="hidden"	id="originRtDate" 	value="">
+	  <input type="hidden"  id="originIsbn" 	value="">
+	  <input type="hidden"  id="originLimitDate" value="">
+	  
+	  <input type="hidden" id="brCode" name="brCode">
+	  <input type="hidden" id="isbn" name="isbn">
+	  <input type="hidden" id="memId" name="memId">
+	  <input type="hidden" id="limitDate" name="limitDate">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-body">
+	      
+					반납하시겠습니까?
+	      </div>
+	        <button type="button" class="btn btn-default" id="closeModalBtnOD" data-dismiss="modal">닫기</button>
+	        <button type="button" class="btn btn-primary" onclick="returnOverdue();">반납</button>
+	    </div>
+	  </div>
+ 	</form> 
  </div>	
 
-<script type="text/javascript" src="/resources/js/book/admin_returnBook.js?ver=31"></script>
-<script type="text/javascript" src="/resources/js/book/admin_returnOverdue.js?ver=19"></script>
+<script type="text/javascript" src="/resources/js/book/admin_returnBook.js?ver=34"></script>
+<script type="text/javascript" src="/resources/js/book/admin_returnOverdue.js?ver=20"></script>
 </body>
 </html>

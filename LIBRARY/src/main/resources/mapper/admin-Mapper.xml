@@ -9,16 +9,19 @@
 	<select id="selectMemberList" resultMap="memberMapper.member">
 		SELECT MEM_ID
 	        , MEM_NAME
+	        , MEM_BIRTH
 	        , ROW_NUM
 	    FROM
 	    (
 	        SELECT MEM_ID
 	             , MEM_NAME
+	             , MEM_BIRTH
 	            , ROWNUM AS ROW_NUM
 	        FROM
 			    (
 			        SELECT MEM_ID
 	                    , MEM_NAME
+	                    , TO_CHAR(MEM_BIRTH, 'YYYY/MM/DD') AS MEM_BIRTH
 			        FROM BOOK_MEMBER
 			        WHERE 1=1
 			        <if test="keyword != null and !keyword.equals('')">
@@ -66,6 +69,29 @@
 		)		
 	</insert>
 	
+	<!-- 대여정보 -->
+	<select id="selectBorrowBookInfo" resultMap="bookMapper.borrow">
+		SELECT BR_CODE
+		    , MEM_ID
+		    , TO_CHAR(BR_DATE, 'YYYY-MM-DD') AS BR_DATE
+		    , TO_CHAR(RT_DATE, 'YYYY-MM-DD') AS RT_DATE
+		    , STATUS
+		    , BOOK_CODE
+		    , TITLE 
+		FROM BORROW
+		WHERE MEM_ID = #{memId}
+	</select>
+	
+	<!-- 예약정보 -->
+	<select id="selectReserveBookInfo" resultMap="bookMapper.reserve">
+		SELECT RSV_CODE
+			, BOOK_CODE
+			, TITLE
+			, MEM_ID
+			, RSV_DATE
+		FROM RESERVE
+		WHERE MEM_ID = #{memId}
+	</select>
 </mapper>
 
 

@@ -54,6 +54,7 @@ public class BookServiceImpl implements BookService {
 	@Override
 	public void updateRcdCnt(BookVO bookVO) {
 		sqlSession.update("bookMapper.updateRcdCnt",bookVO);
+		sqlSession.insert("bookMapper.insertRcd",bookVO);
 	}
 	
 	// 예약 제한 정보 조회
@@ -68,12 +69,21 @@ public class BookServiceImpl implements BookService {
 	public void reserve(BookVO bookVO) {
 		sqlSession.insert("bookMapper.insertReserve", bookVO);
 		sqlSession.update("bookMapper.updateStatus",bookVO);
+		sqlSession.update("memberMapper.updateRsvCnt",bookVO);
 	}
 	
 	// 유저 예약 도서 조회
 	@Override
 	public List<ReserveVO> selectRsvUser(ReserveVO reserveVO) {
 		return sqlSession.selectList("bookMapper.selectRsvUser",reserveVO);
+	}
+	
+	//유저 예약 취소
+	@Override
+	public void deleteReserve(ReserveVO reserveVO) {
+		sqlSession.delete("bookMapper.deleteRsvList", reserveVO);
+		sqlSession.update("bookMapper.updateBookInfo", reserveVO);
+		sqlSession.update("memberMapper.updateCancelRsvCnt",reserveVO);
 	}
 	
 	//유저 대여 목록 조회
