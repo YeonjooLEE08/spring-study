@@ -1,30 +1,3 @@
-//모달창 띄우기
-function showModal(selectedTag){
-	//memId
-	var memId = $('#cancleRsv #memId').val();
-	//isbn
-	var isbn = $(selectedTag).closest('tr').children().eq(2).text();
-
-	$('#cancleReserve #originMemId').val(memId);
-	$('#cancleReserve #originIsbn').val(isbn);
-	
-
-	$('#cancleReserve').modal('show');
-}	
-
-//모달창 닫기
-$('#closeModalBtn').on('click', function(){
-$('#cancleReserve').modal('hide');
-console.log("click close");
-});
-//모달 창 뜰 떄 사전 작업
-$('#cancleReserve').on('show.bs.modal', function (e) {
-	console.log("show.bs.modal");
-});
-$('#cancleReserve').on('shown.bs.modal', function (e) {
-console.log("shown.bs.modal");
-});
-
 
 //제출 버튼$. 클릭 시 실행
 $(document).ready(function (){
@@ -39,29 +12,34 @@ $(document).ready(function (){
 			headers: {Authorization: "KakaoAK 9ac7c779abb75c8cf021af960faffa9e"},
 		})
 		
-			.done(function(msg){
+			.done(function(bk){
 				var i;
 				for(i=0;i<10;i++){
 
-					console.log(msg.documents[i]);
-					var authors =msg.documents[i].authors.join();
-					$('#coverimg').append("<strong>"+msg.documents[i].title+"</strong>");
-					$('#title').append("<img src='"+msg.documents[i].thumbnail+"'/>");
+					console.log(bk.documents[i]);
+					var authors =bk.documents[i].authors.join();
+					$('#coverimg').append("<strong>"+bk.documents[i].title+"</strong>");
+					$('#title').append("<img src='"+bk.documents[i].thumbnail+"'/>");
 					$('#writer').append(authors);
-					$('#publisher').append(msg.documents[i].publisher);
+					$('#publisher').append(bk.documents[i].publisher);
 				}
 				
 			});
 				
 			});
-	/*	})
-		
-		.done(function (res) {
-			$('#coverimg').append("<img src='"+res.documents[0].thumbnail+"'/>");
-			$('h5').append(res.documents[0].title);
-			$('.card-text').append(res.documents[0].contents);
-			$('.card-author').append(res.documents[0].authors);
-			$('.card-publisher').append(res.documents[0].publisher);
-		});
-	});*/
+
 });
+
+/*let str = '<div class="result-row-thead"><div>이미지</div><div>책 제목</div><div>작가</div></div>';
+
+			if(result != ""){
+				for(let i = 0 ; i < result.length ; i++){
+					str += '<div class="result-row-tbody" onclick="resultChoice(this)" ><div><img  src="' + result[i].bkImg + '"></div>';
+					str += '<div>' + result[i].title + '</div>';
+					str += '<div>' + result[i].writer + '</div></div>';
+				}
+			}
+		
+			else{
+				str += '<div class="result-row-tbody">해당 검색어에 조회되는 도서가 없습니다.</div>';
+			}	*/
