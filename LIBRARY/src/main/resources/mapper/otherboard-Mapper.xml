@@ -37,12 +37,15 @@
 		<result column="MEM_NAME" 			property="memName"/>
 		<result column="ROWNUM" 			property="rownum"/>
 		<result column="IS_ANSWERED" 		property="isAnswered"/>
+		<result column="sort" 				property="sort"/>
+		<result column="keyword" 			property="keyword"/>	
 	</resultMap>
 	
 	<resultMap type="com.kh.library.board.vo.QnaAnswerVO" id="qnaAnswer">
 		<id column="ANSWER_NUM" 			property="answerNum"/>
 		<result column="ANSWER_CONTENT" 	property="answerContent"/>
 		<result column="QNA_NUM" 			property="qnaNum"/>
+		<result column="ANSWER_DATE" 		property="answerDate"/>
 	</resultMap>
 	
 	<!-- ///////////////////        자유게시판           /////////////////////////////  -->
@@ -213,6 +216,13 @@
 		)
 	</insert>
 	
+	<!-- 비밀글 비밀번호등록 -->
+	<update id="updateQnaPw">
+		UPDATE QNA
+		SET QNA_PW = #{qnaPw}
+		WHERE QNA_NUM = #{qnaNum}
+	</update>
+	
 	<!-- Qna게시판리스트 조회 -->
 	<select id="selectQnaList" resultMap="qna">
 		SELECT QNA_NUM
@@ -225,6 +235,103 @@
 			, ROWNUM
 			, IS_ANSWERED
 		FROM QNA
+		ORDER BY QNA_CREATE_DATE DESC
+			, ROWNUM DESC
+	</select>
+	
+	<!-- Qna 비밀글 비밀번호 체크 -->
+	<select id="checkQnaPw" resultType="String">
+		SELECT QNA_NUM
+		FROM QNA
+		WHERE QNA_NUM = #{qnaNum}
+		AND QNA_PW = #{qnaPw}
+	</select>
+	
+	<!-- Qna게시판 상세보기 -->
+	<select id="selectQnaDetail" resultMap="qna">
+		SELECT QNA_NUM
+			, QNA_TITLE
+			, QNA_CONTENT
+			, QNA_CREATE_DATE
+			, QNA_IS_PRIVATE
+			, QNA_READ_CNT
+			, MEM_ID
+			, MEM_NAME
+			, IS_ANSWERED
+		FROM QNA
+		WHERE QNA_NUM = #{qnaNum}
+	</select>
+	
+	<!-- Qna게시판 조회수 -->
+	<update id="updateQnaReadCnt">
+		UPDATE QNA
+		SET QNA_READ_CNT = QNA_READ_CNT+1
+		WHERE QNA_NUM = #{qnaNum}
+	</update>
+	
+	<!-- Qna게시판 다음 댓글번호 조회 -->
+	<select id="selectNextAnswerNum" resultType="String">
+		SELECT 'ANSWER_'||LPAD(NVL(MAX(TO_NUMBER(SUBSTR(ANSWER_NUM, 8))),0) +1, 3, '0')
+		FROM QNA_ANSWER
+	</select>
+	
+	<!-- Qna게시판 댓글 작성 -->
+	<insert id="insertQnaAnswer">
+		INSERT INTO QNA_ANSWER(
+			ANSWER_NUM
+			, ANSWER_CONTENT
+			, QNA_NUM
+		) VALUES(
+			#{answerNum}
+			, #{answerContent}
+			, #{qnaNum}
+		)
+	</insert>
+	
+	<!-- QNA게시판 답변유무 상태변경 -->
+	<update id="updateisAnswered">
+		UPDATE QNA
+		SET IS_ANSWERED = #{isAnswered}
+		WHERE QNA_NUM = #{qnaNum}
+	</update>
+	
+	<!-- QNA게시판 댓글 조회 -->
+	<select id="selectQnaAnswer" resultMap="qnaAnswer">
+		SELECT ANSWER_NUM
+			, ANSWER_CONTENT
+			, QNA_NUM
+			, ANSWER_DATE
+		FROM QNA_ANSWER
+		WHERE QNA_NUM = #{qnaNum}
+	</select>
+	
+	<!-- QNA게시판 댓글 수정 -->
+	<update id="updateQnaAnswer">
+		UPDATE QNA_ANSWER
+		SET ANSWER_CONTENT = #{answerContent}
+			, ANSWER_DATE = SYSDATE
+		WHERE ANSWER_NUM = #{answerNum}
+	</update>
+	
+	<!-- QNA게시판 댓글 삭제 -->
+	<delete id="deleteQnaAnswer">
+		DELETE FROM QNA_ANSWER
+		WHERE ANSWER_NUM = #{answerNum}
+	</delete>
+	
+	<!-- QNA게시판 검색 -->
+	<select id="selectSearchQna" resultMap="qna">
+		SELECT QNA_NUM
+			, QNA_TITLE
+			, QNA_CREATE_DATE
+			, QNA_IS_PRIVATE
+			, MEM_ID
+			, MEM_NAME
+			, QNA_READ_CNT
+			, ROWNUM
+			, IS_ANSWERED
+		FROM QNA
+		WHERE ${sort} LIKE '%'||#{keyword}||'%'
 		ORDER BY QNA_CREATE_DATE DESC
 			, ROWNUM DESC
 	</select>

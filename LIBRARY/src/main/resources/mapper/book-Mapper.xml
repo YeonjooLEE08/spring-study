@@ -33,24 +33,9 @@
       <result column="MEM_ID"					property="memId"/>
    </resultMap>
    
-   <resultMap type="com.kh.library.book.vo.BookVO" id="dBook">
-      <id column="BOOK_CODE"                	property="bookCode"/>
-      <result column="TITLE"             		property="title"/>
-      <result column="WRITER"          		  	property="bookWriter"/>
-      <result column="KEYWORD"        		 	property="keyword"/>
-      <result column="PUBLISHER"            	property="publisher"/>
-      <result column="CATE_CODE"             	property="cateCode"/>
-      <result column="INPUT_DATE"          		property="inputDate"/>
-      <result column="BOOK_STOCK"          		property="bookStock"/>
-      <result column="RESERVE_CNT"         		property="reserveCnt"/>
-      <result column="STATUS"             		property="status"/>
-      <result column="PUB_DATE"             	property="pubDate"/>
-      <result column="BOOK_AT_IMG_CODE"         property="bookAtImgCode"/>
-   </resultMap>
-   
    <resultMap type="com.kh.library.book.vo.BookVO" id="searchBook">
    		<id column="SEARCH_CODE" 				property="searchCode"/>
-   		<result column="SEARCH_SUB" 				property="searchSub"/>
+   		<result column="SEARCH_SUB" 			property="searchSub"/>
    		<result column="SEARCH_TXT" 			property="searchTxt"/>
    </resultMap>
    
@@ -84,13 +69,28 @@
 		<result column="SEARCH_SUB" 		property="searchSub"/>
 		<result column="ROWNUM" 					property="rowNum"/>
 	</resultMap>
-	
+			
+				<!--///////// 희망도서 ///////////////  -->
 	<resultMap type="com.kh.library.book.vo.HopeBookVO" id="hopeBook">
 		<id column="HOPE_CODE"				property="hopeCode"/>
-		<result column="HOPE_NAME"  		property="hopeName"/>
-		<result column="HOPE_WRITER"  		property="hopeWriter"/>
-		<result column="HOPE_PUBLISHER"  	property="hopePublisher"/>
+		<result column="TITLE"  			property="title"/>
+		<result column="WRITER"  			property="writer"/>
+		<result column="PUBLISHER"  		property="publisher"/>
 		<result column="MEM_ID"  			property="memId"/>
+		<result column="HOPE_DATE"  		property="hopeDate"/>
+		<result column="STATUS"				property="status"/>
+		<result column="ROWNUM"				property="rowNum"/>
+	</resultMap>
+	
+	<resultMap type="com.kh.library.book.vo.HopeBookVO" id="hopeBookUser">
+		<id column="HOPE_CODE"				property="hopeCode"/>
+		<result column="TITLE"  			property="title"/>
+		<result column="WRITER"  			property="writer"/>
+		<result column="PUBLISHER"  		property="publisher"/>
+		<result column="MEM_ID"  			property="memId"/>
+		<result column="HOPE_DATE"  		property="hopeDate"/>
+		<result column="STATUS"				property="status"/>
+		<result column="ROWNUM"				property="rowNum"/>
 	</resultMap>
 	
 	<resultMap type="com.kh.library.book.vo.RecommendVO" id="recommend">
@@ -98,14 +98,7 @@
 		<result column="MEM_ID"  			property="memId"/>
 		<result column="BOOK_CODE"  		property="bookCOde"/>
 		<result column="RCD_STATUS"  		property="rcdStatus"/>
-		<result column="ROWNUM" 					property="rowNum"/>
-	</resultMap>
-	
-	<resultMap type="com.kh.library.book.vo.RecommendImgVO" id="recommendImg">
-		<id column="RC_IMG_CODE"				property="rcImgCode"/>
-		<result column="RC_ORIGIN_NAME"			property="rcOriginName"/>
-		<result column="RC_AT_IMG_NAME"			property="rcAtImgName"/>
-		<result column="RC_CODE"			property="rcCode"/>
+		<result column="ROWNUM" 			property="rowNum"/>
 	</resultMap>
 	
 	
@@ -511,9 +504,9 @@
 	<insert id="insertHopeBook">
 		INSERT INTO BOOK_HOPE(
 			HOPE_CODE
-			, HOPE_NAME
-			, HOPE_WRITER
-			, HOPE_PUBLISHER
+			, TITLE
+			, WRITER
+			, PUBLISHER
 			, MEM_ID
 		) VALUES (
 			(SELECT 'HP_'||LPAD(NVL(MAX(TO_NUMBER(SUBSTR(HOPE_CODE,4))),0)+1,3,0) AS NT_CODE FROM BOOK_HOPE)
@@ -523,6 +516,62 @@
 			, #{memId}
 		)
 	</insert>
+	
+	<!-- 희망도서리스트 확인 ADMIN용 -->
+	<select id="selectHopeBook" resultMap="hopeBook">
+		SELECT HOPE_CODE
+			, TITLE
+			, WRITER
+			, PUBLISHER
+			, MEM_ID
+			, STATUS
+			, HP_DATE
+			, ROWNUM
+		FROM HOPE_BOOK
+	</select>
+	
+	<!-- 희망도서리스트 확인 user용 -->
+	<select id="selectHopeBookUser" resultMap="hopeBookUser">
+		SELECT HOPE_CODE
+			, TITLE
+			, WRITER
+			, PUBLISHER
+			, MEM_ID
+			, STATUS
+			, HP_DATE
+			, ROWNUM
+		FROM HOPE_BOOK
+		WHERE #{memId} = MEM_ID
+	</select>
+	
+	<!-- 희망도서리스트 STATUS별 조회  -->
+	<select id="selectHopeBookStatus" resultMap="hopeBook">
+		SELECT HOPE_CODE
+			, TITLE
+			, WRITER
+			, PUBLISHER
+			, MEM_ID
+			, STATUS
+			, HP_DATE
+			, ROWNUM
+		FROM HOPE_BOOK
+		<choose>
+			<when test="searchSub != 'all'">
+				WHERE STATUS = #{searchSub}
+				ORDER BY RT_DATE DESC
+			</when>
+			<otherwise>
+				ORDER BY STATUS
+			</otherwise>
+		</choose>
+	</select>
+	
+	<!-- 희망도서 상태변경 -->
+	<update id="updateHpBook">
+		UPDATE HOPE_BOOK
+		SET STATUS = #{status}
+		WHERE #{hopeCode}=HOPE_CODE
+	</update>
 	
 	
 <!-- 	
