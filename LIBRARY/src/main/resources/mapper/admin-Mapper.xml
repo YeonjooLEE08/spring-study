@@ -2,7 +2,16 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!-- 모든 SQL문을 mapper태그 안에 작성 -->
 <mapper namespace="adminMapper">
-	<resultMap type="com.kh.library.admin.vo.AdminVO" id="admin">
+	<!-- <resultMap type="com.kh.library.admin.vo.AdminVO" id="admin">
+	</resultMap> -->
+
+	<resultMap type="com.kh.library.admin.vo.MessageVO" id="msg">
+		<id column="MSG_CODE" 		property="msgCode"/>
+		<result column="SEND_ID" 	property="sendId"/>
+		<result column="GET_ID" 	property="getId"/>
+		<result column="SEND_DATE" 	property="sendDate"/>
+		<result column="MSG_CONTENT" 	property="msgContent"/>
+		<result column="IS_READ" 	property="isRead"/>
 	</resultMap>
 
 	<!-- 회원조회 -->
@@ -56,6 +65,31 @@
 		)		
 	</insert>
 	
+	<!-- 알림전송내역 -->
+	<select id="selectSendMessageList" resultMap="msg">
+		SELECT MSG_CODE
+			, SEND_ID
+			, GET_ID
+			, SEND_DATE
+			, MSG_CONTENT
+			, IS_READ
+		FROM MESSAGE
+		ORDER BY SEND_DATE DESC
+	</select>
+	
+	<!-- 알림전송내역 상세조회 -->
+	<select id="selectSendMessageDetail" resultMap="msg">
+		SELECT MSG_CODE
+			, SEND_ID
+			, GET_ID
+			, SEND_DATE
+			, MSG_CONTENT
+			, IS_READ
+		FROM MESSAGE
+		WHERE MSG_CODE = #{msgCode}
+	</select>
+	
+	
 	<!-- 클럽 수락시 알림보내기 -->
 	<insert id="insertClubJoinMessage">
 		INSERT INTO MESSAGE (
@@ -80,6 +114,7 @@
 		    , TITLE 
 		FROM BORROW
 		WHERE MEM_ID = #{memId}
+		AND STATUS != 2
 	</select>
 	
 	<!-- 예약정보 -->
@@ -92,6 +127,8 @@
 		FROM RESERVE
 		WHERE MEM_ID = #{memId}
 	</select>
+	
+	
 </mapper>
 
 

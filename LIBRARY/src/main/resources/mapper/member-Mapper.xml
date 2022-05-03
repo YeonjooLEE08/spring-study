@@ -2,42 +2,43 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!-- 모든 SQL문을 mapper태그 안에 작성 -->
 <mapper namespace="memberMapper">
-	<resultMap type="com.kh.library.member.vo.MemberVO" id="member">
-		<id column="MEM_ID" 				property="memId"/>
-		<result column="MEM_PWD" 			property="memPwd"/>
-		<result column="MEM_NAME" 			property="memName"/>
-		<result column="MEM_ADDR" 			property="memAddr"/>
-		<result column="MEM_TELL" 			property="memTell"/>
-		<result column="MEM_EMAIL" 			property="memEmail"/>
-		<result column="MEM_IMAGE" 			property="memImage"/>
-		<result column="MEM_GENDER"			property="memGender"/>
-		<result column="MEM_BIRTH" 			property="memBirth"/>
-		<result column="IS_DELETE" 			property="isDelete"/>
-		<result column="IS_ADMIN" 			property="isAdmin"/>
-		<result column="CLUB_ADMIN" 		property="clubAdmin"/>
-		<result column="CLUB_CODE" 			property="clubCode"/>
-		<result column="KEYWORD" 			property="keyword"/>
-		<result column="ROW_NUM" 			property="rowNum"/>
-		<result column="IS_OD" 				property="isOd"/>
-		<result column="BR_CNT" 			property="brCnt"/>
-		 <result column="RSV_CNT"          property="rsvCnt"/>
-		<result column="LIMIT_DATE" 		property="limitDate"/>
-	</resultMap>
-	<resultMap type="com.kh.library.member.vo.MemberImageVO" id="memberImage">
-		<id column="MEM_IMG_CODE" 			property="memImgCode"/>
-		<result column="MEM_ORIGIN_NAME" 	property="memOriginName"/>
-		<result column="MEM_AT_IMG_NAME" 	property="memAtImgName"/>
-		<result column="MEM_ID" 			property="memId"/>
-	</resultMap>
-		
-	<resultMap type="com.kh.library.member.vo.BookComplitVO" id="complit">
-		<id column="COMPLIT_CODE" 			property="complitCode"/>
-		<result column="COMPLIT_DATE" 		property="complitDate"/>
-		<result column="COMPLIT_REVIEW" 	property="complitReview"/>
-		<result column="BOOK_CODE" 			property="bookCode"/>
-		<result column="MEM_ID" 			property="memId"/>
-		<association property="bookInfo"    resultMap="bookMapper.book"></association>
-	</resultMap>
+   <resultMap type="com.kh.library.member.vo.MemberVO" id="member">
+      <id column="MEM_ID"             property="memId"/>
+      <result column="MEM_PWD"          property="memPwd"/>
+      <result column="MEM_NAME"          property="memName"/>
+      <result column="MEM_ADDR"          property="memAddr"/>
+      <result column="MEM_TELL"          property="memTell"/>
+      <result column="MEM_EMAIL"          property="memEmail"/>
+      <result column="MEM_IMAGE"          property="memImage"/>
+      <result column="MEM_GENDER"         property="memGender"/>
+      <result column="MEM_BIRTH"          property="memBirth"/>
+      <result column="IS_DELETE"          property="isDelete"/>
+      <result column="IS_ADMIN"          property="isAdmin"/>
+      <result column="CLUB_ADMIN"       property="clubAdmin"/>
+      <result column="CLUB_CODE"          property="clubCode"/>
+      <result column="KEYWORD"          property="keyword"/>
+      <result column="ROW_NUM"          property="rowNum"/>
+      <result column="IS_OD"             property="isOd"/>
+      <result column="BR_CNT"          property="brCnt"/>
+       <result column="RSV_CNT"          property="rsvCnt"/>
+      <result column="LIMIT_DATE"       property="limitDate"/>
+   </resultMap>
+   <resultMap type="com.kh.library.member.vo.MemberImageVO" id="memberImage">
+      <id column="MEM_IMG_CODE"          property="memImgCode"/>
+      <result column="MEM_ORIGIN_NAME"    property="memOriginName"/>
+      <result column="MEM_AT_IMG_NAME"    property="memAtImgName"/>
+      <result column="MEM_ID"          property="memId"/>
+   </resultMap>
+      
+   <resultMap type="com.kh.library.member.vo.BookComplitVO" id="complit">
+      <id column="COMPLIT_CODE"          property="complitCode"/>
+      <result column="COMPLIT_DATE"       property="complitDate"/>
+      <result column="COMPLIT_REVIEW"    property="complitReview"/>
+      <result column="BOOK_CODE"          property="bookCode"/>
+      <result column="MEM_ID"          property="memId"/>
+      <association property="bookInfo"    resultMap="bookMapper.book"></association>
+   </resultMap>
+
 	
 	<!--/////////////////////회원가입//////////////////// -->
 	<!-- ID 중복체크 -->
@@ -142,7 +143,7 @@
 		    , MEM_EMAIL
 		    , MEM_IMAGE
 		    , MEM_GENDER
-		    , MEM_BIRTH
+		    , TO_CHAR(MEM_BIRTH, 'YYYY"년 "MM"월 "DD"일"') AS MEM_BIRTH
 		    , CLUB_ADMIN
 		    , CLUB_CODE
 		    , CLUB_APPLY_CODE
@@ -190,11 +191,14 @@
 	
 	<!--  독서플래너 조회  -->
 	<select id="selectBookPlaner" resultMap="complit"> 
-		SELECT DISTINCT C.BOOK_CODE 
+		SELECT DISTINCT C.COMPLIT_CODE 
+			, C.BOOK_CODE 
+			, COMPLIT_DATE
 			, (SELECT TITLE FROM BOOK B WHERE B.BOOK_CODE = C.BOOK_CODE) AS TITLE 
 			, (SELECT BK_PAGE FROM BOOK B WHERE B.BOOK_CODE = C.BOOK_CODE) AS BK_PAGE 
 			FROM BOOK_COMPLIT C 
 			WHERE MEM_ID = #{memId} 
+			ORDER BY COMPLIT_DATE DESC
 	</select>
 	
 	<!-- 독서플래너 - 책 검색하기 -->
@@ -236,12 +240,23 @@
 		SELECT C.COMPLIT_CODE
 			, C.COMPLIT_DATE
 			, C.COMPLIT_REVIEW
+			, B.BOOK_CODE
 			, B.TITLE
 			, B.WRITER
 		FROM BOOK_COMPLIT C, BOOK B
-		WHERE C.MEM_ID = #{memId}
+		WHERE C.BOOK_CODE = B.BOOK_CODE
+		AND C.MEM_ID = #{memId}
 		AND C.BOOK_CODE = #{bookCode}
+		AND C.COMPLIT_CODE = #{complitCode}
 	</select>
+	
+	<!-- 독서 플래너 삭제 -->
+	<delete id="deleteBookPlaner">
+		DELETE BOOK_COMPLIT 
+		WHERE COMPLIT_CODE = #{complitCode}
+	</delete>
+	
+	<!-- 독서 플래너 수정 -->
 	
 	<!-- 북클럽 조회 -->
 	<select id="selectMyBookClub" resultMap="clubMapper.club">
@@ -254,8 +269,8 @@
 	</select>
 	
 	
-	<!-- ///////////////////// 도서 대여 관리 ////////////////////////////// -->
-	<!-- 예약시 rsvCnt 업데이트 -->
+	  <!-- ///////////////////// 도서 대여 관리 ////////////////////////////// -->
+   <!-- 예약시 rsvCnt 업데이트 -->
    <update id="updateRsvCnt">
       UPDATE BOOK_MEMBER
       SET RSV_CNT=RSV_CNT+1
@@ -318,26 +333,5 @@
    
 
 </mapper>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

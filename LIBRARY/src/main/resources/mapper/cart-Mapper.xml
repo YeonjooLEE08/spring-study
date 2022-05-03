@@ -41,6 +41,10 @@
 		<result column="PAY_CODE" 			property="payCode"/>
 		<result column="TOTAL_PRICE" 		property="totalPrice"/>
 		<result column="DELI_MSG" 			property="deliMsg"/>
+		<result column="inputSDate" 		property="inputSDate"/>
+		<result column="inputEDate" 		property="inputEDate"/>
+		<result column="ITEM_STATE" 		property="itemState"/>
+		<result column="MEM_NAME" 			property="memName"/>
 	</resultMap>
 
 	<resultMap type="com.kh.library.item.vo.BuyViewVO" id="buyView">
@@ -53,7 +57,6 @@
 		<result column="MEM_ID" 			property="memId"/>
 		<result column="ITEM_AT_IMG_NAME" 	property="itemAtImgName"/>
 		<result column="ORDER_NUM" 			property="orderNum"/>
-		<result column="ITEM_STATE" 		property="itemState"/>
 		<result column="BUY_DATE" 			property="buyDate"/>
 	</resultMap>
 
@@ -210,7 +213,6 @@
 			, ITEM_CNT
 			, MEM_ID
 			, ITEM_AT_IMG_NAME
-			, ITEM_STATE
 		FROM BUY_VIEW
 		WHERE MEM_ID = #{memId}
 		AND ORDER_NUM IS NULL
@@ -276,7 +278,6 @@
 			, MEM_ID
 			, ITEM_AT_IMG_NAME
 			, ORDER_NUM
-			, ITEM_STATE
 		FROM BUY_VIEW
 		WHERE ORDER_NUM = #{orderNum}
 		ORDER BY BUY_NUM DESC
@@ -293,6 +294,7 @@
 			, BUY_DATE
 			, TOTAL_PRICE
 			, PAY_CODE
+			, ITEM_STATE
 		FROM ORDER_SHEET
 		WHERE ORDER_NUM = #{orderNum}
 		AND MEM_ID = #{memId}
@@ -308,44 +310,54 @@
 			, MEM_ID
 			, ITEM_AT_IMG_NAME
 			, ORDER_NUM
-			, ITEM_STATE
-			, BUY_DATE
-		FROM BUY_VIEW
+		FROM BUY_VIEW 
 		WHERE MEM_ID = #{memId}
-		ORDER BY BUY_DATE DESC
-			, ORDER_NUM DESC
+		ORDER BY ORDER_NUM DESC
 	</select>
 	<!-- 구매번호끼리 묶깅 -->
 	<select id="selectOrderNum" resultMap="order">
 		SELECT ORDER_NUM
 			, BUY_DATE
+			, ITEM_STATE
 		FROM ORDER_SHEET
 		WHERE MEM_ID = #{memId}
+		ORDER BY ORDER_NUM DESC
+			, BUY_DATE DESC
 	</select>
 	
+	<!-- 구매내역 기간조회 -->
+	<select id="selectOrderPeriod" resultMap="order">
+		SELECT ORDER_NUM
+			, BUY_DATE
+		FROM ORDER_SHEET
+		WHERE MEM_ID = #{memId}
+		AND BUY_DATE BETWEEN TO_DATE(#{inputSDate})
+						AND TO_DATE(#{inputEDate}) +0.99999
+		ORDER BY ORDER_NUM DESC
+			, BUY_DATE DESC
+	</select>
+	
+	
+	<!-- 주문받은 내역조회 -->
+	<select id="selectOrderAll" resultMap="order">
+		SELECT ORDER_NUM
+		    , BUY_DATE
+		    , O.MEM_ID AS MEM_ID
+		    , PAY_CODE
+		    , TOTAL_PRICE
+		    , ITEM_STATE
+		    , MEM_NAME
+		FROM ORDER_SHEET O, BOOK_MEMBER M
+		WHERE O.MEM_ID = M.MEM_ID
+		ORDER BY ORDER_NUM DESC
+	</select>
+
+	<!-- 주문 배송상태변경 -->
+	<update id="updateItemState">
+		UPDATE ORDER_SHEET
+		SET ITEM_STATE = #{itemState}
+		WHERE ORDER_NUM = #{orderNum}
+	</update>
+	
 </mapper>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
