@@ -1,15 +1,21 @@
 package com.kh.library.book.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.io.File;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
@@ -22,6 +28,8 @@ import com.kh.library.book.vo.HopeBookVO;
 import com.kh.library.book.vo.RecommendVO;
 import com.kh.library.book.vo.ReserveVO;
 import com.kh.library.member.vo.MemberVO;
+
+import net.sf.json.JSONArray;
 
 @Controller
 @RequestMapping("/book")
@@ -214,13 +222,12 @@ public class BookController {
 	}
 	
 	// ----------------------------- 속 내용만 어드민컨트롤러로 이동 -------------------------
-	@GetMapping("/updateOverdue")
-	public String updateOverdue() {
-		bookAdminService.updateOverdue();
-		bookAdminService.clearLimitDate();
-		
-		return "manage/home";
-	}
+	/*
+	 * @GetMapping("/updateOverdue") public String updateOverdue() {
+	 * bookAdminService.updateOverdue(); bookAdminService.clearLimitDate();
+	 * 
+	 * return "manage/home"; }
+	 */
 	
 	//희망도서 신청 폼 
 	@GetMapping("/hopeBookForm")
@@ -240,7 +247,7 @@ public class BookController {
 	@GetMapping("/hopeBookList")
 	public String selectHopeBook(Model model) {
 		
-		model.addAttribute("hpBook", bookAdminService.selectHopeBookList());
+		model.addAttribute("hbBook", bookAdminService.selectHopeBookList());
 		return "admin/hope_book_list";
 	}
 	
@@ -251,6 +258,42 @@ public class BookController {
 		return "admin/hope_book_list";
 	}
 	
+	//희망도서 상태 업데이트
+	@RequestMapping("/updateHopeBook")
+	public String updateHopeBook( HopeBookVO hbVO) {
+		bookAdminService.updateHopeBook(hbVO);
+		return "redirect:/book/hopeBookList";
+	}
+	
+	//희망도서 상태 선택 변경
+	@ResponseBody
+	@PostMapping("/updateHp")
+	public void updateHp(String data, HttpSession session) {
+		
+		System.out.println(data);
+		
+		List<Map<String, String>> list = JSONArray.fromObject(data);
+		String[] hopeCodeArr = new String[list.size()];
+		
+		int index = 0;
+		
+		List<HopeBookVO> hopeBookList = new ArrayList<HopeBookVO>();
+		HopeBookVO hbVO = new HopeBookVO();
+		for(Map<String, String> map : list) {
+			System.out.println("hopeCode : "+map.get("hopeCode") + "/ status="+map.get("status"));
+			
+			HopeBookVO hb = new HopeBookVO();
+			hb.setHopeCode(map.get("hopeCode"));
+			hb.setStatus(Integer.parseInt(map.get("status")));
+			
+			hopeBookList.add(hb);
+			
+			hopeCodeArr[index++]=map.get("hopeCode");
+		}
+		hbVO.setHopeBookList(hopeBookList);
+		
+		bookAdminService.updateHopeBook(hbVO);
 	
 
+}
 }

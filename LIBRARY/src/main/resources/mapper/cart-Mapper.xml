@@ -45,6 +45,9 @@
 		<result column="inputEDate" 		property="inputEDate"/>
 		<result column="ITEM_STATE" 		property="itemState"/>
 		<result column="MEM_NAME" 			property="memName"/>
+		<result column="sort" 				property="sort"/>
+		<result column="keyword" 			property="keyword"/>
+		<result column="ORDER_CNT" 			property="orderCnt"/>	
 	</resultMap>
 
 	<resultMap type="com.kh.library.item.vo.BuyViewVO" id="buyView">
@@ -359,5 +362,81 @@
 		WHERE ORDER_NUM = #{orderNum}
 	</update>
 	
+	<!-- 선택주문내역 배송상태변경 -->
+	<update id="updateItemsStates">
+		UPDATE ORDER_SHEET
+		SET ITEM_STATE = #{itemState}
+		WHERE ORDER_NUM IN
+		<foreach collection="orderNums" item="orderNum" open="(" close=")" separator=",">
+			#{orderNum}
+		</foreach>
+	</update>
+	
+	<!-- 선택주문내역 삭제 -->
+	<delete id="deleteOrders">
+		DELETE FROM ORDER_SHEET
+		WHERE ORDER_NUM IN
+		<foreach collection="orderNums" item="orderNum" open="(" close=")" separator=",">
+			#{orderNum}
+		</foreach>
+	</delete>
+	
+	<!-- 주문내역 배송상태별 조회 -->
+	<select id="searchKindState" resultMap="order">
+		SELECT ORDER_NUM
+		    , BUY_DATE
+		    , O.MEM_ID AS MEM_ID
+		    , PAY_CODE
+		    , TOTAL_PRICE
+		    , ITEM_STATE
+		    , MEM_NAME
+		FROM ORDER_SHEET O, BOOK_MEMBER M
+		WHERE O.MEM_ID = M.MEM_ID
+		AND ITEM_STATE = #{itemState}
+		ORDER BY ORDER_NUM DESC
+	</select>
+	
+	<!-- 주문내역 기간별 조회-->
+	<select id="searchStatePeriod" resultMap="order">
+		SELECT ORDER_NUM
+		    , BUY_DATE
+		    , O.MEM_ID AS MEM_ID
+		    , PAY_CODE
+		    , TOTAL_PRICE
+		    , ITEM_STATE
+		    , MEM_NAME
+		FROM ORDER_SHEET O, BOOK_MEMBER M
+		WHERE O.MEM_ID = M.MEM_ID
+		AND BUY_DATE BETWEEN TO_DATE(#{inputSDate})
+						AND TO_DATE(#{inputEDate}) +0.99999
+		ORDER BY ORDER_NUM DESC
+	</select>
+	
+	<!-- 주문내역 검색 조회 -->
+	<select id="searchOrderState" resultMap="order">
+		SELECT ORDER_NUM
+		    , BUY_DATE
+		    , O.MEM_ID AS MEM_ID
+		    , PAY_CODE
+		    , TOTAL_PRICE
+		    , ITEM_STATE
+		    , MEM_NAME
+		FROM ORDER_SHEET O, BOOK_MEMBER M
+		WHERE O.MEM_ID = M.MEM_ID
+		AND ${sort} LIKE '%'||#{keyword}||'%'
+		ORDER BY ORDER_NUM DESC
+	</select>
+	
+	<!-- 매출 날짜별 조회 -->
+	<select id="displaySalesDay" resultMap="order">
+		SELECT COUNT(ORDER_NUM) AS ORDER_CNT
+			, SUM(TOTAL_PRICE) AS TOTAL_PRICE
+		FROM ORDER_SHEET
+		WHERE BUY_DATE BETWEEN TO_DATE(#{inputSDate})
+						AND TO_DATE(#{inputEDate}) +0.99999
+		<if test="itemState!=null and !itemState.equals('')">
+			AND ITEM_STATE = #{itemState}
+		</if>
+	</select>
 </mapper>
 

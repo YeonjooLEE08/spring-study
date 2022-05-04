@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.kh.library.admin.service.ItemAdminService;
 import com.kh.library.admin.service.MemberAdminService;
 import com.kh.library.admin.vo.MessageVO;
+import com.kh.library.book.service.BookAdminService;
 import com.kh.library.book.service.BookService;
 import com.kh.library.book.vo.ReserveVO;
 import com.kh.library.book.vo.BorrowVO;
@@ -40,10 +41,18 @@ public class AdminController {
 	@Resource(name="bookService")
 	private BookService bookService;
 	
-		 
+	@Resource(name="bookAdminService")
+	private BookAdminService bookAdminService;
+	
+	//메인페이지, 연체일 확인, 연체제한 업데이트
 	@GetMapping("/test") 
 	public String test() { 
-		 return "manage/home"; }
+		
+		bookAdminService.updateOverdue();
+		bookAdminService.clearLimitDate();
+		 
+		return "manage/home"; 
+	}
 		  
 
 	
@@ -68,7 +77,7 @@ public class AdminController {
 		
 		model.addAttribute("memList", memberAdminService.selectMemberList(memberVO));
 				
-		return "admin/member_list1";
+		return "admin/member_list";
 	}
 	
 	//회원 검색
@@ -102,8 +111,8 @@ public class AdminController {
 	
 	@ResponseBody
 	@PostMapping("/sendMsgDetail")
-	public MessageVO sendMsgList(MessageVO messageVO) {
-		String msgCode = messageVO.getMsgCode();
+	public MessageVO sendMsgList(MessageVO messageVO, String msgCode) {
+		//String msgCode = messageVO.getMsgCode();
 		return memberAdminService.selectSendMessageDetail(msgCode);
 	}
 	

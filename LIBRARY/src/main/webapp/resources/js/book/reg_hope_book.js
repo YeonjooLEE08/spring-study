@@ -26,7 +26,7 @@ $(document).ready(function (){
 							str += '<div>' + bk.documents[i].publisher+'</div></div>';
 							
 					}
-					$('#result').append(str);
+					document.querySelector('.result').innerHTML = str;
 				});
 		}
 		else{

@@ -49,18 +49,45 @@
 	</resultMap>
 	
 	<!-- ///////////////////        자유게시판           /////////////////////////////  -->
+	<!-- 자유게시판 글 갯수 조회 -->
+	<select id="selectBoardCnt" resultType="int">
+		SELECT COUNT(BOARD_NUM)
+		FROM BOARD
+		<if test="keyword!=null and !keyword.equals('')">
+			WHERE ${sort} LIKE '%'||#{keyword}||'%'
+		</if>
+	</select>
 	
 	<!-- 게시판리스트조회 -->
 	<select id="selectFreeBoardList" resultMap="free">
-		SELECT BOARD_NUM
-			, BOARD_TITLE
-			, BOARD_READ_CNT
-			, BOARD_CREATE_DATE
-			, ROWNUM
-			, MEM_NAME
-		FROM BOARD 
-		ORDER BY BOARD_CREATE_DATE DESC 
-			, ROWNUM DESC
+	SELECT BOARD_NUM
+				, BOARD_TITLE
+				, BOARD_READ_CNT
+				, BOARD_CREATE_DATE
+				, ROWNUM
+				, MEM_NAME
+		FROM
+		(
+		    SELECT BOARD_NUM
+				, BOARD_TITLE
+				, BOARD_READ_CNT
+				, BOARD_CREATE_DATE
+				, ROWNUM
+				, MEM_NAME
+		        , ROWNUM AS ROW_NUM
+		    FROM
+		    (
+		        SELECT BOARD_NUM
+					, BOARD_TITLE
+					, BOARD_READ_CNT
+					, BOARD_CREATE_DATE
+					, ROWNUM
+					, MEM_NAME
+				FROM BOARD 
+				ORDER BY BOARD_CREATE_DATE DESC 
+		    )
+		)
+		WHERE ROW_NUM &gt;= #{startNum} AND ROW_NUM &lt;= #{endNum}		
 	</select>
 	
 	<!-- 다음 게시판 번호확인 -->
@@ -123,15 +150,34 @@
 	<!-- 자유게시판 검색 -->
 	<select id="selectSearch" resultMap="free">
 		SELECT BOARD_NUM
-			, BOARD_TITLE
-			, BOARD_READ_CNT
-			, BOARD_CREATE_DATE
-			, ROWNUM
-			, MEM_NAME
-		FROM BOARD
-		WHERE ${sort} LIKE '%'||#{keyword}||'%'
-		ORDER BY BOARD_CREATE_DATE DESC 
-			, ROWNUM DESC
+				, BOARD_TITLE
+				, BOARD_READ_CNT
+				, BOARD_CREATE_DATE
+				, ROWNUM
+				, MEM_NAME
+		FROM
+		(
+		    SELECT BOARD_NUM
+					, BOARD_TITLE
+					, BOARD_READ_CNT
+					, BOARD_CREATE_DATE
+					, ROWNUM
+					, MEM_NAME
+			        , ROWNUM AS ROW_NUM
+		    FROM
+		    (
+		        SELECT BOARD_NUM
+						, BOARD_TITLE
+						, BOARD_READ_CNT
+						, BOARD_CREATE_DATE
+						, ROWNUM
+						, MEM_NAME
+				FROM BOARD
+				WHERE ${sort} LIKE '%'||#{keyword}||'%'
+				ORDER BY BOARD_CREATE_DATE DESC 
+		    )
+		)
+		WHERE ROW_NUM &gt;= #{startNum} AND ROW_NUM &lt;= #{endNum}		
 	</select>
 	
 	
@@ -268,6 +314,21 @@
 		SET QNA_READ_CNT = QNA_READ_CNT+1
 		WHERE QNA_NUM = #{qnaNum}
 	</update>
+	
+	<!-- Qna게시판 수정 -->
+	<update id="updateQna">
+		UPDATE QNA
+		SET QNA_TITLE = #{qnaTitle}
+			, QNA_CONTENT = #{qnaContent}
+			, QNA_IS_PRIVATE = #{qnaIsPrivate}
+		WHERE QNA_NUM = #{qnaNum}
+	</update>
+	
+	<!-- Qna게시판 삭제 -->
+	<delete id="qnaDelete">
+		DELETE FROM QNA
+		WHERE QNA_NUM = #{qnaNum}
+	</delete>
 	
 	<!-- Qna게시판 다음 댓글번호 조회 -->
 	<select id="selectNextAnswerNum" resultType="String">
