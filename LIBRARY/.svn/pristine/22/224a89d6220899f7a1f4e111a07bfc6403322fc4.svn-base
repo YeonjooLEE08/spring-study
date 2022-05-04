@@ -9,7 +9,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<form action="/book/hopeBookListStatus" method="post" id="searchBook">
+<form action="/book/hbListStatusU" method="post" id="searchBook">
 	<!-- 검색구분 선택 -->
 	<label for="select">현재 신청 상태</label>
 		<select name="searchSub">
@@ -33,17 +33,17 @@
 				</tr>
 			</thead>
 			<tbody>
-				<c:forEach items="${hpBook }" var="hpBook">
+				<c:forEach items="${hbBook }" var="hbBook">
 					<tr>
-						<td>${hpBook.rowNum }</td>
-						<td>${hpBook.memId }</td>
-						<td>${hpBook.title }</td>
-						<td>${hpBook.writer }</td>
-						<td>${hpBook.publisher }</td>
-						<td>${hpBook.hopeDate }</td>
+						<td>${hbBook.rowNum }</td>
+						<td>${hbBook.memId }</td>
+						<td>${hbBook.title }</td>
+						<td>${hbBook.writer }</td>
+						<td>${hbBook.publisher }</td>
+						<td>${hbBook.hopeDate }</td>
 						<td><c:choose>
-							<c:when test="${hpBook.status eq 0}">승인대기</c:when>
-							<c:when test="${hpBook.status eq 1 }">처리중</c:when>
+							<c:when test="${hbBook.status eq 0}">승인대기</c:when>
+							<c:when test="${hbBook.status eq 1 }">처리중</c:when>
 							<c:otherwise>소장중</c:otherwise>	
 						</c:choose></td>
 	 				</tr>
