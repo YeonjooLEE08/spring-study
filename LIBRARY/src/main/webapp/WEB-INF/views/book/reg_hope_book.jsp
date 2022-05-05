@@ -68,7 +68,6 @@
 				<tr>
 					<td>신청인</td>
 					<td> ${sessionScope.loginInfo.memName }
-						<input type="hidden" 
 						<input type="hidden" name="memId" value="${sessionScope.loginInfo.memId }">
 					</td>
 					<td>신청일</td>

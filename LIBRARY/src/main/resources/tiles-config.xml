@@ -21,6 +21,12 @@
 		<put-attribute name="side" value="/WEB-INF/views/template/my_page.jsp" />
 		<put-attribute name="body" value="/WEB-INF/views/member/mypage/{1}.jsp"/>
 	</definition>
+	
+	<!-- 연주 Admin 메뉴 -->
+	<definition name="admin/*" extends="baseLayout">
+		<put-attribute name="side" value="/WEB-INF/views/template/admin_menu.jsp" />
+		<put-attribute name="body" value="/WEB-INF/views/admin/{1}.jsp"/>
+	</definition>
 
 	<definition name="*/*" extends="baseLayout">
 		<put-attribute name="body" value="/WEB-INF/views/{1}/{2}.jsp"/>

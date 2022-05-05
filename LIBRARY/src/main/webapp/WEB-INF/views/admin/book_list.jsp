@@ -11,10 +11,20 @@
 img:hover{
 	opacity: 0.7;
 }
+table{
+	width:90%;
+	padding-bottom: 10px;
+}
+.searchForm{
+	padding-bottom: 10px;
+}
+.list{
+	padding-bottom: 10px;
+}
 </style>
 </head>
 <body>
-<div align="center">
+<div >
 <%-- 	<c:forEach items="${bookList }" var="book">
 		<div class="col-3 text-center" style="margin-bottom: 16px;">
 			<div class="card" style="width: 13rem; margin: 0 auto;">
@@ -27,7 +37,7 @@ img:hover{
 			</div>
 		</div>
 	</c:forEach> --%>
-<div>
+<div class="searchForm">
 	<form action="/book/searchBook" method="post" id="searchBook">
 	<!-- 검색구분 선택 -->
 	<label for="select">소장자료검색</label>
@@ -44,48 +54,43 @@ img:hover{
 </div>
 
 <c:forEach items="${bookList}" var="book">
-
+<div class="list">
 <table>
 	<tr>
-		<h4><a href="/book/bookDetail?bookCode=${book.bookCode }">${book.title }</a></h4>
+		<td rowspan="3"><a href="/book/bookDetail?bookCode=${book.bookCode }&memId=${sessionScope.loginInfo.memId}"><img src="/resources/images/book/${book.bkImg }"  alt="..." height="120px;" width="80px;" ></a></td>
+		<td colspan="3"><a href="/book/bookDetail?bookCode=${book.bookCode }"><strong>${book.title }</strong></a></td>
 	</tr>
 	<tr>
-		<td colspan="4"><a href="/book/bookDetail?bookCode=${book.bookCode }&memId=${sessionScope.loginInfo.memId}"><img src="/resources/images/book/${book.bkImg }"  alt="..." height="120px;" width="80px;" ></a></td>
 		<td>저자</td>
-		<td>${book.writer }</td>
+		<td colspan="2">${book.writer }</td>
 	</tr>
 	<tr>
-		<td>발행처<td>
-		<td>${book.publisher }<td>
+		<td>발행처</td>
+		<td colspan="2">${book.publisher }</td>
 	</tr>
 	<tr>
-		<td>발행년<td>
-		<td>${book.pubDate }<td>
-	</tr>
-	<tr>
-		<td>ISBN<td>
+		<td>발행년도</td>
+		<td>${book.pubDate }</td>
+		<td colspan="2">ISBN<td>
 		<td>${book.isbn }<td>
 	</tr>
-<%-- 	<tr>
-		<td>대출여부<td>
-		<td>
-			<c:if test="${${book.staus} eq '0' } ">
-				대출 가능
-			</c:if>
-		</td>
-	</tr> --%>
 	<tr>
-		<td rowspan="3">
-			${book.bkContent }
-		</td>
+		<td>키워드</td>
+		<td colspan="3">${book.keyword }</td>
 	</tr>
 	<tr>
-		<td >
-			*자료위치 ${book.area }
-		</td>
+		<td>글내용</td>
+		<td colspan="3">${book.bkContent }</td>
+	</tr>
+	<tr>
+		<td colspan="4">*자료위치 ${book.area }</td>		
+	</tr>
 
-	</tr>
+	
+
+
 </table>
+</div>
 </c:forEach>
 </div>
 </body>

@@ -47,11 +47,16 @@ public class BookController {
 		return "book/list";
 	}
 	
+	@GetMapping("/adminMenu")
+	public String goAdminMenu() {
+		return "admin/go_menu";
+	}
+	
 	//책 등록페이지
 	@GetMapping("/regBookForm")
 	public String regBookForm(Model model) {
 			model.addAttribute("cateList",bookService.selectBookCategory());
-			return "book/reg_book";
+			return "admin/reg_book";
 	}
 	
 	// 책 등록 
@@ -102,7 +107,7 @@ public class BookController {
 		//도서 목록 조회
 		model.addAttribute("bookList", bookService.selectBookList());
 		
-		return "book/book_list";
+		return "admin/book_list";
 	}
 	
 	//도서 검색

@@ -60,6 +60,11 @@
 				<a href="/item/itemList">Goods</a></li>
 				<li>
 				<a href="/club/clubList">독서모임</a></li>
+				<c:if test="${sessionScope.loginInfo.isAdmin eq 'Y' }" > 
+				<li>
+					<a href="/book/adminMenu">관리자메뉴</a>
+				</li>
+				</c:if>
 			</ul>
 		</div>
 	</nav>
