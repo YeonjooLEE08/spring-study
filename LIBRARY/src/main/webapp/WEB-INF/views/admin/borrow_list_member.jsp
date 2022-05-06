@@ -9,6 +9,7 @@
 <title>Insert title here</title>
 </head>
 <body>
+<input type="hidden" id="limitDate" value="${member.limitDate }"/>
 	<h2>도서대여목록</h2>
 	<table>
 		<thead>
@@ -102,7 +103,7 @@
  	</form> 
  </div>	
 
-<script type="text/javascript" src="/resources/js/book/admin_returnBook.js?ver=34"></script>
-<script type="text/javascript" src="/resources/js/book/admin_returnOverdue.js?ver=20"></script>
+<script type="text/javascript" src="/resources/js/book/admin_returnBook.js?ver=35"></script>
+<script type="text/javascript" src="/resources/js/book/admin_returnOverdue.js?ver=23"></script>
 </body>
 </html>

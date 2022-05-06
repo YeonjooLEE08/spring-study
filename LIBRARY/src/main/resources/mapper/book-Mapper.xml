@@ -175,7 +175,7 @@
 	
 	<!-- 이미지 코드 숫자 -->
 	<select id="selectNextImgCode" resultType="int">
-		SELECT NVL(MAX(BK_IMG_CODE),0)+1
+		SELECT NVL(MAX(TO_NUMBER(BK_IMG_CODE)),0)+1
 		FROM BOOK_IMAGE
 	</select>
 	
@@ -194,6 +194,8 @@
 			, KEYWORD
 			, BK_CONTENT
 			, AREA
+			, PUBLISHER
+			, PUB_DATE
 			, STATUS
 			, C.CATE_CODE
 			, CATE_NAME
@@ -570,6 +572,30 @@
 		ORDER BY ROWNUM DESC
 	</select>
 	
+	<!-- 희망도서리스트 STATUS별 조회 USER용 -->
+	<select id="selectHpStatusUser" resultMap="hopeBook">
+		SELECT HOPE_CODE
+			, TITLE
+			, WRITER
+			, PUBLISHER
+			, MEM_ID
+			, STATUS
+			, TO_CHAR(HOPE_DATE,'YYYY/MM/DD') AS HOPE_DATE
+			, ROWNUM
+		FROM HOPE_BOOK
+		WHERE MEM_ID=#{memId}
+		<choose>
+			<when test="searchSub != 'all'">
+				AND STATUS = #{searchSub}
+				ORDER BY ROWNUM DESC
+			</when>
+			<otherwise>
+				ORDER BY ROWNUM DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+
 	
 	<!-- 희망도서 상태변경 -->
 	<update id="updateHpBook" parameterType="java.util.HashMap">

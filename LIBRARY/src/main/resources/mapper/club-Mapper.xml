@@ -46,7 +46,7 @@
 		<result column="MEM_ID" 			property="memId"/>
 		<result column="MEM_NAME" 			property="memName"/>
 		<result column="CLUB_APPLY_DATE" 	property="clubApplyDate"/>
-		<result column="CLUB_NAME" 			property="cluName"/>
+		<result column="CLUB_NAME" 			property="clubName"/>
 	</resultMap>
 	
 	
@@ -334,13 +334,19 @@
 	<!-- 회원리스트 조회 -->
 	<select id="selectClubMemberList" resultMap="memberMapper.member">
 		SELECT MEM_ID
-			, MEM_NAME
-			, MEM_IMAGE
-			, CLUB_CODE
-			, CLUB_ADMIN
-		FROM BOOK_MEMBER
-		WHERE CLUB_CODE = #{clubCode}
-		ORDER BY MEM_ID
+		    , MEM_NAME
+		    , MEM_IMAGE
+		    , CLUB_CODE
+		    , CLUB_ADMIN
+		    , (SELECT COUNT(COMPLIT_CODE)
+				FROM BOOK_COMPLIT
+		        WHERE MEM_ID = BM.MEM_ID
+				AND to_char(LOCALTIMESTAMP,'yyyy/mm') || '/01' &lt;= COMPLIT_DATE
+				AND to_char(LAST_DAY(LOCALTIMESTAMP),'yyyy/mm/dd') &gt;= COMPLIT_DATE
+		        ) AS BOOK_COMPLIT_CNT
+		FROM BOOK_MEMBER BM
+		WHERE CLUB_CODE = 'CLUB_001'
+		ORDER BY BOOK_COMPLIT_CNT DESC
 	</select>  
 	
 	<!-- 모임강퇴 -->

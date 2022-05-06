@@ -22,6 +22,8 @@
       <result column="BR_CNT"          		property="brCnt"/>
        <result column="RSV_CNT"          	property="rsvCnt"/>
       <result column="LIMIT_DATE"       	property="limitDate"/>
+      <result column="CLUB_APPLY_CODE"      property="clubApplyCode"/>
+      <result column="BOOK_COMPLIT_CNT"     property="bookComplitCnt"/>
    </resultMap>
    <resultMap type="com.kh.library.member.vo.MemberImageVO" id="memberImage">
       <id column="MEM_IMG_CODE"          	property="memImgCode"/>
@@ -40,7 +42,13 @@
       <association property="bookInfo"    	resultMap="bookMapper.book" />
       <association property="cateInfo" 		resultMap="bookMapper.bookCate" />
    </resultMap>
-
+	
+	<resultMap type="com.kh.library.member.vo.ToReadListVO" id="toReadList">
+		<id column="TO_READ_LIST_CODE" 		property="toReadListCode"/>
+		<result column="TO_READ_TITLE" 		property="toReadTitle"/>
+		<result column="MEM_ID" 			property="memId"/>
+		<result column="IS_DONE" 			property="isDone"/>
+	</resultMap>
 	
 	<!--/////////////////////회원가입//////////////////// -->
 	<!-- ID 중복체크 -->
@@ -204,7 +212,7 @@
 	</select>
 	
 	<!-- 독서플래너 차트 조회 -->
-	<select id="selectBookPlanerChart">
+	<select id="selectBookPlanerChart" resultMap="complit">
 		SELECT BC.CATE_CODE, BC.CATE_NAME, COUNT(BC.CATE_NAME) AS CNT
 		FROM BOOK_COMPLIT C, BOOK B, BOOK_CATEGORY BC 
 		WHERE C.BOOK_CODE = B.BOOK_CODE 
@@ -214,6 +222,31 @@
 		ORDER BY CATE_CODE
 	</select>
 	
+	<!-- to read list 조회 -->
+	<select id="selectToReadList" resultMap="toReadList">
+		SELECT TO_READ_LIST_CODE
+			, TO_READ_TITLE
+			, IS_DONE
+		FROM TO_READ_LIST
+		WHERE MEM_ID = #{memId}
+	</select>
+	
+	<!-- to read list 추가 -->
+	<insert id="insertToReadList">
+		INSERT INTO TO_READ_LIST
+		VALUES (
+		    (SELECT 'TO_READ_'||LPAD(NVL(MAX(TO_NUMBER(SUBSTR(TO_READ_LIST_CODE, 9, 9))), 0) + 1, 3, '0') 
+		    FROM TO_READ_LIST
+		    ), #{toReadTitle}
+		    , #{memId}
+		    , 'N'
+			)
+	</insert>
+	
+	<delete id="deleteToReadList">
+		DELETE FROM TO_READ_LIST
+		WHERE TO_READ_LIST_CODE = #{toReadListCode}
+	</delete>
 	<!-- 독서플래너 - 책 검색하기 -->
 	<select id="selectBookPlanerSearch" resultMap="bookMapper.book">
 		SELECT BOOK_CODE
@@ -276,9 +309,10 @@
 		WHERE COMPLIT_CODE = #{complitCode}
 	</update>
 	
+	<!--/////////////////////////////북클럽//////////////////////////////////////  -->
 	<!-- 북클럽 조회 -->
 	<select id="selectMyBookClub" resultMap="clubMapper.club">
-		SELECT CLUB_CODE, CLUB_NAME
+		SELECT CLUB_CODE, CLUB_NAME, CLUB_NUMBER_PEOPLE, CLUB_HEAD_CNT
 		FROM BOOK_CLUB
 		WHERE CLUB_CODE = 
 			(SELECT CLUB_CODE 
@@ -286,6 +320,23 @@
 			WHERE MEM_ID = #{memId})
 	</select>
 	
+	<!-- 북클럽 예약 조회 -->
+	<select id="selectMyBookClubApply" resultMap="clubMapper.apply">
+		SELECT BCA.CLUB_CODE
+			, CLUB_APPLY_CODE
+			, TO_CHAR(CLUB_APPLY_DATE, 'YYYY/MM/DD') AS CLUB_APPLY_DATE
+			, BC.CLUB_NAME
+			, BCA.MEM_ID
+		FROM BOOK_CLUB_APPLY BCA , BOOK_CLUB BC
+		WHERE BCA.CLUB_CODE = BC.CLUB_CODE
+		AND BCA.MEM_ID = #{memId}
+	</select>	
+	
+	<!-- 북클럽 신청 취소 -->
+	<delete id="deleteMyBookClubApply">
+		DELETE BOOK_CLUB_APPLY
+		WHERE MEM_ID = #{memId}
+	</delete>
 	
 	  <!-- ///////////////////// 도서 대여 관리 ////////////////////////////// -->
    <!-- 예약시 rsvCnt 업데이트 -->
@@ -305,11 +356,15 @@
    <!-- 대여시 brCnt,rsvCnt 업데이트 -->
    <update id="updateBrCntPlus">
       UPDATE BOOK_MEMBER
-      SET BR_CNT=BR_CNT+1
-      AND RSV_CNT=RSV_CNT-1
+      SET BR_CNT=BR_CNT+1, RSV_CNT=RSV_CNT-1
       WHERE MEM_ID = #{memId}
    </update>
-   
+   <!-- 반납 시 limitDate 값 조회 -->
+   <select id="selectLimitDate" resultType="String">
+   		SELECT LIMIT_DATE
+   		FROM BOOK_MEMBER
+   		WHERE MEM_ID=#{memId}
+   </select>
    <!-- 반납 시 brCnt 업데이트 -->
    <update id="updateBrCntMinus">
       UPDATE BOOK_MEMBER
@@ -320,7 +375,7 @@
    <!-- isOd 업데이트 -->
    <update id="updateIsOdMem">
       UPDATE BOOK_MEMBER
-      SET IS_OD = 'Y', LIMIT_DATE=null
+      SET IS_OD = 'Y'
       WHERE MEM_ID IN (SELECT MEM_ID
                   FROM BORROW
                   WHERE STATUS=1)

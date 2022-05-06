@@ -10,6 +10,7 @@ import java.util.List;
 import javax.annotation.Resource;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,11 +33,13 @@ import com.kh.library.book.vo.BookVO;
 import com.kh.library.book.vo.BorrowVO;
 import com.kh.library.book.vo.HopeBookVO;
 import com.kh.library.book.vo.ReserveVO;
+import com.kh.library.club.vo.ClubApplyVO;
 import com.kh.library.club.vo.ClubVO;
 import com.kh.library.member.service.MemberService;
 import com.kh.library.member.vo.BookComplitVO;
 import com.kh.library.member.vo.MemberImageVO;
 import com.kh.library.member.vo.MemberVO;
+import com.kh.library.member.vo.ToReadListVO;
 
 @Controller
 @RequestMapping("/member")
@@ -296,8 +299,8 @@ public class MemberController {
 	@GetMapping("/bookPlaner")
 	public String bookPlaner(HttpSession session, Model model) {
 		
-		
-		List<BookComplitVO> list = memberService.selectBookPlaner(((MemberVO)(session.getAttribute("loginInfo"))).getMemId());
+		String memId = ((MemberVO)(session.getAttribute("loginInfo"))).getMemId();
+		List<BookComplitVO> list = memberService.selectBookPlaner(memId);
 			for(int i = 0 ; i < list.size() ; i++) {
 				if(list.get(i).getBookInfo().getBkPage() >= 100) { //100페이지 이상이면
 					list.get(i).getBookInfo().setBkPage((int)(list.get(i).getBookInfo().getBkPage() * 0.025));
@@ -307,10 +310,30 @@ public class MemberController {
 				}
 			}
 			
-			model.addAttribute("chartList", memberService.selectBookPlanerChart(((MemberVO)(session.getAttribute("loginInfo"))).getMemId()));
+			model.addAttribute("chartList", memberService.selectBookPlanerChart(memId));
+			model.addAttribute("toReadList", memberService.selectToReadList(memId));
 			model.addAttribute("complitBookList", list);
 		
 		return "mypage/book_planer";
+	}
+	
+	//to read list 추가
+	@ResponseBody
+	@PostMapping("/insertToReadList")
+	public void insertToReadList(ToReadListVO toReadListVO) {
+		memberService.insertToReadList(toReadListVO);
+	}
+	//to read list done
+	@ResponseBody
+	@PostMapping("/updateToReadList")
+	public String updateToReadList() {
+		return "";
+	}
+	//to read list delete
+	@ResponseBody
+	@PostMapping("/deleteToReadList")
+	public void deleteToReadList(String toReadListCode) {
+		memberService.deleteToReadList(toReadListCode);
 	}
 	//독서 플래너 상세조회
 	@GetMapping("/bookPlanerDetail")
@@ -359,14 +382,22 @@ public class MemberController {
       re.addAttribute("memId", bookComplitVO.getMemId());
       return "redirect:/member/bookPlaner";
    }
-
-   //북클럽 조회
+   ///////////////////////////////북클럽/////////////////////////////////
+   //북클럽 조회 + 신청
    @GetMapping("/selectBookClub")
    public String selectBookClub(String memId, Model model) {
       ClubVO clubVO = memberService.selectMyBookClub(memId);
       model.addAttribute("myBookClub", clubVO);
+      model.addAttribute("myBookClubApply", memberService.selectMyBookClubApply(memId));
       return "mypage/my_book_club";
    }
+   
+   //북클럽 신청 취소
+	@ResponseBody
+	@PostMapping("/myBookClubCancel")
+	public void clubJoinRejection(ClubApplyVO clubApplyVO) {
+		memberService.deleteMyBookClubApply(clubApplyVO);
+	}
    
    //예약 도서 목록 조회
    @GetMapping("/reserveListU")
@@ -377,8 +408,8 @@ public class MemberController {
    }
    //예약 취소
    @GetMapping("/cancleReserve")
-   public String deleteReserve(ReserveVO reserveVO, Model model) {
-      bookService.deleteReserve(reserveVO);
+   public String deleteReserve(ReserveVO reserveVO, Model model,MemberVO memberVO) {
+      bookService.deleteReserve(reserveVO,memberVO);
       model.addAttribute("userReserve", bookService.selectRsvUser(reserveVO));
       return "mypage/my_reserve_book";
    }
@@ -389,14 +420,20 @@ public class MemberController {
       model.addAttribute("userBorrow", bookService.selectBrUser(borrowVO));
       return "mypage/my_borrow_book";
    }
-   
-   //희망 도서 신청
+  //희망도서 신청 조회
    @GetMapping("/hopeBookListU")
    public String selectHpUser(HopeBookVO hbVO, Model model) {
       model.addAttribute("hbBook", bookService.selectHpUser(hbVO));
       return "mypage/my_hope_book";
    }
    
+   //상태별 희망도서 신청 조회 
+   @RequestMapping("/hopeBookStatusU")
+   public String selectHpStatusUser(Model model, HopeBookVO hbVO) {
+      model.addAttribute("hbBook", bookService.selectHpStatusUser(hbVO));
+      return "mypage/my_hope_book";
+   }
+
    // 대소문자 + 숫자 포함 8자리 문자열 생성 및 리턴
    public String getTempPwd() {
       String lowerCase = "abcdefghijklmnopqrstuvwxyz";

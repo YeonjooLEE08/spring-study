@@ -7,7 +7,7 @@ public class BorrowVO {
 	private String isbn;
 	private String brDate;
 	private String rtDate;
-	private int status;
+	private int status; // 0 대여중 1 연체 2 반납완료
 	private String title;
 	private String bookCode;
 	private String searchSub;

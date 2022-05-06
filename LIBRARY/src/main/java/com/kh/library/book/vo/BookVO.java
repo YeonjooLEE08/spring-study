@@ -14,13 +14,13 @@ public class BookVO {
 	private String publisher;
 	private String inputDate;
 	
-	private int bkStock;
+	private int bkStock; // 비치 수량
 	private String area;
 	private String bkImg;
 	
-	private int rsvCnt;
-	private int rcdCnt;
-	private String status;
+	private int rsvCnt; // 예약횟수 
+	private int rcdCnt; // 추천횟수
+	private String status; //현재 대여중인 권 수 (반납하면 reset)
 	
 	private String pubDate;//yyyy	
 	private String cateCode;
