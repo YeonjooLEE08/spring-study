@@ -91,6 +91,12 @@ public class BookAdminServiceImpl implements BookAdminService {
 		return sqlSession.selectList("bookMapper.selectRsvAdmin",reserveVO);
 	}
 	
+	//rtDate 조회
+	@Override
+	public String selectRtDate(BorrowVO borrowVO) {
+		String rtDate = sqlSession.selectOne("bookMapper.selectRtDate",borrowVO);
+		return rtDate;
+	}
 	
 	//도서 대여
 	@Override
@@ -122,7 +128,7 @@ public class BookAdminServiceImpl implements BookAdminService {
 	
 	//멤버별 대여제한 이력 조회
 	@Override
-	public String selectLimitDate(MemberVO memberVO) {
+	public MemberVO selectLimitDate(MemberVO memberVO) {
 		return sqlSession.selectOne("memberMapper.selectLimitDate",memberVO);
 	}
 

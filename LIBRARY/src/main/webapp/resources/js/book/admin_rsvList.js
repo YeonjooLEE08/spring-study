@@ -11,9 +11,12 @@ function showModal(selectedTag){
 	
 	$('#insertBorrow #originMemId').val(memId);
 	$('#insertBorrow #originIsbn').val(isbn);
-
+	
 	$('#insertBorrow').modal('show');
-}	
+
+}
+
+
 	
 //대여버튼 클릭 시 진행..
 function insertBorrow(){
@@ -23,16 +26,19 @@ function insertBorrow(){
 	var originMemId = $('#insertBorrow #originMemId').val();
 	var originIsbn = $('#insertBorrow #originIsbn').val();
 	
-	//alert(inputMemId);
-	//alert(originMemId);
+	const memId = docu
+	const isbn = originIsbn.value;
 	
-	
-	/*console.log(inputMemId);
-	console.log(inputIsbn);
-	console.log(originMemId);
-	console.log(originIsbn);*/
-	
-	var now = new Date();
+	alert(memId+isbn);
+	//rtDate 가져오기
+	$.ajax({
+		url: '/book/selectRtDate',
+		type: 'post',
+		date:{'memId':memId, 'isbn':isbn},
+		success: function(result){
+			var originRtDate = result;
+			alert(originRtDate);
+			var now = new Date();
 	var reDate = new Date(now);
 	
 	reDate.setDate(now.getDate()+14);
@@ -55,6 +61,15 @@ function insertBorrow(){
 	}else if(inputIsbn==originIsbn){
 		alert('예약한 회원이 아닙니다.');
 	}
+		},
+		error: function(){
+			alert('실패');
+		}
+	})
+	
+	
+	
+	
 
 	
 }

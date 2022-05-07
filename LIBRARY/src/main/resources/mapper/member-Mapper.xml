@@ -359,12 +359,14 @@
       SET BR_CNT=BR_CNT+1, RSV_CNT=RSV_CNT-1
       WHERE MEM_ID = #{memId}
    </update>
-   <!-- 반납 시 limitDate 값 조회 -->
-   <select id="selectLimitDate" resultType="String">
+   
+   <!-- 멤버별 limitDate 값 조회 -->
+   <select id="selectLimitDate" resultMap="member">
    		SELECT LIMIT_DATE
    		FROM BOOK_MEMBER
    		WHERE MEM_ID=#{memId}
    </select>
+   
    <!-- 반납 시 brCnt 업데이트 -->
    <update id="updateBrCntMinus">
       UPDATE BOOK_MEMBER
@@ -383,10 +385,11 @@
    
    <!-- 대여 제한 해제 -->
    <update id="updateClearLimit">
-      UPDATE BOOK_MEMBER
-      SET IS_OD = 'N'
-      WHERE IS_OD = 'Y'
-      AND TO_CHAR(LIMIT_DATE, 'YYYY/MM/DD') &lt; TO_CHAR(SYSDATE, 'YYYY/MM/DD')
+		  UPDATE BOOK_MEMBER
+	      SET IS_OD = 'N', LIMIT_DATE =''
+	      WHERE IS_OD = 'Y'
+	      AND LIMIT_DATE IS NOT NULL
+	      AND TO_CHAR(LIMIT_DATE, 'YYYY/MM/DD') &lt; TO_CHAR(SYSDATE, 'YYYY/MM/DD')
    </update>
    
    <!-- 연체 시 대여제한일 추가 -->

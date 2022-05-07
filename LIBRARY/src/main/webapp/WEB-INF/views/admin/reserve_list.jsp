@@ -37,18 +37,6 @@
 					<td>${reserve.rsvDate }</td>
 					<td><button type="button" data-toggle="modal" data-target="#insertBorrow" class="btn btn-primary" onclick="showModal(this);">대여</button></td>
  				</tr> 
- 					<!-- <td>
- 					<form action="/book/borrowBook" method="post" id="borrowForm">
- 						<label for="memId">아이디</label>
-						<input type="text" class="form-control" id="memId" name="memId">
-						<label for="isbn">ISBN</label>
-						<input type="text" class="form-control" id="isbn" name="isbn">
-				
-						
-						<button type="button" onclick='borrowBook();' >대여</button>
-					
- 					</form>
- 					</td> -->
 			</c:forEach>
 		</tbody>
 	</table>
@@ -58,6 +46,7 @@
 	<form action="/book/borrowBook" id="borrow">
 	  <input type="hidden" id="originMemId" value="">
 	  <input type="hidden" id="originIsbn" value="">
+	  <input type="hidden" id="originRtDate" value="${borrow.rtDate }">
 	  <div class="modal-dialog" role="document">
 	    <div class="modal-content">
 	      <div class="modal-header">
@@ -84,6 +73,6 @@
  </div>
 	
 
-<script type="text/javascript" src="/resources/js/book/admin_rsvList.js?ver=34"></script>
+<script type="text/javascript" src="/resources/js/book/admin_rsvList.js?ver=40"></script>
 </body>
 </html>

@@ -30,6 +30,7 @@ import com.kh.library.book.vo.ReserveVO;
 import com.kh.library.member.vo.MemberVO;
 
 import net.sf.json.JSONArray;
+import oracle.jdbc.proxy.annotation.Post;
 
 @Controller
 @RequestMapping("/book")
@@ -209,10 +210,17 @@ public class BookController {
 	
 	//관리자 도서예약리스트 조회
 	@GetMapping("/reserveListAdmin")
-	public String selectRsvAdmin(ReserveVO reserveVO, Model model) {
+	public String selectRsvAdmin(ReserveVO reserveVO, Model model , BorrowVO borrowVO) {
 		model.addAttribute("adminReserve", bookAdminService.selectRsvList(reserveVO));
 		
 		return "admin/reserve_list";
+	}
+	
+	//재대출 방지 rtDate 조회
+	@ResponseBody
+	@PostMapping("/selectRtDate")
+	public String selectRtDate(BorrowVO borrowVO) {
+		return bookAdminService.selectRtDate(borrowVO);
 	}
 	
 	//도서 대여

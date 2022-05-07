@@ -47,6 +47,9 @@ public interface BookAdminService {
 	//예약목록 조회
 	List<ReserveVO> selectRsvList(ReserveVO reserveVO);
 	
+	//rtDate 조회
+	String selectRtDate(BorrowVO borrowVO);
+	
 
 	
 	//도서 대여
@@ -62,7 +65,7 @@ public interface BookAdminService {
 	List<BorrowVO> selectBrMember(BorrowVO borrowVO);
 	
 	//멤버별 대여제한 이력 조회
-	String selectLimitDate(MemberVO memberVO);
+	MemberVO selectLimitDate(MemberVO memberVO);
 	
 	//도서 반납
 	void updateReturn(BorrowVO borrowVO, MemberVO memberVO);
