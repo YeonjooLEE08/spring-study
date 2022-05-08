@@ -73,6 +73,6 @@
  </div>
 	
 
-<script type="text/javascript" src="/resources/js/book/admin_rsvList.js?ver=40"></script>
+<script type="text/javascript" src="/resources/js/book/admin_rsvList.js?ver=48"></script>
 </body>
 </html>

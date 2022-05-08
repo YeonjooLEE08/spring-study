@@ -66,6 +66,16 @@ public class BookAdminServiceImpl implements BookAdminService {
 		sqlSession.update("bookMapper.updateBook",bookVO);
 	}
 
+	@Override
+	public void updateBkImg(BookImgVO vo) {
+		sqlSession.update("bookMapper.updateBkImg", vo);
+	}
+
+	@Override
+	public String selectBkAtName(String bookCode) {
+		return sqlSession.selectOne("bookMapper.selectBkAtName",bookCode);
+	}
+
 	//책 삭제
 	@Override
 	public void deleteBook(BookVO bookVO) {
@@ -165,6 +175,7 @@ public class BookAdminServiceImpl implements BookAdminService {
 		sqlSession.update("bookMapper.updateHpBook",hbVO);
 	}
 
+	
 	
 	
 

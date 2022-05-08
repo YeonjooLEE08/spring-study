@@ -62,6 +62,19 @@ public class BookServiceImpl implements BookService {
 		return sqlSession.selectOne("memberMapper.selectRsvInfo",memberVO);
 	}
 		
+	//중복예약제한
+	@Override
+	public String selectRsvCode(ReserveVO reserveVO) {
+		String rsvCode = sqlSession.selectOne("bookMapper.selectRsvCode",reserveVO);
+		return rsvCode;
+	}
+
+	//대여중같은도서예약제한
+	@Override
+	public String selectBrCode(BorrowVO borrowVO) {
+		String brCode = sqlSession.selectOne("bookMapper.selectBrCode",borrowVO);
+		return brCode;
+	}
 		
 	//도서 예약
 	@Override
@@ -110,6 +123,7 @@ public class BookServiceImpl implements BookService {
 	public List<HopeBookVO> selectHpStatusUser(HopeBookVO hbVO) {
 		return sqlSession.selectList("bookMapper.selectHpStatusUser",hbVO);
 	}
+
 
 
 

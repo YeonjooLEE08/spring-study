@@ -28,6 +28,12 @@ public interface BookAdminService {
 	
 	//책 수정
 	void updateBook(BookVO bookVO);
+	
+	//책 표지 수정
+	void updateBkImg(BookImgVO vo);
+	
+	//수정 시 기존 표지 유지할 때 사용 
+	String selectBkAtName(String bookCode);
 
 	//책 삭제
 	void deleteBook(BookVO bookVO);
@@ -38,19 +44,26 @@ public interface BookAdminService {
 	//다음 도서 코드 조회
 	String selectNextBookCode();
 	
+	
+	
 	//추천도서 랭킹 
 	List<BookVO> selectRcdBook();
 	
 	//신간도서 select
 	List<BookVO> selectNewBook();
 	
+	
+	
 	//예약목록 조회
 	List<ReserveVO> selectRsvList(ReserveVO reserveVO);
 	
-	//rtDate 조회
+	//rtDate 조회(예약제한위해서)
 	String selectRtDate(BorrowVO borrowVO);
 	
-
+	//멤버별 대여제한 이력 조회
+	MemberVO selectLimitDate(MemberVO memberVO);
+	
+	
 	
 	//도서 대여
 	void borrowBook(ReserveVO reserveVO, MemberVO memberVO);
@@ -64,14 +77,15 @@ public interface BookAdminService {
 	//멤버별 대여목록 조회
 	List<BorrowVO> selectBrMember(BorrowVO borrowVO);
 	
-	//멤버별 대여제한 이력 조회
-	MemberVO selectLimitDate(MemberVO memberVO);
+	
 	
 	//도서 반납
 	void updateReturn(BorrowVO borrowVO, MemberVO memberVO);
 
 	//대여 제한(연체일만큼)
 	void updateLimit(MemberVO memberVO);
+	
+	
 	
 	//희망도서신청리스트조회
 	List<HopeBookVO> selectHopeBookList();
@@ -81,6 +95,11 @@ public interface BookAdminService {
 
 	//희망도서 승인
 	void updateHopeBook(HopeBookVO hbVO);
+
+	
+
+	
+	
 
 	
 	

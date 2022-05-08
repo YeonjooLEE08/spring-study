@@ -32,6 +32,12 @@ public interface BookService {
 	//예약 권한 조회
 	MemberVO selectRsvInfo(MemberVO memberVO);
 	
+	//중복예약방지 
+	String selectRsvCode(ReserveVO reserveVO);
+	
+	//대출시예약방지
+	String selectBrCode(BorrowVO borrowVO);
+	
 	//도서 예약 기능
 	void reserve(BookVO bookVO, MemberVO memberVO);
 	
