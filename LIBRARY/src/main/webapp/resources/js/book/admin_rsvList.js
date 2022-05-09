@@ -23,8 +23,51 @@ function insertBorrow(){
 	var originMemId = $('#insertBorrow #originMemId').val();
 	var originIsbn = $('#insertBorrow #originIsbn').val();
 	
+<<<<<<< HEAD
 	//alert(inputMemId);
 	//alert(originMemId);
+=======
+	const memId = docu
+	const isbn = originIsbn.value;
+	
+	alert(memId+isbn);
+	//rtDate 가져오기
+	$.ajax({
+		url: '/book/selectRtDate',
+		type: 'post',
+		date:{'memId':memId, 'isbn':isbn},
+		success: function(result){
+			var originRtDate = result;
+			alert(originRtDate);
+			var now = new Date();
+	var reDate = new Date(now);
+	
+	reDate.setDate(now.getDate()+14);
+	
+	var year = reDate.getFullYear();
+	var month = ('0'+(reDate.getMonth()+1)).slice(-2);
+	var date =('0'+reDate.getDate()).slice(-2);
+	
+	var returnDate = year+'-'+month+'-'+date;
+	
+	if((inputMemId==originMemId) && (inputIsbn==originIsbn)){
+		alert(inputMemId+'님 대출되었습니다.\n반납일은 '+returnDate+'입니다.');
+		//'location.href = '/book/borrowBook?memId=' + originMemId + '&isbn=' + originIsbn;
+		
+		var formTag = document.getElementById('borrow');
+		formTag.submit();
+		
+	}else if(inputMemId==originMemId){
+		alert('예약한 도서와 ISBN이 일치하지 않습니다.');
+	}else if(inputIsbn==originIsbn){
+		alert('예약한 회원이 아닙니다.');
+	}
+		},
+		error: function(){
+			alert('실패');
+		}
+	})
+>>>>>>> parent of e4af746 (예약 제한 기능 추가함. alert창 중복으로 뜨는 거 수정 필요)
 	
 	
 	/*console.log(inputMemId);
@@ -32,6 +75,7 @@ function insertBorrow(){
 	console.log(originMemId);
 	console.log(originIsbn);*/
 	
+<<<<<<< HEAD
 	var now = new Date();
 	var reDate = new Date(now);
 	
@@ -54,6 +98,14 @@ function insertBorrow(){
 
 	
 }
+=======
+	
+
+	
+}
+
+
+>>>>>>> parent of e4af746 (예약 제한 기능 추가함. alert창 중복으로 뜨는 거 수정 필요)
 
 
 

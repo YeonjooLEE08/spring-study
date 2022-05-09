@@ -24,10 +24,17 @@ function reserveBook(){
 		formTag.submit();
 		
 	}
+<<<<<<< HEAD
 	else if ((brCnt==5 || sum>5 ) && isOd=='Y'){
 		alert('대여도서는 5권을 초과할 수 없습니다.');
 	}
 	else if ((rsvCnt==5 || sum>5 ) && isOd=='Y'){
+=======
+	else if ((brCnt==5 || sum>5 ) && isOd!='Y'){
+		alert('대여도서는 5권을 초과할 수 없습니다.');
+	}
+	else if ((rsvCnt==5 || sum>5 ) && isOd!='Y'){
+>>>>>>> parent of e4af746 (예약 제한 기능 추가함. alert창 중복으로 뜨는 거 수정 필요)
 		alert('예약된 도서가 5권을 초과할 수 없습니다.');
 	}
 	else if(isOd =='Y'){
