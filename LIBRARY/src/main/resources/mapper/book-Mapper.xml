@@ -368,22 +368,6 @@
 	</select>
 	
 	<!-- ///////////////////////////////// 도서 예약 ////////////////////////////////////// -->
-	<!-- 중복 예약 방지 -->
-	<select id="selectRsvCode" resultType="String">
-		SELECT RSV_CODE
-		FROM RESERVE
-		WHERE MEM_ID = #{memId }
-		AND ISBN = #{isbn }
-	</select>
-	
-	<select id="selectBrCode" resultType="String">
-		SELECT BR_CODE
-		FROM BORROW
-		WHERE MEM_ID = #{memId }
-		AND ISBN = #{isbn }
-		AND STATUS = 0
-	</select>
-	
 	<!-- insert 예약 정보 -->
 	<insert id="insertReserve">
 		INSERT INTO RESERVE(
@@ -433,8 +417,8 @@
 	</select>
 	
 	<!-- 재대출 제한 확인 -->
-	<select id="selectRtDate" resultType="String">
-		SELECT TO_CHAR(RT_DATE, 'YYYY-MM-DD') AS RT_DATE
+	<select id="selectRtDate" resultMap="borrow">
+		SELECT RT_DATE
 		FROM BORROW
 		WHERE RT_DATE = (SELECT MAX(RT_DATE)
 						FROM BORROW

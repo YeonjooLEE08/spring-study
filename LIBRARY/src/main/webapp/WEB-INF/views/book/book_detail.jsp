@@ -58,8 +58,8 @@ img{
 		<form action="/book/reserve" method="post" id="insertRsv">
 			<input type="hidden" name="bookCode" value="${bookDetail.bookCode }">
 			<input type="hidden" name="title" value="${bookDetail.title }">
-			<input type="hidden" name="isbn" id="isbn" value="${bookDetail.isbn }">
-			<input type="hidden" name="memId" id="memId" value="${sessionScope.loginInfo.memId }">
+			<input type="hidden" name="isbn" value="${bookDetail.isbn }">
+			<input type="hidden" name="memId" value="${sessionScope.loginInfo.memId }">
 			<input type="hidden" name="brCnt" id="brCnt" value="${member.brCnt}">
 			<input type="hidden" name="rsvCnt" id="rsvCnt" value="${member.rsvCnt}">
 			<input type="hidden" name="isOd" id="isOd" value="${member.isOd}">
@@ -70,7 +70,17 @@ img{
 				<c:when test="${ bkStock-status > 0}">
 					<c:set var ="brCnt" scope ="session" value="${member.brCnt}"/>
 					<c:set var ="isOd" scope ="session" value="${member.isOd}"/>
-			
+				<%-- 	<c:choose>
+						<c:when test="${ brCnt == 5 }">
+							<button type = "button" onclick="limitBrCnt()">대출가능 ${bkStock-status }</button>
+						</c:when>
+						<c:when test="${ isOd eq 'Y' }">
+							<button type = "button" class="btn btn-primary"  onclick="limitOverdue()">대출가능 ${bkStock-status }</button>
+						</c:when>
+						<c:otherwise> <!-- 로그인제한은 spring security 이용 하기  -->
+							<button type="button" onclick="reserveBook();">대출가능 ${bkStock-status }</button>
+						</c:otherwise>
+					</c:choose> --%>
 					<button type="button" onclick="reserveBook();">대출가능 ${bkStock-status }</button>
 					
 				</c:when>
@@ -81,11 +91,11 @@ img{
 		</form>
 		<button type="button" onclick="location.href='/book/bookListU';">목록</button>
 	</div>
-</div>		
+		
 
 	
 
 <script type="text/javascript" src="/resources/js/book/recommend_book.js?ver=6"></script>
-<script type="text/javascript" src="/resources/js/book/reserve_book.js?ver=16"></script>
+<script type="text/javascript" src="/resources/js/book/reserve_book.js?ver=15"></script>
 </body>
 </html>

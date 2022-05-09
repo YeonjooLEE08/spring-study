@@ -48,14 +48,6 @@ public class BookController {
 		return "book/list";
 	}
 	
-	
-	//아이디 가져오기
-	@ResponseBody
-	@GetMapping("/selectMemId")
-	public String selectMemID(HttpSession session) {
-		String memId = (String) session.getAttribute("memID");
-		return memId;
-	}
 	//책 등록페이지
 	@GetMapping("/regBookForm")
 	public String regBookForm(Model model) {
@@ -98,7 +90,6 @@ public class BookController {
 		    				  e.printStackTrace();
 		    			  }
 		    		  }
-		      //이미지 첨부 안하면 기본 이미지 세팅 필요
 		    	
 		   
 		      
@@ -126,35 +117,8 @@ public class BookController {
 	
 	//도서 수정
 	@PostMapping("/updateBook")
-	public String updateBook(BookVO bookVO, MultipartHttpServletRequest multi){
-		MultipartFile file = multi.getFile("file");
-		
-	    if(!file.getOriginalFilename().equals("")) {
-    	  String uploadPath = "D:\\git\\spring-study\\LIBRARY\\src\\main\\webapp\\resources\\images\\book\\";
-    	  
-    	  try {
-    		  
-    		  String bkOriginName = file.getOriginalFilename();
-    		  String bkAtName = System.currentTimeMillis()+"_"+file.getOriginalFilename();
-    		  file.transferTo(new File(uploadPath+bkAtName));
-    		  BookImgVO vo = new BookImgVO();
-    		  vo.setBkOriginName(bkOriginName);
-    		  vo.setBkAtName(bkAtName);
-    		  vo.setBookCode(bookVO.getBookCode());
-    		  bookAdminService.updateBkImg(vo);
-    		  
-    		  bookVO.setBkImg(bkAtName);
-		      
-    			  } catch(IllegalStateException e) {
-    				  e.printStackTrace();
-    			  } catch(IOException e) {
-    				  e.printStackTrace();
-    			  }
-    		  }
-	    else if(file.getOriginalFilename().equals("")) {
-	    	bookVO.setBkImg(bookAdminService.selectBkAtName(bookVO.getBookCode()));
-	    }
-	    
+	public String updateBook(BookVO bookVO)
+	{
 		//이미지 수정하는 코드 짜야함...
 		bookAdminService.updateBook(bookVO);
 		
@@ -235,21 +199,6 @@ public class BookController {
 		
 		return "book/list";
 	}
-	
-	//중복예약방지-예약중복
-	@ResponseBody
-	@PostMapping("/selectRsvCode")
-	public String selectRsvCode(ReserveVO reserveVO) {
-		return bookService.selectRsvCode(reserveVO);
-	}
-	
-	//대출시예약방지
-	@ResponseBody
-	@PostMapping("/selectBrCode")
-	public String selectBrCode(BorrowVO borrowVO) {
-		return bookService.selectBrCode(borrowVO);
-	}
-	
 	//도서예약
 	@RequestMapping("/reserve")
 	public String reserve(BookVO bookVO, Model model ,MemberVO memberVO) {
