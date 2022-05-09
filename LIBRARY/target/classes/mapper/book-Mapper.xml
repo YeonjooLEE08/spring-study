@@ -185,6 +185,43 @@
 		FROM BOOK
 	</select> 
 	
+	<!-- 책 수정 -->
+	<update id="updateBook">
+		UPDATE BOOK
+		SET TITLE=#{title}
+			, WRITER=#{writer}
+			, KEYWORD=#{keyword}
+			, BK_CONTENT=#{bkContent}
+			, AREA=#{area}
+			, PUBLISHER=#{publisher}
+			, PUB_DATE=#{pubDate}
+			, BK_IMG=#{bkImg}
+			, BK_STOCK=#{bkStock}
+		WHERE BOOK_CODE = #{bookCode}
+	</update>
+	
+	<!-- 이미지 업데이트 -->
+	<update id="updateBkImg">
+		UPDATE BOOK_IMAGE
+		SET , BK_ORIGIN_NAME=#{bkOriginName}
+			, BK_AT_NAME=#{bkAtName}
+		WHERE BOOK_CODE=#{bookCode}
+	</update>
+	
+	<!-- 수정 안 하면 원래 이미지 셀렉 -->
+	<select id="selectBkAtName" resultType="String">
+		SELECT BK_AT_NAME
+		FROM BOOK_IMAGE
+		WHERE BOOK_CODE=#{bookCode}
+	</select>
+	
+	<!-- 책 삭제 -->
+	<update id="deleteBook">
+		UPDATE BOOK
+		SET IS_DEL = 'Y'
+		WHERE BOOK_CODE=#{bookCode}
+	</update>
+	
 	<!-- 검색 조회 -->
 	<select id="selectSearchList" resultMap="book" >
 		SELECT B.BOOK_CODE
@@ -203,6 +240,7 @@
 		FROM BOOK B, BOOK_CATEGORY C, BOOK_IMAGE I
 		WHERE (B.CATE_CODE = C.CATE_CODE
 		AND B.BOOK_CODE = I.BOOK_CODE)
+		AND IS_DEL = 'N'
 		<choose>
 			<when test="searchSub != 'all'">
 				AND ${searchSub} LIKE '%'||#{searchTxt}||'%'
@@ -234,6 +272,7 @@
 		FROM BOOK B, BOOK_CATEGORY C, BOOK_IMAGE I
 		WHERE B.CATE_CODE = C.CATE_CODE
 		AND B.BOOK_CODE = I.BOOK_CODE
+		AND IS_DEL = 'N'
 		ORDER BY TITLE DESC
 	</select>
 	
@@ -307,6 +346,7 @@
 		        FROM BOOK
 		    )
 		WHERE MRCD &lt; 4
+		AND IS_DEL = 'N'
 	</select>
 	
 	<!-- 신간도서 -->
@@ -324,6 +364,7 @@
 	        FROM BOOK
 	    )
 	WHERE RECENT &lt; 7
+	AND IS_DEL = 'N'
 	</select>
 	
 	<!-- ///////////////////////////////// 도서 예약 ////////////////////////////////////// -->

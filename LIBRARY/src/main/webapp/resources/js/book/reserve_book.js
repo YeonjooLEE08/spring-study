@@ -14,93 +14,26 @@ function reserveBook(){
 	var brCnt = $('#reserveBook #brCnt').val();	
 	var rsvCnt = $('#reserveBook #rsvCnt').val(); 
 	var isOd = $('#reserveBook #isOd').val(); 
-	var memId =$('#reserveBook #memId').val(); 
-	var isbn =$('#reserveBook #isbn').val(); 
-	/*ajax로 memid , isbn 넘기고 reserveVO에 있는지 조회 후 값 넘겨주기(reserve코드 string 타입으로)
-	 alert 예약한 도서는 중복예약이 불가합니다
-	 위에랑 똑같은 방법으로 하되 status 0인 borrow코드 넘겨줌 
-	 alert 대여 중인 도서는 예약이 불가합니다 이*/
-	
-	var sum = parseInt(brCnt)+parseInt(rsvCnt) ;
-	
-	var aaa = 0;
-	
-	$.ajax({
-		url: '/book/selectRsvCode',
-		type: 'post',
-		data: {'memId':memId, 'isbn':isbn},
-		success: function(result){
-			if(result != ''){
-				alert('이미 예약한 도서입니다.');
-			}else{
-				aaa=aaa+1;
-				reserve();
-			}
-		},
-		error: function(){
-			alert('실패');
-		}
-		})
-		
-	$.ajax({
-	url: '/book/selectBrCode',
-	type: 'post',
-	data: {'memId':memId, 'isbn':isbn},
-	success: function(result){
-		if(result != ''){
-			alert('대여중인 도서는 예약할 수 없습니다.');
-		}
-		else{
-			aaa=aaa+1;
-			reserve();
-		}
-	},
-	error: function(){
-		alert('실패');
-	}
-	})
-
-/*	if((sum)<5 && isOd !='Y'){
-	
-		alert('대여가 예약되었습니다.');
-	
-		var formTag = document.getElementById('insertRsv');
-		formTag.submit();
-	}
-	else if(isOd =='Y'){
-		alert('연체이력으로 대여할 수 없습니다.');
-	}
-	else{
-		alert('대여와 예약은 합하여 5권까지 가능합니다.');
-	}*/
-}
-
-function reserve(){
-	var brCnt = $('#reserveBook #brCnt').val();	
-	var rsvCnt = $('#reserveBook #rsvCnt').val(); 
-	var isOd = $('#reserveBook #isOd').val(); 
-	/*ajax로 memid , isbn 넘기고 reserveVO에 있는지 조회 후 값 넘겨주기(reserve코드 string 타입으로)
-	 alert 예약한 도서는 중복예약이 불가합니다
-	 위에랑 똑같은 방법으로 하되 status 0인 borrow코드 넘겨줌 
-	 alert 대여 중인 도서는 예약이 불가합니다 이*/
 	
 	var sum = parseInt(brCnt)+parseInt(rsvCnt) ;
 	
 	if((sum)<5 && isOd !='Y'){
-	
 		alert('대여가 예약되었습니다.');
-	
+		
 		var formTag = document.getElementById('insertRsv');
 		formTag.submit();
+		
+	}
+	else if ((brCnt==5 || sum>5 ) && isOd=='Y'){
+		alert('대여도서는 5권을 초과할 수 없습니다.');
+	}
+	else if ((rsvCnt==5 || sum>5 ) && isOd=='Y'){
+		alert('예약된 도서가 5권을 초과할 수 없습니다.');
 	}
 	else if(isOd =='Y'){
 		alert('연체이력으로 대여할 수 없습니다.');
 	}
-	else{
-		alert('대여와 예약은 합하여 5권까지 가능합니다.');
-	}
 }
-
 
 /////////////////// 마이페이지 예약 목록////////////////////
 

@@ -1,8 +1,8 @@
 
 //삭제 확인 모달창 띄우기
-function showModal(){
+function showModal(selectedTag){
 	
-	var bookCode = $('#manageBook #bookCode');
+	var bookCode = $('#deleteBook #bookCode');
 	
 	$('#deleteBook #originBookCode').val(bookCode);
 	$('#deleteBook').modal('show');
@@ -28,7 +28,7 @@ function modifyBk(){
 	
 	alert('수정페이지로 이동합니다.');
 	
-	var bookCode = $('#manageBook #bookCode');
+	var bookCode = $('#modifyBook #bookCode');
 	
 	location.href = '/book/modifyBook?bookCode='+bookCode;
 }

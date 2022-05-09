@@ -83,7 +83,7 @@
 		</div>
 	</div>
 </div>
-<script src="/resources/js/book/reg_book.js?ver.3" type="text/javascript"></script>
+<script src="/resources/js/book/reg_book.js?ver.4" type="text/javascript"></script>
 </body>
 </html>
 

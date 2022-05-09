@@ -19,3 +19,21 @@ function regBook(){
 	var formTag = document.getElementById('regBookForm');
 	formTag.submit();
 }
+
+//도서 수정
+function updateBook(){
+	
+	//모달창고려중
+
+	alert('수정되었습니다.')
+
+	//submit
+	var formTag = document.getElementById('updateBookForm');
+	formTag.submit();
+}
+
+//도서 삭제
+function deleteBook(){
+	
+	
+}

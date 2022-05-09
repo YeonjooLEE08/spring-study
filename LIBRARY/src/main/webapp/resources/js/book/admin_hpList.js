@@ -41,7 +41,7 @@ function updateChecked(){
 		type:'post',
 		data:{'data':JSON.stringify(objArr)},
 		success: function(result){
-			alert('상태를 변경했습니다.');
+			arlert('상태를 변경했습니다.');
 			
 			location.href ='/book/hopeBookList';
 		},
